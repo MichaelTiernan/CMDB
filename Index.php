@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link   href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </head>
  
@@ -32,8 +33,9 @@
                           echo '<tr>';
                           echo '<td>'. $row['FirstName'] . '</td>';
                           echo '<td>'. $row['LastName'] . '</td>';
+                          echo '<td>'. $row['UserID'] . '</td>';
                           echo '<td>'. $row['Type'] . '</td>';
-                          echo '<td><a class="btn" href="read.php?id='.$row['Iden_id'].'">Read</a></td>';
+                          echo '<td><a class="btn" href="read.php?id='.$row['Iden_Id'].'">Read</a></td>';
                           echo '</tr>';
                  }
                  Database::disconnect();

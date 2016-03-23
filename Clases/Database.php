@@ -11,7 +11,10 @@ class Database
     public function __construct() {
         die('Init function is not allowed');
     }
-     
+    /**
+     * Makes the connection to the dB
+     * @return type
+     */ 
     public static function connect()
     {
        // One connection through whole application
@@ -28,7 +31,9 @@ class Database
        }
        return self::$cont;
     }
-     
+    /**
+     * Disconects from dB
+     */
     public static function disconnect()
     {
         self::$cont = null;
