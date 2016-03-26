@@ -9,32 +9,28 @@ class Database
     private static $cont  = null;
      
     public function __construct() {
-        die('Init function is not allowed');
+       // die('Init function is not allowed');
     }
     /**
      * Makes the connection to the dB
      * @return type
      */ 
-    public static function connect()
+    protected static function connect()
     {
        // One connection through whole application
-       if ( null == self::$cont )
-       {     
-        try
-        {
-          self::$cont =  new PDO( "mysql:host=".self::$dbHost.";"."dbname=".self::$dbName, self::$dbUsername, self::$dbUserPassword);  
-        }
-        catch(PDOException $e)
-        {
-          die($e->getMessage()); 
-        }
+       if ( null == self::$cont ){     
+            try{
+                self::$cont =  new PDO( "mysql:host=".self::$dbHost.";"."dbname=".self::$dbName, self::$dbUsername, self::$dbUserPassword);  
+            }catch(PDOException $e){
+                die($e->getMessage()); 
+            }
        }
        return self::$cont;
     }
     /**
      * Disconects from dB
      */
-    public static function disconnect()
+    protected static function disconnect()
     {
         self::$cont = null;
     }

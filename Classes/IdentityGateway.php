@@ -1,9 +1,11 @@
 <?php
 require_once 'Logger.php';
-class Identity extends Logger{
-    private static $table = 'identity';
+//require_once 'Database.php';
 
-    public function create($FirstName,$LastName,$UserID,$type,$AdminName) {
+class IdentityGateway extends Logger{
+    private static $table = 'identity';
+    
+    public function create($FirstName,$LastName,$UserID,$type,$AdminName,$pdo) {
         $pdo = Logger::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "INSERT INTO Identity (FirstName,LastName,UserID,Type) values(:firstname, :lastname, :userid, :type)";
@@ -15,9 +17,9 @@ class Identity extends Logger{
         if ($q->execute()){
             $Value = "Identity width name: ".$FirstName." ".$LastName;
             $UUID = 1;
-            Identity::logCreate(self::$table, $UUID, $Value, $AdminName);
+            Logger::logCreate(self::$table, $UUID, $Value, $AdminName);
         }       
-        Logger::disconnect();
+        Database::disconnect();
     }
 
     public function delete() {
@@ -35,6 +37,18 @@ class Identity extends Logger{
     public function update() {
         
     }
-
-//put your code here
+    
+    public function selectAll($order) {
+        if (empty($order)) {
+            $order = "FirstName";
+        }
+        $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "Select * from Identity order by ".$order;
+        $q = $pdo->prepare($sql);
+        if ($q->execute()){
+            return $q->fetchAll(PDO::FETCH_ASSOC); 
+        }
+        Logger::disconnect();
+    }
 }
