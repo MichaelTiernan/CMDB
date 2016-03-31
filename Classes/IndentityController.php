@@ -47,30 +47,28 @@ class IndentityController {
        
         $title = 'Add new Identity';
         
-        $name = '';
-        $phone = '';
-        $email = '';
-        $address = '';
+        $FristName = '';
+        $LastName = '';
+        $userid = '';
+        $type = '';
        
         $errors = array();
         
-        if ( isset($_POST['form-submitted']) ) {
-            
-            $name       = isset($_POST['name']) ?   $_POST['name']  :NULL;
-            $phone      = isset($_POST['phone'])?   $_POST['phone'] :NULL;
-            $email      = isset($_POST['email'])?   $_POST['email'] :NULL;
-            $address    = isset($_POST['address'])? $_POST['address']:NULL;
+        if ( isset($_POST['form-submitted'])) {
+            $FristName  = isset($_POST['FirstName']) ? $_POST['FirstName'] :NULL;
+            $LastName   = isset($_POST['LastName'])?  $_POST['LastName'] :NULL;
+            $userid     = isset($_POST['UserID'])? $_POST['UserID'] :NULL;
+            $type       = isset($_POST['type'])? $_POST['type']:NULL;
             
             try {
-                $this->contactsService->createIdentity($name, $phone, $email, $address);
-                $this->redirect('index.php');
+                $this->identityService->createNewIdentity($FristName,$LastName,$userid,$type);
+                $this->redirect('Identity.php');
                 return;
-            } catch (ValidationException $e) {
+            } catch (Exception $e) {
                 $errors = $e->getErrors();
             }
         }
-        
-        include 'view/contact-form.php';
+        include 'newIdentity_form.php';
     }
     
     public function deleteIdentity() {

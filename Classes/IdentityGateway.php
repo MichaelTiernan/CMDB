@@ -5,7 +5,8 @@ require_once 'Logger.php';
 class IdentityGateway extends Logger{
     private static $table = 'identity';
     
-    public function create($FirstName,$LastName,$UserID,$type,$AdminName,$pdo) {
+    public function create($FirstName,$LastName,$UserID,$type,$AdminName) {
+        $UserID = ($UserID!= NULL)?$UserID:NULL;
         $pdo = Logger::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "INSERT INTO Identity (FirstName,LastName,UserID,Type) values(:firstname, :lastname, :userid, :type)";
@@ -19,7 +20,7 @@ class IdentityGateway extends Logger{
             $UUID = 1;
             Logger::logCreate(self::$table, $UUID, $Value, $AdminName);
         }       
-        Database::disconnect();
+        Logger::disconnect();
     }
 
     public function delete() {
@@ -40,11 +41,12 @@ class IdentityGateway extends Logger{
     
     public function selectAll($order) {
         if (empty($order)) {
-            $order = "FirstName";
+            $order = "Name";
         }
         $pdo = Logger::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "Select * from Identity order by ".$order;
+        $sql = "Select Name, UserID, E_Mail, Language, it.Type, if(i.active=1,\"Active\",\"Inactive\") as Active "
+                . "from Identity i join identitytype it on i.type = it.type_id order by ".$order;
         $q = $pdo->prepare($sql);
         if ($q->execute()){
             return $q->fetchAll(PDO::FETCH_ASSOC); 

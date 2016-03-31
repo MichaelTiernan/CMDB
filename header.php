@@ -3,8 +3,10 @@
     <title>Test CMDB</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/dropdown.css" rel="stylesheet">
+    <link href="css/bootstrap-select.min.css" rel="stylesheet">    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-select.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-default">
@@ -72,3 +74,4 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+<div class="container">
