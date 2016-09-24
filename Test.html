@@ -1,0 +1,177 @@
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Test CMDB</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/dropdown.css" rel="stylesheet">
+    <link href="css/bootstrap-select.min.css" rel="stylesheet">  
+    <link href="css/font-awesome.css" rel="stylesheet">
+        <link href="css/datepacker.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="js/bootstrap-select.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">CMDB</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse">
+             <ul class="nav navbar-nav">
+                <li class="active"><a href="Index.php">Home <span class="sr-only">(current)</span></a></li>
+                                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Identity 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Identity </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Identity.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Account.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Role 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Role </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Role.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Devices 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laptop </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Devices.php?Category=Laptop ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Desktop </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Devices.php?Category=Desktop ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Token </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Token.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Kensington </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Kensington.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mobile </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Mobile.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Subscription </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Subscription.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Types 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Asset Type </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="AssetType.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Asset Category </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Category.php ">Overview</a></li>
+                                    </ul>                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Category.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">IdentityType </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="IdentityType.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">AccountType </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="AccountType.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">RoleType </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="RoleType.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Subscription Type </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="SubscriptionType.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">System 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">System </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Sytem.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Application 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Application.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>                    <li class="dropdown"><!-- 1 -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin 
+                        <span class="caret"></span></a>
+                        <ul class="dropdown-menu multi-level">
+                                                    <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Admin.php ">Overview</a></li>
+                                    </ul>                            </li>                            <li class="dropdown-submenu"><!-- 2 -->
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Permissions </a>
+                                                                    <ul class="dropdown-menu"><!-- 3 -->
+                                       <li><a href="Permission.php ">Overview</a></li>
+                                    </ul>                            </li>                        </ul>
+                    </li>            </ul>       
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+    <div class="container">
+        <h2>Identities</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <a class="btn icon-btn btn-success" href="identity.php?op=new">
+                <span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>Add</a>
+            </div>
+            <div class="col-md-6 text-right">
+                <form class="navbar-form" role="search" action="identity.php?op=search" method="post">
+                <div class="form-group">
+                    <input name="search" type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                </form>
+            </div>
+        </div>
+            <table class="table table-striped table-bordered"><thead><tr><th><a href="identity.php?orderby=Name">Name</a></th><th><a href="identity.php?orderby=UserID">UserID</a></th><th><a href="identity.php?orderby=E_Mail">E Mail</a></th><th><a href="identity.php?orderby=Language">Language</a></th><th><a href="identity.php?orderby=Type">Type</a></th><th><a href="identity.php?orderby=Active">Active</a></th><th>Actions</th></tr></thead><tbody><tr><td>Stock</a></td><td></td><td></td><td>NL</td><td>Werknemer</td><td>Active</td><td><a class="btn btn-info" href="identity.php?op=show&id=1" data-toggle="tooltip" data-placement="top" title="Info"><span class="fa fa-info"></span></a></td></tr></tbody></table><script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+});
+</script>
+ </div>
+</body>
+</html>

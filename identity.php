@@ -1,6 +1,7 @@
 <?php
-include 'header.php';
-require_once 'Classes/IndentityController.php';
-$controller = new IndentityController();
+include_once 'header.php';
+require 'controller/IdentityController.php';
+//require_once 'Classes/IndentityController.php';
+$controller = new IdentityController();
 $controller->handleRequest();
 include 'footer.php';

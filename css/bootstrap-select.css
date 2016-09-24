@@ -280,3 +280,25 @@ select.selectpicker {
   float: none;
 }
 /*# sourceMappingURL=bootstrap-select.css.map */
+.sandbox-form label, .sandbox-form span {
+  display: inline-block;
+  margin: .5em .5em;
+  vertical-align: middle;
+}
+.sandbox-form span label {
+  vertical-align: baseline !important;
+}
+
+/* CSS REQUIRED */
+.state-icon {
+    left: -5px;
+}
+.list-group-item-primary {
+    color: rgb(255, 255, 255);
+    background-color: rgb(66, 139, 202);
+}
+
+/* DEMO ONLY - REMOVES UNWANTED MARGIN */
+.well .list-group {
+    margin-bottom: 0px;
+}
