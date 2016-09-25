@@ -1,5 +1,5 @@
 <?php
-require_once './utils/PHPExcel/Classes/PHPExcel.php';
+require_once '../utils/PHPExcel/Classes/PHPExcel.php';
 $exampleFile = "ODS_Beschrijving_SalesManagement_AFC_R3.xlsx";
 $pathInfo = pathinfo($exampleFile);
 $type = $pathInfo['extension'] == 'xlsx' ? 'Excel2007' : 'Excel5';

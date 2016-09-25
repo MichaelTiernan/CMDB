@@ -10,7 +10,11 @@ class ApplicationService extends Service{
     }
 
     public function activate($id, $AdminName) {
-        
+    	try{
+        	$this->applicationGateway->activate($id, $AdminName);
+        } catch (PDOException $exc){
+        	throw $exc;
+        }
     }
 
     public function delete($id, $reason, $AdminName) {
@@ -44,7 +48,7 @@ class ApplicationService extends Service{
         try{
             $this->validateParameters($Name);
             $this->applicationGateway->create($Name,$AdminName);
-        } catch (Exception $ex) {
+        } catch (ValidationException $ex) {
             throw $ex;
         } catch (PDOException $e){
             throw $e;
@@ -54,16 +58,30 @@ class ApplicationService extends Service{
     public function listAllAccounts($UUID) {
         return $this->applicationGateway->listAllAccounts($UUID);
     }
+    
+    public function edit($UUID,$Name,$AdminName){
+    	try {
+    		$this->validateParameters($Name,$UUID);
+    		$this->applicationGateway->update($UUID,$Name,$AdminName);
+    	} catch (ValidationException $ex) {
+    		throw $ex;
+    	} catch (PDOException $e){
+            throw $e;
+        }
+    }
     /**
      * This will validate the givven parameters
      * @param String $Name The Name of the Application
      * @return 
      * @throws ValidationException
      */
-    private function validateParameters($Name){
+    private function validateParameters($Name, $UUID = 0){
         $errors = array();
         if (empty($Name)) {
             $errors[] = 'Please enter a Name';
+        }
+        if ($UUID >0 and $this->applicationGateway->alreadyExist($Name,$UUID)){
+        	$errors[] = 'This application already exist';
         }
         if ( empty($errors) ) {
             return;

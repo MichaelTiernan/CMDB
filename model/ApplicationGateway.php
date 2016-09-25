@@ -87,7 +87,8 @@ class ApplicationGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * @see Logger::selectBySearch($search)
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
      */
     public function selectBySearch($search){
         $searhterm = "%$search%";
@@ -123,7 +124,7 @@ class ApplicationGateway extends Logger{
         }
     }
     /**
-     * 
+     * This function will update the application.
      * @param Integer $UUID The ID of the Application
      * @param String $Name The name of the application
      * @param String $AdminName The name of the admin that creates the Application
@@ -131,14 +132,15 @@ class ApplicationGateway extends Logger{
     public function update($UUID, $Name,$AdminName) {
         $OldName = $this->getName($UUID);
         if (strcmp($OldName, $Name) != 0){
-            $this->logUpdate(self::$table, $UUID, "Name", $OldName, $Name, $AdminName);
             $pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql =  "Update Account set Name = :name where App_ID = :uuid" ;
             $q = $pdo->prepare($sql);
             $q->bindParam(':uuid',$UUID);
             $q->bindParam(':name',$Name);
-            $q->execute();
+            if ($q->execute()){
+            	$this->logUpdate(self::$table, $UUID, "Name", $OldName, $Name, $AdminName);
+            }
             Logger::disconnect();
         }
     }
@@ -161,6 +163,41 @@ class ApplicationGateway extends Logger{
             return $q->fetchAll(PDO::FETCH_ASSOC); 
         }
         Logger::disconnect();
+    }
+    /**
+     * This function will check if there is an application already existing
+     * @param string $Naam
+     * @return boolean
+     */
+    public function alreadyExist($Naam,$UUID = 0){
+    	$pdo = Logger::connect();
+    	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    	if ($UUD = 0){
+	    	$sql =  "Select Name from Application where Name = :name" ;
+	    	$q = $pdo->prepare($sql);
+	    	$q->bindParam(':name',$Naam);
+	    	$q->execute();
+	    	if ($q->rowCount()>0){
+	    		return TRUE;
+	    	}  else {
+	    		return FALSE;
+	    	}
+    	}else {
+    		$OldName = $this->getName($UUID);
+    		if (strcmp($OldName, $Naam) != 0){
+    			$sql =  "Select Name from Application where Name = :name" ;
+    			$q = $pdo->prepare($sql);
+    			$q->bindParam(':name',$Naam);
+    			$q->execute();
+    			if ($q->rowCount()>0){
+    				return TRUE;
+    			}  else {
+    				return FALSE;
+    			}
+    		}else{
+    			return FALSE;
+    		}
+    	}
     }
     /**
      * This function will return the name of a given application

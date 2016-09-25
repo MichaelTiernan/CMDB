@@ -11,11 +11,17 @@ class ApplicationController extends Controller{
         $this->applicationService = new ApplicationService();
         $this->Level = $_SESSION["Level"];
     }
-    
+    /**
+     * This function will return all applications
+     * @return array
+     */
     public function listAllApplications(){
         return $this->applicationService->listAllApplications();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
+     */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -41,15 +47,26 @@ class ApplicationController extends Controller{
             $this->showError("Application error", $e->getMessage());
         }
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
             throw new Exception('Internal error.');
         }
+        $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
         $AdminName = $_SESSION["WhoName"];
+        if ($ActiveAccess){
+        	$this->applicationService->activate($id, $AdminName);
+        	$this->redirect('Application.php');
+        }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -78,20 +95,42 @@ class ApplicationController extends Controller{
         }
         include 'view/deleteApplication_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
             throw new Exception('Internal error.');
         }
+        $UpdateAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Update");
         $title = 'Update Application';
         $AdminName = $_SESSION["WhoName"];
         $errors = array();
         if ( isset($_POST['form-submitted'])) {
-            
+        	$Name = isset($_POST['Name']) ? $_POST['Name'] :NULL;
+        	try{
+        		$this->applicationService->edit($id,$Name,$AdminName);
+        		$this->redirect('Application.php');
+        		return;
+        	}catch (ValidationException $e){
+        		$errors = $e->getErrors();
+        	}catch (PDOException $ex){
+        		print $ex;
+        	}
+        }else {
+        	$rows = $this->applicationService->getByID($id);
+        	foreach ($rows as $row):
+        		$Name = $row["Name"];
+        	endforeach;
         }
+        include 'view/updateApplication_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::listAll()
+	 */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -99,7 +138,6 @@ class ApplicationController extends Controller{
         $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
         $UpdateAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Update");
         $AssignAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "AssignAccount");
-        //$orderby = isset($_GET['orderby'])?$_GET['orderby']:NULL;
         if (isset($_GET['orderby'])){
             $orderby = $_GET['orderby'];
         }else{
@@ -108,7 +146,10 @@ class ApplicationController extends Controller{
         $rows = $this->applicationService->getAll($orderby);
         include 'view/applications.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new Application';
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -130,7 +171,10 @@ class ApplicationController extends Controller{
         }
         include 'view/newApplication_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -144,7 +188,10 @@ class ApplicationController extends Controller{
         $accrows = $this->applicationService->listAllAccounts($id);
         include 'view/application_overview.php';
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::search()
+     */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){

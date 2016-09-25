@@ -11,7 +11,11 @@ class KensingtonService extends Service{
     }
 
     public function activate($id, $AdminName) {
-        
+    	try {
+        	$this->kensingtonGateway->activate($id, $AdminName);
+        } catch (PDOException $e){
+        	throw  $e;
+        }
     }
 
     public function delete($id, $reason, $AdminName) {
@@ -50,7 +54,10 @@ class KensingtonService extends Service{
     public function getAll($order) {
         return $this->kensingtonGateway->selectAll($order);
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::getByID()
+	 */
     public function getByID($id) {
         return $this->kensingtonGateway->selectById($id);
     }

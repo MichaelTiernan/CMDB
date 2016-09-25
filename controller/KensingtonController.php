@@ -5,13 +5,18 @@ class KensingtonController extends Controller{
     private $kensingtoneService = NULL;
     private $Level;
     private static $sitePart = "Kensington";
-    
+    /**
+     * Constroctor
+     */
     public function __construct() {        
         $this->kensingtoneService = new KensingtonService();
         $this->Level = $_SESSION["Level"];
         parent::__construct();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -21,7 +26,10 @@ class KensingtonController extends Controller{
         $this->kensingtoneService->activate($id,$AdminName);
         $this->redirect('Kensington.php');
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -42,8 +50,13 @@ class KensingtonController extends Controller{
                 $errors = $e->getErrors();
             }
         }
+        $rows = $this->kensingtoneService->getByID($id);
+        include 'view/deleteKensington_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -79,7 +92,10 @@ class KensingtonController extends Controller{
         $types = $this->kensingtoneService->listAllTypes();
         include 'view/updateKensington_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::handleRequest()
+	 */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -107,7 +123,10 @@ class KensingtonController extends Controller{
             $this->showError("Application error", $e->getMessage());
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::listAll()
+	 */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -124,7 +143,10 @@ class KensingtonController extends Controller{
         $rows = $this->kensingtoneService->getAll($orderby);
         include 'view/kensingtons.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new Kensington';
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -153,7 +175,10 @@ class KensingtonController extends Controller{
         $types = $this->kensingtoneService->listAllTypes();
         include 'view/newKensington_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){
@@ -169,7 +194,10 @@ class KensingtonController extends Controller{
             include 'view/searched_kensingtons.php';
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");

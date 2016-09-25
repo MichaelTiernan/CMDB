@@ -2,13 +2,36 @@
 require_once 'Logger.php';
 class KensingtonGateway extends Logger{
     private static $table = 'kensington';
-    
+    /**
+     * {@inheritDoc}
+     * @see Logger::activate()
+     */
     public function activate($UUID, $AdminName) {
-        echo "Needs activation<br>";
+    $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "update Kensington set Active = 1, Deactivate_reason = NULL where Key_ID = :uuid";
+        $q = $pdo->prepare($sql);
+        $q->bindParam(':uuid', $UUID);
+        if ($q->execute()){
+        	$Value = "Kensington with type: ".$this->getType($UUID)." and have seral number: ".$this->getSerialNumber($UUID);
+        	$this->logActivation($this::$table, $UUID, $Value, $AdminName);
+        }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::delete()
+	 */
     public function delete($UUID, $reason, $AdminName) {
-        echo "Needs deletion<br>";
+        $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "update Kensington set Active = 0, Deactivate_reason = :reason where Key_ID = :uuid";
+        $q = $pdo->prepare($sql);
+        $q->bindParam(':reason', $reason);
+        $q->bindParam(':uuid', $UUID);
+        if ($q->execute()){
+        	$Value = "Kensington with type: ".$this->getType($UUID)." and have seral number: ".$this->getSerialNumber($UUID);
+        	$this->logDelete($this::$table, $UUID, $Value, $reason, $AdminName);
+        }
     }
     /**
      * This Function will create a new Kensington
@@ -36,7 +59,15 @@ class KensingtonGateway extends Logger{
             $this->logActivation(self::$table, $row["Key_ID"], $Value, $AdminName);
         }
     }
-    
+    /**
+     * This function will update a given Kensington
+     * @param int $UUID The unique ID of the Kensington
+     * @param int $Type The ID of the Kensington Type
+     * @param string $Serial The Serial number of the Kensington
+     * @param int $NrKeys the amount of keys
+     * @param int $hasLock the indication if the key has a lock
+     * @param string $AdminName The Person who did the activation
+     */
     public function update($UUID,$Type,$Serial,$NrKeys,$hasLock,$AdminName) {
         $oldType = $this->getType($UUID);
         $newType = $this->getTypeByID($Type);
@@ -78,7 +109,10 @@ class KensingtonGateway extends Logger{
             $q->execute();
         }
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Logger::selectAll()
+     */
     public function selectAll($order) {
         if (empty($order)) {
             $order = "Serial";
@@ -205,6 +239,11 @@ class KensingtonGateway extends Logger{
             return $result;
         }
     }
+    /**
+     * This function will return the Asset Info from a givven Kensington
+     * @param int $UUID
+     * @return array
+     */
     public function GetAssetInfo($UUID){
         $pdo = Logger::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -217,8 +256,7 @@ class KensingtonGateway extends Logger{
         $q = $pdo->prepare($sql);
         $q->bindParam(':id',$UUID); 
         if ($q->execute()){
-            $row = $q->fetch(PDO::FETCH_ASSOC); 
-            return $row["Type"];
+             return $q->fetchAll(PDO::FETCH_ASSOC); 
         }
     }
     /**

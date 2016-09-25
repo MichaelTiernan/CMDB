@@ -21,9 +21,17 @@ class AccountController extends Controller{
         $this->identityController = new IdentityController();
         $this->Level = $_SESSION["Level"];
     }
+    /**
+     * This function will return all Accounts
+     * @return array
+     */
     public function listAllAccounts() {
         return $this->accountService->getAllAcounts();
     }
+    /**
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
+     */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -51,7 +59,10 @@ class AccountController extends Controller{
             $this->showError("Application error", $e->getMessage());
         } 
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::activate()
+	 */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -66,7 +77,10 @@ class AccountController extends Controller{
             $this->showError("Application error", "You do not access to this page");
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -91,7 +105,10 @@ class AccountController extends Controller{
         $rows  = $this->accountService->getByID($id); 
         include 'view/deleteAccount_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -127,7 +144,10 @@ class AccountController extends Controller{
         $applications = $this->applicationController->listAllApplications();
         include 'view/updateAccount_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::listAll()
+	 */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -143,7 +163,10 @@ class AccountController extends Controller{
         $rows = $this->accountService->getAll($orderby);
         include 'view/accounts.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new Account';
         $action = "Add";
@@ -173,7 +196,10 @@ class AccountController extends Controller{
         $applications = $this->applicationController->listAllApplications();
         include ($_SERVER["DOCUMENT_ROOT"] .'/CMDB/view/newAccount_form.php');
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -190,7 +216,11 @@ class AccountController extends Controller{
         $accrows = $this->accountService->listAllIdentities($id);
         include 'view/account_overview.php';
     }
-    
+    /**
+     * This function will be used when assign a account to an Identity
+     * @throws ValidationException
+     * @throws PDOException
+     */
     public function assign(){
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -223,7 +253,10 @@ class AccountController extends Controller{
         $identities = $this->identityController->listAllIdenties();
         include 'view/assignIdentity.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){

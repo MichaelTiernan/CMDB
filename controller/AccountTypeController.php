@@ -12,7 +12,10 @@ class AccountTypeController extends Controller{
         $this->accountTypeService = new AccountTypeService();
         $this->Level = $_SESSION["Level"];
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
+     */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -38,7 +41,10 @@ class AccountTypeController extends Controller{
             $this->showError("Application error", $e->getMessage());
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::activate()
+	 */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -51,7 +57,10 @@ class AccountTypeController extends Controller{
             $this->redirect('AccountType.php');
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -82,7 +91,10 @@ class AccountTypeController extends Controller{
         }
         include 'view/deleteAccountType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -115,7 +127,10 @@ class AccountTypeController extends Controller{
         }
         include 'view/updateAccountType_form.php';
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::listAll()
+     */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -130,7 +145,10 @@ class AccountTypeController extends Controller{
         $rows = $this->accountTypeService->getAll($orderby);
         include 'view/accounttypes.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new Account';
         $Level = $_SESSION["Level"];
@@ -158,7 +176,10 @@ class AccountTypeController extends Controller{
         }
         include 'view/newAccountType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -174,11 +195,17 @@ class AccountTypeController extends Controller{
         
         include 'view/accounttype_overview.php';
     }
-    
+    /**
+     * This function will be used to return all Account Types
+     * @return array
+     */
     public function listAllTypes(){
         return $this->accountTypeService->listAllTypes();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){
