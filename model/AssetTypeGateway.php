@@ -1,11 +1,15 @@
 <?php
 require_once 'Logger.php';
 class AssetTypeGateway extends Logger{
+	/**
+	 * This variable will keep the table for the logging
+	 * @var string
+	 */
     private static $table = 'assettype';
     /**
      * This function will Activate the AssetType
-     * @param Integer $UUID The Unique ID of the AssetType
-     * @param String $AdminName
+     * @param integer $UUID The Unique ID of the AssetType
+     * @param string $AdminName
      * @throws PDOException
      */
     public function activate($UUID, $AdminName) {
@@ -26,9 +30,9 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will deactivate the AssetType
-     * @param Integer $UUID The Unique ID of the AssetType
-     * @param String $reason
-     * @param String $AdminName
+     * @param integer $UUID The Unique ID of the AssetType
+     * @param string $reason
+     * @param string $AdminName
      * @throws PDOException
      */
     public function delete($UUID, $reason, $AdminName) {
@@ -52,7 +56,7 @@ class AssetTypeGateway extends Logger{
     /**
      * This function will return all know Asset Types
      * @param string $order
-     * @return Array
+     * @return array
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -70,7 +74,8 @@ class AssetTypeGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * @see Logger::selectBySearch($search)
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
      */
     public function selectBySearch($search){
         $searhterm = "%$search%";
@@ -88,11 +93,11 @@ class AssetTypeGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param type $Category
-     * @param type $Vendor
-     * @param type $Type
-     * @param type $AdminName
+     * This function will create a new Category
+     * @param int $Category
+     * @param string $Vendor
+     * @param string $Type
+     * @param string $AdminName
      */
     public function create($Category,$Vendor,$Type,$AdminName){
         try{
@@ -117,12 +122,12 @@ class AssetTypeGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param Integer $UUID
-     * @param Integer $Category
-     * @param String $Vendor
-     * @param String $Type
-     * @param String $AdminName
+     * This function will update a given AssetType
+     * @param integer $UUID
+     * @param integer $Category
+     * @param string $Vendor
+     * @param string $Type
+     * @param string $AdminName
      * @throws PDOException
      */
     public function update($UUID,$Category,$Vendor,$Type,$AdminName) {
@@ -163,9 +168,8 @@ class AssetTypeGateway extends Logger{
         }
     }
     /**
-     * 
-     * @param type $id
-     * @return type
+     * {@inheritDoc}
+     * @see Logger::selectById()
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -209,7 +213,7 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will return all active Categories
-     * @return type
+     * @return array
      */
     public function getAllCategories() {
         $pdo = Logger::connect();
@@ -223,7 +227,7 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will return the Type
-     * @param Int $UUID
+     * @param int $UUID
      * @return string
      */
     private function getType($UUID){
@@ -242,7 +246,7 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will return the Vendor
-     * @param Int $UUID
+     * @param int $UUID
      * @return string
      */
     private function getVendor($UUID){
@@ -261,7 +265,7 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will return the Category
-     * @param Int $UUID The Unique ID of the AssetType
+     * @param int $UUID The Unique ID of the AssetType
      * @return string
      */
     private function getCategory($UUID){
@@ -280,7 +284,7 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will return the Category
-     * @param Int $CatID The Unique ID of the Category
+     * @param int $CatID The Unique ID of the Category
      * @return string
      */
     private function getCategoryByID($CatID){

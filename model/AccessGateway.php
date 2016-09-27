@@ -1,12 +1,16 @@
 <?php
 require_once 'Logger.php';
 class AccessGateway extends Logger{
-    private static $table = 'role_perm';
+    /**
+     * This variable will keep the table for the logging
+     * @var string
+     */
+	private static $table = 'role_perm';
     /**
      * Check if the level has access to the requested source
-     * @param Integer $level
-     * @param String $sitePart
-     * @param String $action
+     * @param int $level The level of the Administator 
+     * @param string $sitePart the Source 
+     * @param string $action the action that will be performed
      * @return boolean
      */
     public function hasAccess($level,$sitePart,$action) {
@@ -151,10 +155,10 @@ class AccessGateway extends Logger{
     }
     /**
      * This function will create a new Permmission;
-     * @param type $Level
-     * @param type $menu
-     * @param type $permission
-     * @param type $AdminName
+     * @param int $Level The Level of the administrator
+     * @param int $menu the ID Level of the menu
+     * @param int $permission the ID of the Permession
+     * @param string $AdminName The name of the Admin
      */
     public function create($Level,$menu,$permission,$AdminName){
         $pdo = Logger::connect();
@@ -174,15 +178,31 @@ class AccessGateway extends Logger{
         }
         Logger::disconnect();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::activate()
+	 */
     public function activate($UUID, $AdminName) {
-        
+    	throw new Exception("Access activation not implemented");
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::delete()
+	 */
     public function delete($UUID, $reason, $AdminName) {
-        
+    	$pdo = Logger::connect();
+    	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    	$sql = "delete from role_perm where role_perm_id = :uuid";
+    	$q = $pdo->prepare($sql);
+    	$q->bindParam(':uuid',$id);
+    	if ($q->execute()){
+    		//TODO: Log delete to a deleted object ??
+    	}
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::selectById()
+	 */
     public function selectById($id) {
         $pdo = Logger::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -198,7 +218,7 @@ class AccessGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
+     * This function will return the permission from the givven permission
      * @param type $permission
      * @return string
      */
@@ -217,10 +237,10 @@ class AccessGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param type $Level
-     * @param type $menu
-     * @param type $permission
+     * This function will check if a given level, menu and permission exist
+     * @param int $Level The level of the Administratr
+     * @param int $menu The ID of the menu 
+     * @param int $permission The id of the Permission
      * @return boolean
      */
     public function dubbelChecker($Level,$menu,$permission) {
@@ -239,7 +259,10 @@ class AccessGateway extends Logger{
         }
         Logger::disconnect();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
+     */
     public function selectBySearch($search) {
         $searhterm = "%$search%";
         $pdo = Logger::connect();
@@ -257,8 +280,8 @@ class AccessGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param type $menu
+     * This function will return the Menu
+     * @param int $menu The ID of the Menu.
      * @return string
      */
     private function getMenuById($menu){

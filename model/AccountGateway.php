@@ -2,11 +2,15 @@
 require_once 'Logger.php';
 
 class AccountGateway extends Logger{
+	/**
+	 * This variable will keep the table for the logging
+	 * @var string
+	 */
     private static $table = 'account';
     /**
      * This function will activate the given Account
-     * @param Integer $UUID The ID of the account
-     * @param String $AdminName The name of the Admin that did the activation
+     * @param integer $UUID The ID of the account
+     * @param string $AdminName The name of the Admin that did the activation
      */
     public function activate($UUID, $AdminName) {
         try{
@@ -29,9 +33,9 @@ class AccountGateway extends Logger{
     }
     /**
      * This function will deactivate the given Account
-     * @param Integer $UUID The ID of the Account
-     * @param String $reason The reason the deactivation was done
-     * @param String $AdminName The name of the Admin that did the activation
+     * @param integer $UUID The ID of the Account
+     * @param string $reason The reason the deactivation was done
+     * @param string $AdminName The name of the Admin that did the activation
      */
     public function delete($UUID, $reason, $AdminName) {
         try{
@@ -56,7 +60,7 @@ class AccountGateway extends Logger{
     /**
      * This function will list all Accounts
      * @param string $order The order of sorting
-     * @return Array
+     * @return array
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -74,7 +78,8 @@ class AccountGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * @see Logger::selectBySearch($search)
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
      */
     public function selectBySearch($search){
         $searhterm = "%$search%";
@@ -93,10 +98,10 @@ class AccountGateway extends Logger{
     }
     /**
      * This will create the Account
-     * @param String $UserID The ID of the Account
-     * @param Integer $Type The TypeID of the AccountType
-     * @param Integer $Application The ApplicationID of the Application 
-     * @param String $AdminName The name of the Admin that did the create
+     * @param string $UserID The ID of the Account
+     * @param integer $Type The TypeID of the AccountType
+     * @param integer $Application The ApplicationID of the Application 
+     * @param string $AdminName The name of the Admin that did the create
      */
     public function create($UserID,$Type,$Application,$AdminName){
         try{
@@ -122,11 +127,11 @@ class AccountGateway extends Logger{
     }
     /**
      * This function will update the Account
-     * @param Integer $UUID The ID of the Account
-     * @param String $UserID
-     * @param Integer $Type The TypeID of the AccountType
-     * @param Integer $Application The ApplicationID of the Application
-     * @param String $AdminName The name of the Admin that did the update
+     * @param integer $UUID The ID of the Account
+     * @param string $UserID
+     * @param integer $Type The TypeID of the AccountType
+     * @param integer $Application The ApplicationID of the Application
+     * @param string $AdminName The name of the Admin that did the update
      */
     public function update($UUID,$UserID,$Type,$Application,$AdminName){
         $OldUserID = $this->getUserID($UUID);
@@ -158,8 +163,8 @@ class AccountGateway extends Logger{
     }
     /**
      * This function will check if there is a double entry in the DB.
-     * @param String $UserID The UserID of the application
-     * @param Integer $Application The ApplicationID of the application
+     * @param string $UserID The UserID of the application
+     * @param integer $Application The ApplicationID of the application
      * @return boolean
      */
     public function CheckDoubleEntry($UserID,$Application){
@@ -182,8 +187,8 @@ class AccountGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @return type
+     * This function will return all active Accounts
+     * @return array
      */
     public function getAllAcounts() {
         $pdo = Logger::connect();
@@ -199,7 +204,14 @@ class AccountGateway extends Logger{
         }
         Logger::disconnect();
     }
-    
+    /**
+     * This function will assign an account to an Identity
+     * @param int $UUID
+     * @param int $Identity
+     * @param DateTime $From
+     * @param DateTime $Until
+     * @param string $AdminName
+     */
     public function AssignIdentity($UUID,$Identity,$From,$Until,$AdminName){
         if (empty($Until)){
             $newUntilDate = NULL;
@@ -230,8 +242,8 @@ class AccountGateway extends Logger{
 
     /**
      * Thid function will return the info for one Account
-     * @param Integer $id The ID of the account
-     * @return Array
+     * @param integer $id The ID of the account
+     * @return array
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -247,9 +259,9 @@ class AccountGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param type $UUID
-     * @return type
+     * This function will retrun all assigned account
+     * @param int $UUID
+     * @return array
      */
     public function listAllIdentities($UUID){
         $pdo = Logger::connect();
@@ -268,7 +280,7 @@ class AccountGateway extends Logger{
 
     /**
      * This function will return the name of an given AccountType.
-     * @param Integer $AccountType The ID of the AccountType
+     * @param integer $AccountType The ID of the AccountType
      * @return string
     */
     private function getAccountType($AccountType){
@@ -287,8 +299,8 @@ class AccountGateway extends Logger{
     }
     /**
      * This function will return the Name of the application for a given Application
-     * @param Integer $Application The ID of the application
-     * @return strings
+     * @param integer $Application The ID of the application
+     * @return string
      */
     public function getApplicationName($Application){
         $pdo = Logger::connect();
@@ -306,7 +318,7 @@ class AccountGateway extends Logger{
     }
     /**
      * This will return the ApplicationType ID fromt the given Account
-     * @param Integer $UUID The ID of the Account
+     * @param integer $UUID The ID of the Account
      * @return string
      */
     private function getType($UUID){
@@ -325,7 +337,7 @@ class AccountGateway extends Logger{
     }
     /**
      * This function will return the ApplicationID of the given Account
-     * @param Integer $UUID The ID of the Account
+     * @param integer $UUID The ID of the Account
      * @return string
      */
     public function getApplication($UUID){
@@ -344,7 +356,7 @@ class AccountGateway extends Logger{
     }
     /**
      * This will return the UserID of the given account
-     * @param Integer $UUID The ID of the Account
+     * @param integer $UUID The ID of the Account
      * @return string
      */
     public function getUserID($UUID){
@@ -361,5 +373,4 @@ class AccountGateway extends Logger{
         }
         Logger::disconnect();
     }
-
 }

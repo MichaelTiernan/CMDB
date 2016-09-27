@@ -1,6 +1,6 @@
 <?php
 
-require_once 'model/ContactsService.php';
+require_once 'ContactsService.php';
 
 class ContactsController {
     
@@ -37,7 +37,7 @@ class ContactsController {
     public function listContacts() {
         $orderby = isset($_GET['orderby'])?$_GET['orderby']:NULL;
         $contacts = $this->contactsService->getAllContacts($orderby);
-        include 'view/contacts.php';
+        include 'contacts.php';
     }
     
     public function saveContact() {
@@ -88,7 +88,7 @@ class ContactsController {
         }
         $contact = $this->contactsService->getContact($id);
         
-        include 'view/contact.php';
+        include 'contact.php';
     }
     
     public function showError($title, $message) {

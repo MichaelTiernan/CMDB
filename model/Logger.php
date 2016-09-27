@@ -3,10 +3,28 @@ require_once 'Database.php';
 
 abstract class Logger extends Database{
     private $LogText = '';
-    
+    /**
+     * This function will delte the given object
+     * @param mixed $UUID The unique identifier of the object
+     * @param string $reason The reason of deletion
+     * @param string $AdminName The Person who did the deletion
+     */
     abstract function delete($UUID, $reason,$AdminName);
+    /**
+     * This function will activate the given object
+     * @param mixed $UUID The unique identifier of the object
+     * @param unknown $AdminName The person who did the Activation
+     */
     abstract function activate($UUID,$AdminName);
+    /**
+     * This funcion will select all object in a sairtan order
+     * @param string $order The Column where the sort will be done on
+     */
     abstract function selectAll($order);
+    /**
+     * This function will return will select only the given object
+     * @param mixed $id The unique identifier of the object
+     */
     abstract function selectById($id);
     /**
      * This function will rerutn anny matchin row by the given search term
@@ -36,11 +54,11 @@ abstract class Logger extends Database{
         return $result;
     }
     /**
-     * 
-     * @param type $Table
-     * @param type $UUID
-     * @param type $Value
-     * @param type $AdminName
+     * This function will log the Creation of an object
+     * @param string $Table The table on where the action has been done
+     * @param mixed $UUID The unique identifier of the object
+     * @param string $Value Info on the object
+     * @param string $AdminName The name of the admin who did the action
      */
     protected function logCreate($Table,$UUID,$Value,$AdminName){
         $this->LogText = "The ".$Value." is created by ".$AdminName." in table ".$Table;
@@ -48,12 +66,12 @@ abstract class Logger extends Database{
     }
     /**
      * this function will log the update of a field in a table
-     * @param type $Table
-     * @param type $UUID
-     * @param type $field
-     * @param type $oldValue
-     * @param type $NewValue
-     * @param type $AdminName
+     * @param string $Table The table on where the action has been done
+     * @param mixed $UUID The unique identifier of the object
+     * @param string $field The indication of the coloumn where the change happend
+     * @param string $oldValue The old value
+     * @param string $NewValue The new value
+     * @param string $AdminName The name of the admin who did the action
      */
     protected function logUpdate($Table,$UUID,$field,$oldValue,$NewValue,$AdminName){
         if (empty($oldValue)){
@@ -67,47 +85,47 @@ abstract class Logger extends Database{
         $this->doLog($Table, $UUID);
     }
     /**
-     * 
-     * @param type $Table
-     * @param type $UUID
-     * @param type $Value
-     * @param type $reason
-     * @param type $AdminName
+     * This function will log the deletion of an object
+     * @param string $Table The table on where the action has been done
+     * @param mixed $UUID The unique identifier of the object
+     * @param string $Value Information about the object
+     * @param string $reason The reason why the deletion is done
+     * @param string $AdminName The name of the admin who did the action
      */
     protected function logDelete($Table,$UUID,$Value,$reason,$AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is deleted du to ".$reason." by ".$AdminName;
         $this->doLog($Table, $UUID);
     }
     /**
-     * 
-     * @param type $Table
-     * @param type $UUID
-     * @param type $Value
-     * @param type $AdminName
+     * This function will log the activation of an object
+     * @param string $Table The table on where the action has been done
+     * @param mixed $UUID The unique identifier of the object
+     * @param string $Value Information about the object
+     * @param type $AdminName The name of the admin who did the action
      */
     protected function logActivation($Table,$UUID,$Value,$AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is activated by ".$AdminName;
         $this->doLog($Table, $UUID);
     }
     /**
-     * 
-     * @param String $Table
-     * @param Integer $UUID
-     * @param String $Value
-     * @param String $AccountInfo
-     * @param String $AdminName
+     * This function will log the assignment of an Identity to an Account
+     * @param string $Table The table on where the action has been done
+     * @param int $UUID The unique identifier of the object
+     * @param string $Value info about the Idenity
+     * @param string $AccountInfo info about the Account
+     * @param string $AdminName The name of the admin who did the action
      */
     protected function logAssignIden2Account($Table,$UUID,$Value,$AccountInfo,$AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is assigned to ".$AccountInfo." by ".$AdminName;
         $this->doLog($Table, $UUID);
     }
     /**
-     * 
-     * @param type $Table
-     * @param type $UUID
-     * @param type $Value
-     * @param type $IdenInfo
-     * @param type $AdminName
+     * This function will log the assignment of an account to an Identity
+     * @param string $Table The table on where the action has been done
+     * @param int $UUID The unique identifier of the object
+     * @param string $Value The info of the Account
+     * @param string $IdenInfo The info about the Idententity
+     * @param string $AdminName The name of the admin who did the action
      */
     protected function logAssignAccount2Iden($Table,$UUID,$Value, $IdenInfo, $AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is assigned to ".$IdenInfo." by ".$AdminName;
@@ -115,9 +133,9 @@ abstract class Logger extends Database{
     }
 
     /**
-     * 
-     * @param type $Table
-     * @param type $UUID
+     * This function will do the logging
+     * @param string $Table The table on where the action has been done
+     * @param mixed $UUID The unique identifier of the object
      * @throws PDOException
      */
     private function doLog($Table,$UUID){
@@ -168,7 +186,7 @@ abstract class Logger extends Database{
                     $sql = "INSERT INTO log (Kensington,Log_Text,Log_Date) values(:uuid, :log_text, :log_date)";
                     break;
                 default :
-                    throw new Exception('Table not Know');
+                    throw new Exception('Class logger reports: Table not Know');
             }
             $q = $pdo->prepare($sql);
             $q->bindParam(':uuid',$UUID);

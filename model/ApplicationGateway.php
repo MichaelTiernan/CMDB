@@ -1,11 +1,15 @@
 <?php
 require_once 'Logger.php';
 class ApplicationGateway extends Logger{
+	/**
+	 * This variable will keep the table for the logging
+	 * @var string
+	 */
     private static $table = 'application';
     /**
      * This function will Activate the Application
-     * @param Integer $UUID The ID of the Application
-     * @param String $AdminName The name of the person perfoming the action
+     * @param integer $UUID The ID of the Application
+     * @param string $AdminName The name of the person perfoming the action
      */
     public function activate($UUID, $AdminName) {
         $pdo = Logger::connect();
@@ -20,9 +24,9 @@ class ApplicationGateway extends Logger{
     }
     /**
      * This application will Deactivate the application
-     * @param type $UUID The ID of the Application
-     * @param type $reason The Reason of Deletion
-     * @param type $AdminName The name of the person perfoming the action
+     * @param integer $UUID The ID of the Application
+     * @param string $reason The Reason of Deletion
+     * @param string $AdminName The name of the person perfoming the action
      */
     public function delete($UUID, $reason, $AdminName) {
         $pdo = Logger::connect();
@@ -39,7 +43,7 @@ class ApplicationGateway extends Logger{
     /**
      * This function will select all posibel Application
      * @param string $order The colmumn name were to order on
-     * @return Array
+     * @return array
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -58,7 +62,7 @@ class ApplicationGateway extends Logger{
     }
     /**
      * Return all active AccountTypes
-     * @return Array
+     * @return array
      */
     public function getAllApplications() {
         $pdo = Logger::connect();
@@ -73,7 +77,7 @@ class ApplicationGateway extends Logger{
     }
     /**
      * This function will retun all the info of an given application
-     * @param Integer $id The ID of the Application
+     * @param integer $id The ID of the Application
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -105,8 +109,8 @@ class ApplicationGateway extends Logger{
     }
     /**
      * This function will create a new application
-     * @param String $Name The name of the application
-     * @param String $AdminName The name of the admin that creates the Application
+     * @param string $Name The name of the application
+     * @param string $AdminName The name of the admin that creates the Application
      */
     public function create($Name,$AdminName){
         $pdo = Logger::connect();
@@ -125,9 +129,9 @@ class ApplicationGateway extends Logger{
     }
     /**
      * This function will update the application.
-     * @param Integer $UUID The ID of the Application
-     * @param String $Name The name of the application
-     * @param String $AdminName The name of the admin that creates the Application
+     * @param integer $UUID The ID of the Application
+     * @param string $Name The name of the application
+     * @param string $AdminName The name of the admin that creates the Application
      */
     public function update($UUID, $Name,$AdminName) {
         $OldName = $this->getName($UUID);
@@ -146,8 +150,8 @@ class ApplicationGateway extends Logger{
     }
     /**
      * This will return the list of accounts for a given Application
-     * @param Integer $UUID The ID of the Application
-     * @return Array
+     * @param integer $UUID The ID of the Application
+     * @return array
      */
     public function listAllAccounts($UUID){
         $pdo = Logger::connect();
@@ -201,7 +205,7 @@ class ApplicationGateway extends Logger{
     }
     /**
      * This function will return the name of a given application
-     * @param Integer $UUID The ID of the Application
+     * @param integer $UUID The ID of the Application
      * @return string
      */
     private function getName($UUID) {

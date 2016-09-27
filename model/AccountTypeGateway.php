@@ -2,8 +2,15 @@
 require_once 'Logger.php';
 
 class AccountTypeGateway extends Logger{
+	/**
+	 * This variable will keep the table for the logging
+	 * @var string
+	 */
     private static $table = 'accounttype';
-    
+    /**
+     * {@inheritDoc}
+     * @see Logger::activate()
+     */
     public function activate($UUID, $AdminName) {
         try{
             $pdo = Logger::connect();
@@ -20,7 +27,10 @@ class AccountTypeGateway extends Logger{
         }
         Logger::disconnect();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::delete()
+	 */
     public function delete($UUID, $reason, $AdminName) {
         try{
             $pdo = Logger::connect();
@@ -41,9 +51,9 @@ class AccountTypeGateway extends Logger{
     }
     /**
      * This function will add a new AccountType
-     * @param string $type
-     * @param string $description
-     * @param string $AdminName
+     * @param string $type The Type of account type
+     * @param string $description The description
+     * @param string $AdminName The name of the admin that will do the action
      */
     public function create($type,$description, $AdminName) {
         try{
@@ -66,7 +76,10 @@ class AccountTypeGateway extends Logger{
         }
         Logger::disconnect();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Logger::selectAll()
+     */
     public function selectAll($order) {
         if (empty($order)) {
             $order = "Type";
@@ -81,7 +94,8 @@ class AccountTypeGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * @see Logger::selectBySearch($search)
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
      */
     public function selectBySearch($search){
         $searhterm = "%$search%";
@@ -98,7 +112,7 @@ class AccountTypeGateway extends Logger{
     }
     /**
      * Return all active AccountTypes
-     * @return Array
+     * @return array
      */
     public function getAllTypes() {
         $pdo = Logger::connect();
@@ -111,7 +125,10 @@ class AccountTypeGateway extends Logger{
         }
         Logger::disconnect();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::selectById()
+	 */
     public function selectById($id) {
         $pdo = Logger::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -124,11 +141,11 @@ class AccountTypeGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param Integer $UUID
-     * @param String $type
-     * @param String $description
-     * @param String $AdminName
+     * This function will update the given Account Type
+     * @param integer $UUID 
+     * @param string $type
+     * @param string $description
+     * @param string $AdminName
      */
     public function update($UUID,$type,$description,$AdminName){
         $OldType = $this->getType($UUID);
@@ -160,8 +177,8 @@ class AccountTypeGateway extends Logger{
     }
     /**
      * This function will check if the same Identity Type exist.
-     * @param String $Type
-     * @param String $Description
+     * @param string $Type
+     * @param string $Description
      * @return boolean
      * @throws PDOException
      */
@@ -186,7 +203,7 @@ class AccountTypeGateway extends Logger{
     }
     /**
      * This function will return the Type
-     * @param Int $UUID
+     * @param int $UUID
      * @return string
      */
     private function getType($UUID){
@@ -205,7 +222,7 @@ class AccountTypeGateway extends Logger{
     }
     /**
      * This function will return the Desription
-     * @param Int $UUID
+     * @param int $UUID
      * @return string
      */
     private function getDescription($UUID){
