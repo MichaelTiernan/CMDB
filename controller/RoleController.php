@@ -14,7 +14,10 @@ class RoleController extends Controller{
         $this->roleService = new RoleService();
         $this->roleTypeController = new RoleTypeController();
     }
-    
+   	/**
+   	 * {@inheritDoc}
+   	 * @see Controller::handleRequest()
+   	 */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -42,7 +45,10 @@ class RoleController extends Controller{
             $this->showError("Application error", $e->getMessage());
         } 
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -56,7 +62,10 @@ class RoleController extends Controller{
             print $e;
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -82,7 +91,10 @@ class RoleController extends Controller{
         $rows = $this->roleService->getByID($id);   
         include 'view/deleteRole_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -116,7 +128,10 @@ class RoleController extends Controller{
         $types = $this->roleTypeController->listAllType();
         include 'view/updateRole_form.php';
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::listAll()
+     */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -131,7 +146,10 @@ class RoleController extends Controller{
         $rows = $this->roleService->getAll($orderby);
         include 'view/roles.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new Role';
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -158,7 +176,10 @@ class RoleController extends Controller{
         $types = $this->roleTypeController->listAllType();
         include 'view/newRole_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -170,11 +191,17 @@ class RoleController extends Controller{
         $logrows = $this->loggerController->listAllLogs('role', $id);
         include 'view/role_overview.php';
     }
-    
+    /**
+     * This function will assign a Role to TBD
+     * TODO: Implement
+     */
     public function assign(){
         
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){

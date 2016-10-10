@@ -21,7 +21,8 @@ class IdentityController extends Controller{
         return $this->identityService->listAllIdentities();
     }
     /**
-     * THis function is the main function of our controller.
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
      */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
@@ -51,9 +52,8 @@ class IdentityController extends Controller{
         }
     }
     /**
-     * This function will try to update a given Identity
-     * @return type
-     * @throws Exception
+     * {@inheritDoc}
+     * @see Controller::edit()
      */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
@@ -109,7 +109,8 @@ class IdentityController extends Controller{
         include 'view/updateIdentity_form.php';
     }
     /**
-     * This function will list all Identities
+     * {@inheritDoc}
+     * @see Controller::listAll()
      */
     public function listAll() {
         $action = "Add";
@@ -129,9 +130,8 @@ class IdentityController extends Controller{
         include 'view/identities.php';
     }
     /**
-     * This function will try to create a new Identity
-     * @return type
-     * @throws Exception
+     * {@inheritDoc}
+     * @see Controller::save()
      */
     public function save() {
         $title = 'Add new Identity';
@@ -172,8 +172,8 @@ class IdentityController extends Controller{
         include 'view/newIdentity_form.php';
     }
     /**
-     * This function will Deactive a Identity
-     * @throws Exception
+     * {@inheritDoc}
+     * @see Controller::delete()
      */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
@@ -206,7 +206,10 @@ class IdentityController extends Controller{
         }
         include 'view/deleteIdentity_form.php';
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate(){
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -217,8 +220,8 @@ class IdentityController extends Controller{
         $this->redirect('Identity.php');
     }
     /**
-     * This funstion will diplay the details of an Identity
-     * @throws Exception
+     * {@inheritDoc}
+     * @see Controller::show()
      */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
@@ -233,7 +236,9 @@ class IdentityController extends Controller{
         $accrows = $this->identityService->listAssignedAccount($id);
         include 'view/identity_overview.php';
     }
-    
+    /**
+     * @throws Exception
+     */
     public function assign(){
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -269,7 +274,10 @@ class IdentityController extends Controller{
         $accounts = $this->identityService->listAllAccounts();
         include 'view/assignAccount.php';
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::search()
+     */
     public function search(){
         //print_r($_POST);
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;

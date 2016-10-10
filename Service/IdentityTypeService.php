@@ -10,9 +10,9 @@ class IdentityTypeService extends Service{
         $this->identityTypeGateway = new IdentityTypeGateway();
     }
     /**
-     * 
-     * @return Array
-     * @throws Exception
+     * This function will return all active Identity Types
+     * @return array
+     * @throws PDOException
      */
     public function listAllType(){
         try {
@@ -24,10 +24,8 @@ class IdentityTypeService extends Service{
         }
     }
     /**
-     * 
-     * @param String $order
-     * @return Array
-     * @throws PDOException
+     * {@inheritDoc}
+     * @see Service::getAll()
      */
     public function getAll($order) {
         try{
@@ -38,11 +36,12 @@ class IdentityTypeService extends Service{
         }
     }
     /**
-     * 
-     * @param type $type
-     * @param type $description
-     * @param type $AdminName
+     * This function will create a new IdentityType
+     * @param string $type
+     * @param string $description
+     * @param string $AdminName
      * @throws ValidationException
+     * @throws PDOException
      */
     public function create($type,$description, $AdminName){
         try {
@@ -50,14 +49,13 @@ class IdentityTypeService extends Service{
             $this->identityTypeGateway->create($type,$description,$AdminName);
         } catch (ValidationException $ex) {
             throw $ex;
+        }catch (PDOException $e){
+        	throw $e;
         }
     }
     /**
-     * 
-     * @param type $id
-     * @param type $reason
-     * @param type $AdminName
-     * @throws ValidationException
+     * {@inheritDoc}
+     * @see Service::delete()
      */
     public function delete($id,$reason,$AdminName){
         try{
@@ -70,10 +68,8 @@ class IdentityTypeService extends Service{
         }
     }
     /**
-     * 
-     * @param type $id
-     * @return type
-     * @throws Exception
+     * {@inheritDoc}
+     * @see Service::getByID()
      */
     public function getByID($id) {
         try{
@@ -82,6 +78,14 @@ class IdentityTypeService extends Service{
             throw $ex;
         }
     }
+    /**
+     * This function will update a given IdentityType
+     * @param int $id
+     * @param string $type
+     * @param string $description
+     * @param string $AdminName
+     * @throws ValidationException
+     */
     public function uppdate($id,$type,$description,$AdminName){
         try {
             $this->validateIdentiyTypeParams($type,$description);
@@ -90,22 +94,25 @@ class IdentityTypeService extends Service{
             throw $ex;
         }
     }
+    /**
+     * {@inheritDoc}
+     * @see Service::activate()
+     */
     public function activate($UUID,$AdminName) {
         $this->identityTypeGateway->activate($UUID, $AdminName);
     }
     /**
-     * 
-     * @param type $search
-     * @return type
+     * {@inheritDoc}
+     * @see Service::search()
      */
     public function search($search) {
         return $this->identityTypeGateway->selectBySearch($search);
     }
     /**
-     * 
-     * @param type $type
-     * @param type $description
-     * @return type
+     * This function will validate the parameters
+     * @param string $type
+     * @param string $description
+     * @return array
      * @throws ValidationException
      */
     private function validateIdentiyTypeParams($type,$description){

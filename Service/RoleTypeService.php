@@ -50,6 +50,10 @@ class RoleTypeService extends Service{
             throw $ex;
         }
     }
+    /**
+     * This function will return all active RoleTypes
+     * @return array
+     */
     public function listAllType() {
         return $this->roleTypeGateway->getAllTypes();
     }

@@ -10,20 +10,15 @@ class AccountService extends Service {
         $this->accountGateway = new AccountGateway();
     }
     /**
-     * 
-     * @param type $id
-     * @param type $AdminName
+     * {@inheritDoc}
+     * @see Service::activate()
      */
     public function activate($id, $AdminName) {
         $this->accountGateway->activate($id, $AdminName);
     }
     /**
-     * 
-     * @param type $id
-     * @param type $reason
-     * @param type $AdminName
-     * @throws ValidationException
-     * @throws PDOException
+     * {@inheritDoc}
+     * @see Service::delete()
      */
     public function delete($id, $reason, $AdminName) {
         try{
@@ -36,10 +31,8 @@ class AccountService extends Service {
         }
     }
     /**
-     * 
-     * @param type $order
-     * @return type
-     * @throws PDOException
+     * {@inheritDoc}
+     * @see Service::getAll()
      */
     public function getAll($order) {
         try{
@@ -50,19 +43,18 @@ class AccountService extends Service {
         }
     }
     /**
-     * 
-     * @param Integer $id
-     * $return Array
+     * {@inheritDoc}
+     * @see Service::getByID()
      */
     public function getByID($id) {
         return $this->accountGateway->selectById($id);
     }
     /**
-     * 
-     * @param type $UserID
-     * @param type $Type
-     * @param type $Application
-     * @param type $AdminName
+     * This function will create a new Account
+     * @param string $UserID The UserID of the Account
+     * @param int $Type The ID of the AccountType
+     * @param int $Application The ID of the Application
+     * @param string $AdminName The name of the Admin
      * @throws ValidationException
      * @throws PDOException
      */
@@ -77,12 +69,12 @@ class AccountService extends Service {
         }
     }
     /**
-     * 
-     * @param type $UUID
-     * @param type $UserID
-     * @param type $Type
-     * @param type $Application
-     * @param type $AdminName
+     * This functon will update a given Account
+     * @param int $UUID The unique ID of the Account
+     * @param string $UserID The UserID of the Account
+     * @param int $Type The ID of the AccountType
+     * @param int $Application The ID of the Application
+     * @param string $AdminName The name of the Admin
      * @throws ValidationException
      * @throws PDOException
      */
@@ -96,16 +88,20 @@ class AccountService extends Service {
             throw $e;
         }
     }
+    /**
+     * This function will return all Accounts
+     * @return array
+     */
     public function getAllAcounts(){
         return $this->accountGateway->getAllAcounts();
     }
     /**
-     * 
-     * @param type $id
-     * @param type $Identity
-     * @param type $start
-     * @param type $end
-     * @param type $AdminName
+     * This function will assign an Account to an Identity
+     * @param int $id The unique ID of the Account
+     * @param int $Identity The unique ID of the Identity
+     * @param DateTime $start The startDate
+     * @param DateTime $end The EndDate
+     * @param string $AdminName The name of the Admin
      * @throws ValidationException
      * @throws PDOException
      */
@@ -119,55 +115,27 @@ class AccountService extends Service {
             throw $e;
         }
     }
-    
+    /**
+     * This function will list all Identities assigned to an Account
+     * @param int $id The ID of the Account
+     */
     public function listAllIdentities($id){
         return $this->accountGateway->listAllIdentities($id);
     }
-
     /**
-     * 
-     * @param String $userid 
-     * @param Integer $type
-     * @param Integer $application
-     * @throws ValidationException
-     */
-    private function validateAccountParams($userid, $type, $application, $UUID = 0){
-        $errors = array();
-        if (empty($type)) {
-            $errors[] = 'Please select a Type';
-        }
-        if (empty($userid)){
-            $errors[] = 'Please select a UserID';
-        }
-        if (empty($application)){
-            $errors[] = 'Please select a Application';
-        }
-        if ($UUID > 0){
-            if (strcmp($userid, $this->accountGateway->getUserID($UUID)) != 0){
-                if ($this->accountGateway->CheckDoubleEntry($userid, $application)){
-                    $errors[] = 'This UserID aleray exist in the application';
-                }
-            }
-        }else{
-            if ($this->accountGateway->CheckDoubleEntry($userid, $application)){
-                $errors[] = 'This UserID aleray exist in the application';
-            }
-        }
-        if ( empty($errors) ) {
-            return;
-        }
-        
-        throw new ValidationException($errors);
-    }
-    /**
-     * 
-     * @param type $search
-     * @return Array
+     * {@inheritDoc}
+     * @see Service::search()
      */
     public function search($search) {
         return $this->accountGateway->selectBySearch($search);
     }
-    
+    /**
+     * This function will validate teh parameters during assign
+     * @param int $Identity
+     * @param DateTime $From
+     * @param DateTime $Until
+     * @throws ValidationException
+     */
     private function validateAssignParams($Identity,$From,$Until){
         $errors = array();
         if (empty($Identity)) {
@@ -188,5 +156,40 @@ class AccountService extends Service {
         }
         
         throw new ValidationException($errors);
+    }
+    /**
+     * This function will validate the paramaters and throw an exception
+     * @param string $userid The UserID of the Account
+     * @param int $type The ID of the AccountType
+     * @param int $application The ID of the Application
+     * @throws ValidationException
+     */
+    private function validateAccountParams($userid, $type, $application, $UUID = 0){
+    	$errors = array();
+    	if (empty($type)) {
+    		$errors[] = 'Please select a Type';
+    	}
+    	if (empty($userid)){
+    		$errors[] = 'Please select a UserID';
+    	}
+    	if (empty($application)){
+    		$errors[] = 'Please select a Application';
+    	}
+    	if ($UUID > 0){
+    		if (strcmp($userid, $this->accountGateway->getUserID($UUID)) != 0){
+    			if ($this->accountGateway->CheckDoubleEntry($userid, $application)){
+    				$errors[] = 'This UserID aleray exist in the application';
+    			}
+    		}
+    	}else{
+    		if ($this->accountGateway->CheckDoubleEntry($userid, $application)){
+    			$errors[] = 'This UserID aleray exist in the application';
+    		}
+    	}
+    	if ( empty($errors) ) {
+    		return;
+    	}
+    
+    	throw new ValidationException($errors);
     }
 }

@@ -8,7 +8,10 @@ class ApplicationService extends Service{
     public function __construct() {
         $this->applicationGateway = new ApplicationGateway();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::activate()
+	 */
     public function activate($id, $AdminName) {
     	try{
         	$this->applicationGateway->activate($id, $AdminName);
@@ -16,7 +19,10 @@ class ApplicationService extends Service{
         	throw $exc;
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::delete()
+	 */
     public function delete($id, $reason, $AdminName) {
         try{
             $this->validateDeleteParams($reason);
@@ -27,23 +33,41 @@ class ApplicationService extends Service{
             throw $exc;
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::getAll()
+	 */
     public function getAll($order) {
         return $this->applicationGateway->selectAll($order);
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::getByID()
+	 */
     public function getByID($id) {
         return $this->applicationGateway->selectById($id);
     }
-    
+    /**
+     * This function will return all applications
+     * @return array
+     */
     public function listAllApplications() {
         return $this->applicationGateway->getAllApplications();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::search()
+	 */
     public function search($search) {
         return $this->applicationGateway->selectBySearch($search);
     }
-    
+    /**
+     * This function will create a new Application
+     * @param string $Name
+     * @param string $AdminName
+     * @throws ValidationException
+     * @throws PDOException
+     */
     public function createNewApplication($Name,$AdminName){
         try{
             $this->validateParameters($Name);
@@ -54,7 +78,10 @@ class ApplicationService extends Service{
             throw $e;
         }
     }
-    
+    /**
+     * This function will return all accounts
+     * @param int $UUID The 
+     */
     public function listAllAccounts($UUID) {
         return $this->applicationGateway->listAllAccounts($UUID);
     }

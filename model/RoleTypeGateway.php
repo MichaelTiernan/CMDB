@@ -5,7 +5,7 @@ class RoleTypeGateway extends Logger {
     private static $table = 'roletype';
     /**
      * This function will return all Active IdentiyTypes
-     * @return Array
+     * @return array
      */
     public function getAllTypes(){
         $pdo = Logger::connect();

@@ -11,7 +11,10 @@ class RoleTypeController extends Controller{
         $this->Level = $_SESSION["Level"];
         $this->roleTypeService = new RoleTypeService();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
+     */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -37,7 +40,10 @@ class RoleTypeController extends Controller{
             $this->showError("Application error", $e->getMessage());
         } 
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -47,7 +53,10 @@ class RoleTypeController extends Controller{
         $this->roleTypeService->activate($id, $AdminName);
         $this->redirect('RoleType.php');
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -111,7 +120,10 @@ class RoleTypeController extends Controller{
         }
         include 'view/updateRoleType_form.php';
     }
-    
+   	/**
+   	 * {@inheritDoc}
+   	 * @see Controller::listAll()
+   	 */ 
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -126,7 +138,10 @@ class RoleTypeController extends Controller{
         $rows = $this->roleTypeService->getAll($orderby);
         include 'view/roleTypes.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new Role Type';
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -152,7 +167,10 @@ class RoleTypeController extends Controller{
         }
         include 'view/newRoleType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -164,11 +182,17 @@ class RoleTypeController extends Controller{
         $logrows = $this->loggerController->listAllLogs('roletype', $id);
         include 'view/roletype_overview.php';
     }
-    
+    /**
+     * This function returns all ative Role Types
+     * @return array
+     */
     public function listAllType(){
         return $this->roleTypeService->listAllType();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){

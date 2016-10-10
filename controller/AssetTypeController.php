@@ -11,7 +11,10 @@ class AssetTypeController extends Controller{
         $this->Level = $_SESSION["Level"];
         parent::__construct();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
+     */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -37,7 +40,10 @@ class AssetTypeController extends Controller{
             $this->showError("Application error", $e->getMessage());
         }
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -50,7 +56,10 @@ class AssetTypeController extends Controller{
             $this->redirect('AssetType.php');
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -82,7 +91,10 @@ class AssetTypeController extends Controller{
         }
         include 'view/deleteAssetType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -116,7 +128,10 @@ class AssetTypeController extends Controller{
         $catrows = $this->assetTypeService->listAllCategories();
         include 'view/updateAssetType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::listAll()
+	 */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -131,7 +146,10 @@ class AssetTypeController extends Controller{
         $rows = $this->assetTypeService->getAll($orderby);
         include 'view/assetTypes.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new Asset Type';
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -160,7 +178,10 @@ class AssetTypeController extends Controller{
         $catrows = $this->assetTypeService->listAllCategories();
         include 'view/newAssetType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -173,7 +194,10 @@ class AssetTypeController extends Controller{
         
         include 'view/assetType_overview.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){

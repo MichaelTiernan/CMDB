@@ -15,7 +15,10 @@ class DeviceController extends Controller{
         $this->Category = $_SESSION["Category"];
         $this->deviceService->setCategory($this->Category);
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::handleRequest()
+	 */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -44,6 +47,10 @@ class DeviceController extends Controller{
         }
         
     }
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -58,7 +65,10 @@ class DeviceController extends Controller{
             throw new Exception("No acces to this page");
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -95,7 +105,10 @@ class DeviceController extends Controller{
         }
         include 'view/deleteDevice_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -140,6 +153,10 @@ class DeviceController extends Controller{
         $Ramrows = $this->deviceService->listAllRams();
         include 'view/updateDevice_form.php';
     }
+    /**
+     * {@inheritDoc}
+     * @see Controller::listAll()
+     */
     public function listAll() {
         $title = $this->Category."s";
         $AddAccess= $this->accessService->hasAccess($this->Level, $this->Category , "Add");
@@ -157,7 +174,10 @@ class DeviceController extends Controller{
         $rows = $this->deviceService->getAll($orderby);
         include 'view/devices.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new '.$this->Category;
         $AddAccess= $this->accessService->hasAccess($this->Level, $this->Category, "Add");
@@ -192,7 +212,10 @@ class DeviceController extends Controller{
         $Ramrows = $this->deviceService->listAllRams();
         include 'view/newDevice_form.php';
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::show()
+     */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -206,11 +229,19 @@ class DeviceController extends Controller{
         $title = $this->Category. ' Overview';
         include 'view/devices_overview.php';
     }
-    
+    /**
+     * This function will Assign a Device to an Identiy
+     */
     public function assign(){
-        
+    	$id = isset($_GET['id'])?$_GET['id']:NULL;
+    	if ( !$id ) {
+    		throw new Exception('Internal error.');
+    	}
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){

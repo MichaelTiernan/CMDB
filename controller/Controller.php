@@ -12,6 +12,7 @@ abstract class Controller {
     abstract function handleRequest();
     /**
      * This function will be used to Edit the given object
+     * @throws PDOException
      */
     abstract function edit();
     /**
@@ -24,10 +25,12 @@ abstract class Controller {
     abstract function activate();
     /**
      * This function will be used to deactivate the given object.
+     * @throws PDOException
      */
     abstract function delete();
     /***
      * This function will be used to create a given object
+     * @throws PDOException
      */
     abstract function save();
     /**

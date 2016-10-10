@@ -14,11 +14,13 @@ class MenuController{
     public function handleRequest(){
         $this->listMenu();
     }
-    
+    /**
+     * This function will return the menu on the top level.
+     */
     private function listMenu(){
         $Level = $_SESSION["Level"];
 //        $Action = "Read";
         $FirstMenu = $this->accessService->getFirstLevel();
-        include ($_SERVER["DOCUMENT_ROOT"] .'/CMDB/view/menu.php');
+        include 'view/menu.php';
     }
 }

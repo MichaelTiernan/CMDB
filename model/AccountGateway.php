@@ -8,26 +8,21 @@ class AccountGateway extends Logger{
 	 */
     private static $table = 'account';
     /**
-     * This function will activate the given Account
-     * @param integer $UUID The ID of the account
-     * @param string $AdminName The name of the Admin that did the activation
+     * {@inheritDoc}
+     * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
-        try{
-            $pdo = Logger::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "Update Account set Active = 1, Deactivate_reason = NULL where Acc_id = :uuid";
-            $q = $pdo->prepare($sql);
-            $q->bindParam(':uuid',$UUID);
-            if ($q->execute()){
-                $Type = $this->getType($UUID);
-                $Application = $this->getApplication($UUID);
-                $UserID = $this->getUserID($UUID);
-                $Value = "Account with ". $UserID. " and Type: ".$this->getAccountType($Type)." for application: ".$this->getApplicationName($Application);
-                $this->logActivation(self::$table, $UUID, $Value, $AdminName);
-            }
-        }catch (PDOException $e){
-            print $e;
+        $pdo = Logger::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "Update Account set Active = 1, Deactivate_reason = NULL where Acc_id = :uuid";
+        $q = $pdo->prepare($sql);
+        $q->bindParam(':uuid',$UUID);
+        if ($q->execute()){
+			$Type = $this->getType($UUID);
+            $Application = $this->getApplication($UUID);
+            $UserID = $this->getUserID($UUID);
+            $Value = "Account with ". $UserID. " and Type: ".$this->getAccountType($Type)." for application: ".$this->getApplicationName($Application);
+            $this->logActivation(self::$table, $UUID, $Value, $AdminName);
         }
         Logger::disconnect();
     }
@@ -38,22 +33,18 @@ class AccountGateway extends Logger{
      * @param string $AdminName The name of the Admin that did the activation
      */
     public function delete($UUID, $reason, $AdminName) {
-        try{
-            $pdo = Logger::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "Update Account set Active = 0, Deactivate_reason = :reason where Acc_id = :uuid";
-            $q = $pdo->prepare($sql);
-            $q->bindParam(':uuid',$UUID);
-            $q->bindParam(':reason',$reason);
-            if ($q->execute()){
-                $Type = $this->getType($UUID);
-                $Application = $this->getApplication($UUID);
-                $UserID = $this->getUserID($UUID);
-                $Value = "Account with ". $UserID. " and Type: ".$this->getAccountType($Type)." for application: ".$this->getApplicationName($Application);
-                $this->logDelete(self::$table, $UUID, $Value, $reason, $AdminName);
-            }
-        }catch (PDOException $e){
-            print $e;
+        $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "Update Account set Active = 0, Deactivate_reason = :reason where Acc_id = :uuid";
+        $q = $pdo->prepare($sql);
+        $q->bindParam(':uuid',$UUID);
+        $q->bindParam(':reason',$reason);
+        if ($q->execute()){
+        	$Type = $this->getType($UUID);
+            $Application = $this->getApplication($UUID);
+            $UserID = $this->getUserID($UUID);
+            $Value = "Account with ". $UserID. " and Type: ".$this->getAccountType($Type)." for application: ".$this->getApplicationName($Application);
+            $this->logDelete(self::$table, $UUID, $Value, $reason, $AdminName);
         }
         Logger::disconnect();
     }
@@ -104,24 +95,20 @@ class AccountGateway extends Logger{
      * @param string $AdminName The name of the Admin that did the create
      */
     public function create($UserID,$Type,$Application,$AdminName){
-        try{
-            $pdo = Logger::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "Insert into Account (UserID, Type, Application) Values (:userid,:type,:app)";
-            $q = $pdo->prepare($sql);
-            $q->bindParam(':userid',$UserID);
-            $q->bindParam(':type',$Type);
-            $q->bindParam(':app',$Application);
-            if ($q->execute()){
-                $Value = "Account with ". $UserID. " and Type: ".$this->getAccountType($Type)." for application: ".$this->getApplicationName($Application);
-                $UUIDQ = "Select Acc_ID from Account order by Acc_ID desc limit 1";
-                $stmnt = $pdo->prepare($UUIDQ);
-                $stmnt->execute();
-                $row = $stmnt->fetch(PDO::FETCH_ASSOC);
-                $this->logCreate(self::$table, $row["Acc_ID"], $Value, $AdminName);
-            }
-        }catch (PDOException $e){
-            print $e;
+        $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "Insert into Account (UserID, Type, Application) Values (:userid,:type,:app)";
+		$q = $pdo->prepare($sql);
+        $q->bindParam(':userid',$UserID);
+        $q->bindParam(':type',$Type);
+        $q->bindParam(':app',$Application);
+       	if ($q->execute()){
+        	$Value = "Account with ". $UserID. " and Type: ".$this->getAccountType($Type)." for application: ".$this->getApplicationName($Application);
+            $UUIDQ = "Select Acc_ID from Account order by Acc_ID desc limit 1";
+            $stmnt = $pdo->prepare($UUIDQ);
+            $stmnt->execute();
+            $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+            $this->logCreate(self::$table, $row["Acc_ID"], $Value, $AdminName);
         }
         Logger::disconnect();
     }
@@ -168,22 +155,18 @@ class AccountGateway extends Logger{
      * @return boolean
      */
     public function CheckDoubleEntry($UserID,$Application){
-        try{
-            $pdo = Logger::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "Select * from Account where UserID =:userid and Application = :Application";
-            $q = $pdo->prepare($sql);
-            $q->bindParam(':userid',$UserID);
-            $q->bindParam(':Application',$Application);
-            $q->execute();
-            if ($q->rowCount()>0){
-                return TRUE;
-            }  else {
-                return FALSE;
-            }
-        }  catch (PDOException $e){
-            print $e;
-        }
+        $pdo = Logger::connect ();
+		$pdo->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		$sql = "Select * from Account where UserID =:userid and Application = :Application";
+		$q = $pdo->prepare ( $sql );
+		$q->bindParam ( ':userid', $UserID );
+		$q->bindParam ( ':Application', $Application );
+		$q->execute ();
+		if ($q->rowCount () > 0) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
         Logger::disconnect();
     }
     /**

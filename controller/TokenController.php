@@ -12,7 +12,10 @@ class TokenController extends Controller{
         $this->Level = $_SESSION["Level"];
         $this->tokenService = new TokenService();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
+     */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -40,7 +43,10 @@ class TokenController extends Controller{
             $this->showError("Application error", $e->getMessage());
         }
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -50,7 +56,10 @@ class TokenController extends Controller{
         $this->tokenService->activate($id,$AdminName);
         $this->redirect('Token.php');
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -77,7 +86,10 @@ class TokenController extends Controller{
         $rows = $this->tokenService->getByID($id);
         include 'view/deleteToken_form.php'; 
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -112,7 +124,10 @@ class TokenController extends Controller{
         $typerows = $this->tokenService->listAllTypes();
         include 'view/updateToken_form.php';
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::listAll()
+     */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -127,7 +142,10 @@ class TokenController extends Controller{
         $rows = $this->tokenService->getAll($orderby);
         include 'view/tokens.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $title = 'Add new token';
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
@@ -155,7 +173,10 @@ class TokenController extends Controller{
         $typerows = $this->tokenService->listAllTypes();
         include 'view/newToken_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){
@@ -170,7 +191,10 @@ class TokenController extends Controller{
             include 'view/searched_tokens.php';
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {

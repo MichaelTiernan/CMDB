@@ -9,20 +9,25 @@ class DeviceService extends Service{
     public function __construct() {
         $this->deviceGateway = new DeviceGateway();
     }
-
+	/**
+	 * This function will set the Category
+	 * @param string $category
+	 */
     public function setCategory($category) {
         $this->category = $category;
         $this->deviceGateway->setCategory($category);
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::activate()
+	 */
     public function activate($id, $AdminName) {
-        try {
-            $this->deviceGateway->activate($id,$AdminName);
-        } catch (PDOException $ex) {
-            throw $ex;
-        }
+        $this->deviceGateway->activate($id,$AdminName);
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::delete()
+	 */
     public function delete($id, $reason, $AdminName) {
         try {
             $this->validateDeleteParams($reason);
@@ -33,19 +38,33 @@ class DeviceService extends Service{
             throw $e;
         }
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::getAll()
+	 */
     public function getAll($order) {
         return $this->deviceGateway->selectAll($order);
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::getByID()
+	 */
     public function getByID($id) {
-        try{
-            return $this->deviceGateway->selectById($id);
-        }  catch (PDOException $e){
-            print $e->getMessage();
-        }
+        return $this->deviceGateway->selectById($id);
     }
-    
+    /**
+     * This function will create a new Asset
+     * @param string $AssetTag
+     * @param string $SerialNumber
+     * @param int $Type
+     * @param string $RAM
+     * @param string $IP
+     * @param string $Name
+     * @param string $MAC
+     * @param string $AdminName
+     * @throws ValidationException
+     * @throws PDOException
+     */
     public function create($AssetTag,$SerialNumber,$Type,$RAM,$IP,$Name,$MAC,$AdminName){
         try{
             $this->validateParameters($AssetTag, $SerialNumber, $Type, $RAM, $IP, $Name, $MAC);
@@ -56,6 +75,19 @@ class DeviceService extends Service{
             throw $e;
         }
     }
+    /**
+     * This function will update a given Asset
+     * @param string $AssetTag
+     * @param string $SerialNumber
+     * @param int $Type
+     * @param string $RAM
+     * @param string $IP
+     * @param string $Name
+     * @param string $MAC
+     * @param string $AdminName
+     * @throws ValidationException
+     * @throws PDOException
+     */
     public function update ($AssetTag,$SerialNumber,$Type,$RAM,$IP,$Name,$MAC,$AdminName){
         try{
             $this->validateParameters($AssetTag, $SerialNumber, $Type, $RAM, $IP, $Name, $MAC);
@@ -66,27 +98,37 @@ class DeviceService extends Service{
             throw $e;
         }
     }
+    /**
+     * This function will return all AssetTypes for the given category
+     * @param string $Category
+     * @return array
+     */
     public function listAllTypes($Category){
         return $this->deviceGateway->listAllTypes($Category);
     }
-    
+    /**
+     * This function will return all possibles RAM's
+     * @return array
+     */
     public function listAllRams(){
         return $this->deviceGateway->listAllRams();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::search()
+	 */
     public function search($search) {
         return $this->deviceGateway->selectBySearch($search);
     }
     /**
-     * 
-     * @param type $AssetTag
-     * @param type $SerialNumber
-     * @param type $Type
-     * @param type $RAM
-     * @param type $IP
-     * @param type $Name
-     * @param type $MAC
-     * @return type
+     * This function will validate the parameters
+     * @param string $AssetTag
+     * @param string $SerialNumber
+     * @param int $Type
+     * @param string $RAM
+     * @param string $IP
+     * @param string $Name
+     * @param string $MAC
      * @throws ValidationException
      */
     private function validateParameters($AssetTag,$SerialNumber,$Type,$RAM,$IP,$Name,$MAC){

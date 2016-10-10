@@ -1,19 +1,25 @@
 <?php
 require_once 'Logger.php';
 class LoggerGateway extends Logger {
-    
+    /**
+     * {@inheritDoc}
+     * @see Logger::activate()
+     */
     public function activate($UUID, $AdminName) {
         echo 'UUID: '.$UUID. " AdminName ".$AdminName;
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::delete()
+	 */
     public function delete($UUID, $reason, $AdminName) {
          echo 'UUID: '.$UUID. " AdminName ".$AdminName." reason ".$reason;
     }
     /**
      * This function will return the log lines for a given table.
-     * @param String $table
+     * @param string $table
      * @param mixed $UUID
-     * @return type
+     * @return array
      */
     public function getLog($table, $UUID) {
         $pdo = Logger::connect();
@@ -71,14 +77,24 @@ class LoggerGateway extends Logger {
         }
         Logger::disconnect();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::selectAll()
+	 */
     public function selectAll($order) {
         echo "The order is ".$order;
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Logger::selectById()
+	 */
     public function selectById($id) {
         echo "The Id is ".$id;
     }
+    /**
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
+     */
     public function selectBySearch($search){
         echo "The Search is ".$search;
     }

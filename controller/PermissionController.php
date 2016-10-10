@@ -5,13 +5,15 @@ require_once 'Service/AccessService.php';
 class PermissionController extends Controller{
     private static $sitePart ="Permissions";
     private $Level = NULL;
-    
-            
+                
     public function __construct() {
         parent::__construct();
         $this->Level = $_SESSION["Level"];
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::handleRequest()
+	 */
     public function handleRequest() {
         $op = isset($_GET['op'])?$_GET['op']:NULL;
         try {
@@ -39,19 +41,58 @@ class PermissionController extends Controller{
             $this->showError("Application error", $e->getMessage());
         } 
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Controller::activate()
+     */
     public function activate() {
-        
+    	$id = isset($_GET['id'])?$_GET['id']:NULL;
+    	if ( !$id ) {
+    		throw new Exception('Internal error.');
+    	}
+    	$AdminName = $_SESSION["WhoName"];
+    	$this->accessService->activate($id, $AdminName); 
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::delete()
+	 */
     public function delete() {
-        
+    	$id = isset($_GET['id'])?$_GET['id']:NULL;
+    	if ( !$id ) {
+    		throw new Exception('Internal error.');
+    	}
+    	$title = 'Delete Permission';
+    	$errors = array();
+    	$AdminName = $_SESSION["WhoName"];
+    	if (isset($_POST['form-submitted'])){
+    		try {
+    			$reason = "Just because";
+    			$this->accessService->delete($id, $reason, $AdminName);
+    			 $this->redirect("Permission.php");
+                return;
+    		}catch (PDOException $ex){
+    			print "The error was: ".$ex->getMessage();
+    		}
+    	}
+    	$rows = $this->accessService->getByID($id);
+    	include 'view/deletePermission_Form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
-        
+    	$id = isset($_GET['id'])?$_GET['id']:NULL;
+    	if ( !$id ) {
+    		throw new Exception('Internal error.');
+    	}
+    	$AdminName = $_SESSION["WhoName"];
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::listAll()
+	 */
     public function listAll() {
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -66,7 +107,10 @@ class PermissionController extends Controller{
         $rows = $this->accessService->getAll($orderby);
         include 'view/permissions.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::save()
+	 */
     public function save() {
         $AdminName = $_SESSION["WhoName"];
         $title = "Create Permission";
@@ -92,7 +136,10 @@ class PermissionController extends Controller{
         $Levels = $this->accessService->listAllLevels();
         include 'view/newPermission_Form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::show()
+	 */
     public function show() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -107,7 +154,10 @@ class PermissionController extends Controller{
         $logrows = $this->loggerController->listAllLogs('role_perm', $id);
         include 'view/permission_overview.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){
@@ -122,5 +172,4 @@ class PermissionController extends Controller{
             include 'view/searched_permissions.php';
         }
     }
-
 }

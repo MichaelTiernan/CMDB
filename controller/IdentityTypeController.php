@@ -12,16 +12,16 @@ class IdentityTypeController extends Controller{
         $this->Level = $_SESSION["Level"];
         parent::__construct();
     }
-    
+    /**
+     * This function will return all IdentityTypes
+     * @return array
+     */
     public function listAllType(){
-        try {
-            return $this->identityTypeService->listAllType();
-        } catch (Exception $ex) {
-            throw $ex;
-        }
+        return $this->identityTypeService->listAllType();
     }
     /**
-     * Main function of the Controller
+     * {@inheritDoc}
+     * @see Controller::handleRequest()
      */
     public function handleRequest(){
         $op = isset($_GET['op'])?$_GET['op']:NULL;
@@ -48,7 +48,10 @@ class IdentityTypeController extends Controller{
             $this->showError("Application error", $e->getMessage());
         } 
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::listAll()
+	 */
     public function listAll(){
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $InfoAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
@@ -64,8 +67,8 @@ class IdentityTypeController extends Controller{
         include 'view/identityTypes.php';
     }
     /**
-     * Try to save the Identity Type
-     * @throws ValidationException
+     * {@inheritDoc}
+     * @see Controller::save()
      * @throws PDOException
      */
     public function save(){
@@ -94,10 +97,9 @@ class IdentityTypeController extends Controller{
         include 'view/newIdentityType_form.php';
     }
     /**
-     * 
-     * @return type
-     * @throws PDOException 
-     * @throws ValidationException
+     * {@inheritDoc}
+     * @see Controller::delete()
+     * @throws PDOException
      */
     public function delete(){
         $id = isset($_GET['id'])?$_GET['id']:NULL;
@@ -130,7 +132,8 @@ class IdentityTypeController extends Controller{
         include 'view/deleteIdentityType_form.php';
     }
     /**
-     * 
+     * {@inheritDoc}
+     * @see Controller::activate()
      */
     public function activate(){
         $id = isset($_GET['id'])?$_GET['id']:NULL;
@@ -142,8 +145,8 @@ class IdentityTypeController extends Controller{
         $this->redirect('IdentityType.php');
     }
     /**
-     * 
-     * @throws Exception
+     * {@inheritDoc}
+     * @see Controller::show()
      */
     public function show(){
         $id = isset($_GET['id'])?$_GET['id']:NULL;
@@ -157,9 +160,9 @@ class IdentityTypeController extends Controller{
         include 'view/identitytype_overview.php';
     }
     /**
-     * 
-     * @return type
-     * @throws Exception
+     * {@inheritDoc}
+     * @see Controller::edit()
+     * @throws PDOException
      */
     public function edit(){
         $id = isset($_GET['id'])?$_GET['id']:NULL;
@@ -195,7 +198,10 @@ class IdentityTypeController extends Controller{
         }
         include 'view/updateIdentityType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::search()
+	 */
     public function search() {
         $search = isset($_POST['search']) ? $_POST['search'] :NULL;
         if (empty($search)){

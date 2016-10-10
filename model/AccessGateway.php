@@ -40,7 +40,7 @@ class AccessGateway extends Logger{
     }
     /**
      * Return the first Level of the menu
-     * @return Array
+     * @return array
      */
     public function getFrirst(){
         $pdo = Logger::connect();
@@ -54,7 +54,7 @@ class AccessGateway extends Logger{
     /**
      * Return the Second Level of the menu
      * @param type $menuid
-     * @return Array
+     * @return array
      */
     public function getSecond($menuid){
         $pdo = Logger::connect();
@@ -68,7 +68,7 @@ class AccessGateway extends Logger{
     }
     /**
      * Return a list of all The Second level menus
-     * @return type
+     * @return array
      */
     public function listSecondLevel(){
         $pdo = Logger::connect();
@@ -81,7 +81,7 @@ class AccessGateway extends Logger{
     }
     /**
      * Return a list of all Permissions
-     * @return type
+     * @return array
      */
     public function listAllPermissions(){
         $pdo = Logger::connect();
@@ -94,7 +94,7 @@ class AccessGateway extends Logger{
     }
     /**
      * Return a list of all Levels
-     * @return type
+     * @return array
      */
     public function listAllLevels(){
         $pdo = Logger::connect();
@@ -107,9 +107,9 @@ class AccessGateway extends Logger{
     }
     /**
      * Retunr the Last level if the Level has access
-     * @param Integer $level
-     * @param Integer $menuid
-     * @return Array
+     * @param integer $level
+     * @param integer $menuid
+     * @return array
      */
     public function getMenu($level,$menuid) {
         try{
@@ -135,7 +135,7 @@ class AccessGateway extends Logger{
     /**
      * This function will list all Accounts
      * @param string $order The order of sorting
-     * @return Array
+     * @return array
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -194,10 +194,11 @@ class AccessGateway extends Logger{
     	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     	$sql = "delete from role_perm where role_perm_id = :uuid";
     	$q = $pdo->prepare($sql);
-    	$q->bindParam(':uuid',$id);
+    	$q->bindParam(':uuid',$UUID);
     	if ($q->execute()){
     		//TODO: Log delete to a deleted object ??
     	}
+    	Logger::disconnect();
     }
 	/**
 	 * {@inheritDoc}

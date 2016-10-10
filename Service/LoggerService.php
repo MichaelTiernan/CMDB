@@ -6,11 +6,17 @@ class LoggerService {
     public function __construct() {
         $this->loggerGatteway = new LoggerGateway();
     }
-    
+    /**
+     * this function will return all the log of a given object
+     * @param string $table
+     * @param mixed $uuid
+     * @throws PDOException
+     * @return array
+     */
     public function listAllLogs($table, $uuid) {
         try {
             return $this->loggerGatteway->getLog($table, $uuid);
-        } catch (Exception $ex) {
+        } catch (PDOException $ex) {
             throw $ex;
         }
     }

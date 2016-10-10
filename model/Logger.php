@@ -141,7 +141,7 @@ abstract class Logger extends Database{
     private function doLog($Table,$UUID){
         try{
             $pdo = Database::connect();
-            $LogDate = date("d-m-y h:i:s");
+            $LogDate = date("y-m-d h:i:s");
             switch ($Table){
                 case "identity":
                     $sql = "INSERT INTO log (Identity,Log_Text,Log_Date) values(:uuid, :log_text, :log_date)";
