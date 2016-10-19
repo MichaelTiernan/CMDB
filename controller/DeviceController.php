@@ -59,10 +59,14 @@ class DeviceController extends Controller{
         $AdminName = $_SESSION["WhoName"];
         $ActiveAccess= $this->accessService->hasAccess($this->Level, $this->Category, "Activate");
         if ($ActiveAccess){
-            $this->deviceService->activate($id,$AdminName);
-            $this->redirect('Devices.php?Category='.$this->Category);
+        	try{
+            	$this->deviceService->activate($id,$AdminName);
+            	$this->redirect('Devices.php?Category='.$this->Category);
+        	}catch (PDOException $e){
+        		$this->showError("Database exception",$e);
+        	}
         }  else {
-            throw new Exception("No acces to this page");
+            $this->showError("Application error", "You do not access to activate a ".$this->Category);
         }
     }
 	/**
@@ -88,7 +92,7 @@ class DeviceController extends Controller{
             }  catch (ValidationException $e){
                 $errors = $e->getErrors();
             } catch (PDOException $ex){
-                print $ex->getMessage();
+                $this->showError("Database exception",$ex);
             }
         } 
         $rows = $this->deviceService->getByID($id);
@@ -135,7 +139,7 @@ class DeviceController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e->getMessage();
+               	$this->showError("Database exception",$e);
             }
         }else{
             $rows = $this->deviceService->getByID($id);
@@ -205,7 +209,7 @@ class DeviceController extends Controller{
             } catch (ValidationException $ex) {
                $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e->getMessage();
+                $this->showError("Database exception",$e);
             }
         }
         $typerows = $this->deviceService->listAllTypes($this->Category);

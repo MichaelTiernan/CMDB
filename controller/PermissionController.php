@@ -51,7 +51,12 @@ class PermissionController extends Controller{
     		throw new Exception('Internal error.');
     	}
     	$AdminName = $_SESSION["WhoName"];
-    	$this->accessService->activate($id, $AdminName); 
+    	$ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
+    	if ($ActiveAccess){
+    		$this->accessService->activate($id, $AdminName);
+    	} else {
+            $this->showError("Application error", "You do not access to activate a application");
+        }
     }
 	/**
 	 * {@inheritDoc}
@@ -72,7 +77,7 @@ class PermissionController extends Controller{
     			 $this->redirect("Permission.php");
                 return;
     		}catch (PDOException $ex){
-    			print "The error was: ".$ex->getMessage();
+    			$this->showError("Database exception",$e);
     		}
     	}
     	$rows = $this->accessService->getByID($id);
@@ -127,7 +132,7 @@ class PermissionController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         }
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");

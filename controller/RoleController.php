@@ -55,11 +55,16 @@ class RoleController extends Controller{
             throw new Exception('Internal error.');
         }
         $AdminName = $_SESSION["WhoName"];
-        try{
-            $this->roleService->activate($id, $AdminName);
-            $this->redirect('Role.php');
-        } catch (PDOException $e){
-            print $e;
+        $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
+        if ($ActiveAccess){
+	        try{
+	            $this->roleService->activate($id, $AdminName);
+	            $this->redirect('Role.php');
+	        } catch (PDOException $e){
+	            $this->showError("Database exception",$e);
+	        }
+        }else {
+            $this->showError("Application error", "You do not access to activate a role");
         }
     }
 	/**
@@ -85,7 +90,7 @@ class RoleController extends Controller{
             }  catch (ValidationException $e){
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         } 
         $rows = $this->roleService->getByID($id);   
@@ -115,7 +120,7 @@ class RoleController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         }else{
             $rows = $this->roleService->getByID($id); 
@@ -170,7 +175,7 @@ class RoleController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         }
         $types = $this->roleTypeController->listAllType();

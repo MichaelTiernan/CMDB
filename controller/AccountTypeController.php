@@ -53,8 +53,14 @@ class AccountTypeController extends Controller{
         $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
         $AdminName = $_SESSION["WhoName"];
         if ($ActiveAccess){
-            $this->accountTypeService->activate($id, $AdminName);
-            $this->redirect('AccountType.php');
+        	try{
+            	$this->accountTypeService->activate($id, $AdminName);
+            	$this->redirect('AccountType.php');
+        	}catch (PDOException $e){
+        		$this->showError("Database exception",$e);
+        	}
+        } else {
+            $this->showError("Application error", "You do not access to activate a account type");
         }
     }
 	/**
@@ -81,7 +87,7 @@ class AccountTypeController extends Controller{
             } catch (ValidationException $e){
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                throw $e;
+                $this->showError("Database exception",$e);
             }
         }
         $rows = $this->accountTypeService->getByID($id);
@@ -116,7 +122,7 @@ class AccountTypeController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                throw $e;
+                $this->showError("Database exception",$e);
             }
         }else {
             $rows = $this->accountTypeService->getByID($id);
@@ -171,7 +177,7 @@ class AccountTypeController extends Controller{
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         }
         include 'view/newAccountType_form.php';

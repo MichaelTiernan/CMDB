@@ -23,8 +23,18 @@ class KensingtonController extends Controller{
             throw new Exception('Internal error.');
         }
         $AdminName = $_SESSION["WhoName"];
-        $this->kensingtoneService->activate($id,$AdminName);
-        $this->redirect('Kensington.php');
+        $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
+        if ($ActiveAccess){
+        	try{
+        		$this->kensingtoneService->activate($id,$AdminName);
+        		$this->redirect('Kensington.php');
+        	}catch (PDOException $e){
+        		$this->showError("Database exception",$e);
+        	}
+        }else {
+        	$this->showError("Application error", "You do not access to activate a kensington");
+        }
+        
     }
 	/**
 	 * {@inheritDoc}
@@ -48,6 +58,8 @@ class KensingtonController extends Controller{
                 return;
             }  catch (Exception $e){
                 $errors = $e->getErrors();
+            } catch (PDOException $ex){
+            	$this->showError("Database exception",$e);
             }
         }
         $rows = $this->kensingtoneService->getByID($id);
@@ -78,7 +90,7 @@ class KensingtonController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         }else{
             $rows = $this->kensingtoneService->getByID($id);
@@ -169,7 +181,7 @@ class KensingtonController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         }
         $types = $this->kensingtoneService->listAllTypes();

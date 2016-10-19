@@ -53,8 +53,15 @@ class TokenController extends Controller{
             throw new Exception('Internal error.');
         }
         $AdminName = $_SESSION["WhoName"];
-        $this->tokenService->activate($id,$AdminName);
-        $this->redirect('Token.php');
+        $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
+        if ($ActiveAccess){
+        	try{
+        		$this->tokenService->activate($id,$AdminName);
+        		$this->redirect('Token.php');
+        	}catch (PDOException $e){
+        		$this->showError("Database exception",$e);
+        	}
+        }
     }
 	/**
 	 * {@inheritDoc}
@@ -80,7 +87,7 @@ class TokenController extends Controller{
             } catch (ValidationException $e){
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                throw $e;
+               	$this->showError("Database exception",$e);
             }
         }
         $rows = $this->tokenService->getByID($id);
@@ -110,7 +117,7 @@ class TokenController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                throw $e;
+                $this->showError("Database exception",$e);
             }
         }  else {
             $rows = $this->tokenService->getByID($id);
@@ -167,7 +174,7 @@ class TokenController extends Controller{
             } catch (ValidationException $ex) {
                $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e->getMessage();
+                $this->showError("Database exception",$e);
             }
         }
         $typerows = $this->tokenService->listAllTypes();

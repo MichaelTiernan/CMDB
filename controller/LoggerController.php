@@ -17,7 +17,7 @@ class LoggerController {
         try {
             return $this->loggerService->listAllLogs($table, $uuid);
         } catch (PDOException $ex) {
-            throw $ex;
+            $this->showError("Database exception",$ex);
         }
     }
 }

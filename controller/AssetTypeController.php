@@ -52,8 +52,14 @@ class AssetTypeController extends Controller{
         $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
         $AdminName = $_SESSION["WhoName"];
         if ($ActiveAccess){
-            $this->assetTypeService->activate($id, $AdminName);
-            $this->redirect('AssetType.php');
+            try{
+	        	$this->assetTypeService->activate($id, $AdminName);
+	            $this->redirect('AssetType.php');
+            }catch (PDOException $e){
+            	$this->showError("Database exception",$e);
+            }
+        }else{
+        	$this->showError("Application error", "You do not access to activate a asset type");
         }
     }
 	/**
@@ -79,8 +85,8 @@ class AssetTypeController extends Controller{
                 return;
             } catch (ValidationException $e){
                 $errors = $e->getErrors();
-            } catch (PDOException $e){
-                throw $e;
+            } catch (PDOException $ex){
+                $this->showError("Database exception",$ex);
             }
         }
         $rows = $this->assetTypeService->getByID($id);
@@ -114,8 +120,8 @@ class AssetTypeController extends Controller{
                 return;           
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
-            } catch (PDOException $e){
-                throw $e;
+            } catch (PDOException $ex){
+                $this->showError("Database exception",$ex);
             }
         }  else {
             $rows = $this->assetTypeService->getByID($id);
@@ -171,8 +177,8 @@ class AssetTypeController extends Controller{
                 return;           
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
-            } catch (PDOException $e){
-                throw $e;
+            } catch (PDOException $ex){
+                $this->showError("Database exception",$ex);
             }
         }
         $catrows = $this->assetTypeService->listAllCategories();

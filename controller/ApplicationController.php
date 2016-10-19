@@ -59,8 +59,14 @@ class ApplicationController extends Controller{
         $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
         $AdminName = $_SESSION["WhoName"];
         if ($ActiveAccess){
-        	$this->applicationService->activate($id, $AdminName);
-        	$this->redirect('Application.php');
+        	try{
+        		$this->applicationService->activate($id, $AdminName);
+        		$this->redirect('Application.php');
+        	}catch (PDOException $e){
+        		$this->showError("Database exception",$e);
+        	}
+       	} else {
+            $this->showError("Application error", "You do not access to activate a application");
         }
     }
 	/**
@@ -86,7 +92,7 @@ class ApplicationController extends Controller{
             } catch (ValidationException $e){
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                throw $e;
+                $this->showError("Database exception",$e);
             }
         }
         $rows = $this->applicationService->getByID($id);
@@ -117,7 +123,7 @@ class ApplicationController extends Controller{
         	}catch (ValidationException $e){
         		$errors = $e->getErrors();
         	}catch (PDOException $ex){
-        		print $ex;
+        		$this->showError("Database exception",$ex);
         	}
         }else {
         	$rows = $this->applicationService->getByID($id);
@@ -166,7 +172,7 @@ class ApplicationController extends Controller{
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
             } catch (PDOException $ex){
-                print $ex;
+                $this->showError("Database exception",$ex);
             }
         }
         include 'view/newApplication_form.php';

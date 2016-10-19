@@ -71,10 +71,14 @@ class AccountController extends Controller{
         $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
         $AdminName = $_SESSION["WhoName"];
         if ($ActiveAccess){
-            $this->accountService->activate($id,$AdminName);
-            $this->redirect('Account.php');
-        }  else {
-            $this->showError("Application error", "You do not access to this page");
+        	try{
+            	$this->accountService->activate($id,$AdminName);
+            	$this->redirect('Account.php');
+        	} catch (PDOException $e){
+            	$this->showError("Database exception",$e);
+            }
+        } else {
+            $this->showError("Application error", "You do not access to activate a account");
         }
     }
 	/**
@@ -100,6 +104,8 @@ class AccountController extends Controller{
                 return;
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
+            } catch (PDOException $e){
+            	$this->showError("Database exception",$e);
             }
         }
         $rows  = $this->accountService->getByID($id); 
@@ -129,9 +135,11 @@ class AccountController extends Controller{
                 $this->accountService->update($id,$UserID,$Type,$Application,$AdminName);
                 $this->redirect('Account.php');
                 return;
-            } catch (Exception $ex) {
+            } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
-            }    
+            } catch (PDOException $e){
+            	$this->showError("Database exception",$e);
+            }
         }else {
             $rows  = $this->accountService->getByID($id);
             foreach ($rows as $row){
@@ -189,7 +197,7 @@ class AccountController extends Controller{
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                print $e;
+            	$this->showError("Database exception",$e);
             }
         }
         $types = $this->accountTypeController->listAllTypes();
@@ -241,7 +249,7 @@ class AccountController extends Controller{
             } catch (ValidationException $exc) {
                 $errors = $exc->getErrors();
             } catch (PDOException $e){
-                throw $e;
+                $this->showError("Database exception",$e);
             } 
         }
         $rows = $this->accountService->getByID($id);

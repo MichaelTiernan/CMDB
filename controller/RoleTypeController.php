@@ -50,8 +50,17 @@ class RoleTypeController extends Controller{
             throw new Exception('Internal error.');
         }
         $AdminName = $_SESSION["WhoName"];
-        $this->roleTypeService->activate($id, $AdminName);
-        $this->redirect('RoleType.php');
+        $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
+        if ($ActiveAccess){
+        	try{
+        		$this->roleTypeService->activate($id, $AdminName);
+        		$this->redirect('RoleType.php');
+        	}catch (PDOException $e){
+        		$this->showError("Database exception",$e);
+        	}
+        } else {
+            $this->showError("Application error", "You do not access to activate a role type");
+        }
     }
 	/**
 	 * {@inheritDoc}
@@ -77,7 +86,7 @@ class RoleTypeController extends Controller{
             } catch (ValidationException $e){
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                throw $e;
+                $this->showError("Database exception",$e);
             }
         }
         $rows = $this->roleTypeService->getByID($id);
@@ -87,7 +96,10 @@ class RoleTypeController extends Controller{
         }
         include 'view/deleteRoleType_form.php';
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Controller::edit()
+	 */
     public function edit() {
         $id = isset($_GET['id'])?$_GET['id']:NULL;
         if ( !$id ) {
@@ -109,7 +121,7 @@ class RoleTypeController extends Controller{
             } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             }
         }  else {
             $rows = $this->roleTypeService->getByID($id);
@@ -162,7 +174,7 @@ class RoleTypeController extends Controller{
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
             } catch (PDOException $e){
-                throw $e;
+                $this->showError("Database exception",$e);
             }
         }
         include 'view/newRoleType_form.php';
@@ -183,7 +195,7 @@ class RoleTypeController extends Controller{
         include 'view/roletype_overview.php';
     }
     /**
-     * This function returns all ative Role Types
+     * This function returns all active Role Types
      * @return array
      */
     public function listAllType(){

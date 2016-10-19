@@ -84,8 +84,10 @@ class IdentityController extends Controller{
                 $this->identityService->updateIdentity($id,$FristName,$LastName,$company,$Language,$userid,$type,$EMail,$AdminName);
                 $this->redirect('Identity.php');
                 return;
-            } catch (Exception $ex) {
+            } catch (ValidationException $ex) {
                 $errors = $ex->getErrors();
+            }catch (PDOException $e){
+            	$this->showError("Database exception",$e);
             }
         }  else {
             $rows = $this->identityService->getByID($id);
@@ -164,9 +166,8 @@ class IdentityController extends Controller{
             } catch (ValidationException $e) {
                 $errors = $e->getErrors();
             } catch (PDOException $ex){
-                print $ex;
+                 $this->showError("Database exception",$ex);
             }
-            
         }
         $types = $this->identityTypeController->listAllType();
         include 'view/newIdentity_form.php';
@@ -193,6 +194,8 @@ class IdentityController extends Controller{
                 return;
             }  catch (Exception $e){
                 $errors = $e->getErrors();
+            } catch (PDOException $ex){
+            	$this->showError("Database exception",$ex);
             }
         } 
         $rows = $this->identityService->getByID($id);
@@ -216,8 +219,17 @@ class IdentityController extends Controller{
             throw new Exception('Internal error.');
         }
         $AdminName = $_SESSION["WhoName"];
-        $this->identityService->activate($id,$AdminName);
-        $this->redirect('Identity.php');
+        $ActiveAccess= $this->accessService->hasAccess($this->Level, $this->Category, "Activate");
+        if ($ActiveAccess){
+        	try{
+       			$this->identityService->activate($id,$AdminName);
+        		$this->redirect('Identity.php');
+        	} catch (PDOException $e){
+        		$this->showError("Database exception",$e);
+        	}
+        }else{
+        	$this->showError("Application error", "You do not access to activate a Identity");
+        }
     }
     /**
      * {@inheritDoc}
@@ -259,7 +271,7 @@ class IdentityController extends Controller{
             } catch (ValidationException $exc) {
                 $errors = $exc->getErrors();
             } catch (PDOException $e){
-                print $e;
+                $this->showError("Database exception",$e);
             } 
         }
         $rows = $this->identityService->getByID($id);
