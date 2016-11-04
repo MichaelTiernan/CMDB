@@ -7,14 +7,11 @@ class AssetTypeGateway extends Logger{
 	 */
     private static $table = 'assettype';
     /**
-     * This function will Activate the AssetType
-     * @param integer $UUID The Unique ID of the AssetType
-     * @param string $AdminName
-     * @throws PDOException
+     * {@inheritDoc}
+     * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
-        try{
-            $pdo = Logger::connect();
+        $pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "Update AssetType set Active = 1, Deactivate_reason = NULL where Type_id = :uuid";
             $q = $pdo->prepare($sql);
@@ -23,21 +20,14 @@ class AssetTypeGateway extends Logger{
                 $Value = $this->getCategory($UUID)."Type with ".  $this->getVendor($UUID)." ".  $this->getType($UUID);
                 $this->logActivation(self::$table, $UUID, $Value, $AdminName);
             }
-        }catch (PDOException $e){
-            throw $e;
-        }
         Logger::disconnect();
     }
     /**
-     * This function will deactivate the AssetType
-     * @param integer $UUID The Unique ID of the AssetType
-     * @param string $reason
-     * @param string $AdminName
-     * @throws PDOException
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID, $reason, $AdminName) {
-        try{
-            $pdo = Logger::connect();
+       $pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "Update AssetType set Active = 0, Deactivate_reason = :reason where Type_id = :uuid";
             $q = $pdo->prepare($sql);
@@ -48,9 +38,6 @@ class AssetTypeGateway extends Logger{
                 $this->logDelete(self::$table, $UUID, $Value, $reason, $AdminName);
             }
             print "UUID: ".$UUID." reason: ".$reason."<br>";
-        }catch (PDOException $e){
-            throw $e;
-        }
         Logger::disconnect();
     }
     /**
@@ -94,14 +81,13 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will create a new Category
-     * @param int $Category
-     * @param string $Vendor
-     * @param string $Type
-     * @param string $AdminName
+     * @param int $Category The Unique ID of the asset category
+     * @param string $Vendor The name of the vendor
+     * @param string $Type The name of the type
+     * @param string $AdminName The name of the administrator that did the creation
      */
     public function create($Category,$Vendor,$Type,$AdminName){
-        try{
-            $pdo = Logger::connect();
+        $pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "Insert into AssetType (Category, Vendor, Type) values (:cat,:vendor,:type)";
             $q = $pdo->prepare($sql);
@@ -116,19 +102,15 @@ class AssetTypeGateway extends Logger{
                 $row = $stmnt->fetch(PDO::FETCH_ASSOC);
                 Logger::logCreate(self::$table, $row["Type_ID"], $Value, $AdminName);
             }
-        }catch (PDOException $e){
-            throw $e;
-        }
         Logger::disconnect();
     }
     /**
      * This function will update a given AssetType
-     * @param integer $UUID
-     * @param integer $Category
-     * @param string $Vendor
-     * @param string $Type
-     * @param string $AdminName
-     * @throws PDOException
+     * @param integer $UUID The unique id of the asset type
+     * @param integer $Category The unique ID of the asset category 
+     * @param string $Vendor The name of the vendor
+     * @param string $Type the name of the type
+     * @param string $AdminName The name of the administrator that did the creation
      */
     public function update($UUID,$Category,$Vendor,$Type,$AdminName) {
         $OldCategory = $this->getCategory($UUID);
@@ -151,8 +133,7 @@ class AssetTypeGateway extends Logger{
         }
         //Update Database
         if ($Changed){
-            try{
-                $pdo = Logger::connect();
+            $pdo = Logger::connect();
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $sql = "Update AssetType set Category = :cat, Vendor = :vendor, Type= :type where Type_id = :uuid";
                 $q = $pdo->prepare($sql);
@@ -161,9 +142,6 @@ class AssetTypeGateway extends Logger{
                 $q->bindParam(':type',$Type);
                 $q->bindParam(':vendor',$Vendor);
                 $q->execute();
-            } catch (PDOException $ex){
-                throw $ex;
-            }
             Logger::disconnect();
         }
     }
@@ -186,8 +164,9 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will check if the same Asset Type exist.
-     * @param String $Type
-     * @param String $Description
+     * @param int $Category The unique id of the category
+     * @param string $Type The name of the type
+     * @param string $Vendor The name of the vendor
      * @return boolean
      * @throws PDOException
      */
@@ -227,7 +206,7 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will return the Type
-     * @param int $UUID
+     * @param int $UUID the unique ID of the Asset type
      * @return string
      */
     private function getType($UUID){
@@ -246,7 +225,7 @@ class AssetTypeGateway extends Logger{
     }
     /**
      * This function will return the Vendor
-     * @param int $UUID
+     * @param int $UUID the unique ID of the Asset type
      * @return string
      */
     private function getVendor($UUID){

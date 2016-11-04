@@ -106,7 +106,7 @@ class AccessGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * Retunr the Last level if the Level has access
+     * Return the Last level if the Level has access
      * @param integer $level
      * @param integer $menuid
      * @return array

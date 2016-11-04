@@ -4,7 +4,7 @@ require_once 'Database.php';
 abstract class Logger extends Database{
     private $LogText = '';
     /**
-     * This function will delte the given object
+     * This function will delete the given object
      * @param mixed $UUID The unique identifier of the object
      * @param string $reason The reason of deletion
      * @param string $AdminName The Person who did the deletion
@@ -13,11 +13,11 @@ abstract class Logger extends Database{
     /**
      * This function will activate the given object
      * @param mixed $UUID The unique identifier of the object
-     * @param unknown $AdminName The person who did the Activation
+     * @param string $AdminName The person who did the Activation
      */
     abstract function activate($UUID,$AdminName);
     /**
-     * This funcion will select all object in a sairtan order
+     * This function will select all object in a certain order
      * @param string $order The Column where the sort will be done on
      */
     abstract function selectAll($order);
@@ -27,14 +27,14 @@ abstract class Logger extends Database{
      */
     abstract function selectById($id);
     /**
-     * This function will rerutn anny matchin row by the given search term
-     * @param string $search Anny term
-     * @return Array
+     * This function will return any matching row by the given search term
+     * @param string $search the term to search
+     * @return array
      */
     abstract function selectBySearch($search);
     /**
      * This function will check if the given assetTag is unique
-     * @param string $AssetTag
+     * @param string $AssetTag The assetTag of the device
      * @return boolean
      */
     public function isAssetTagUnique($AssetTag) {
@@ -54,11 +54,11 @@ abstract class Logger extends Database{
         return $result;
     }
     /**
-     * This function will log the Creation of an object
+     * This function will log the creation of an object
      * @param string $Table The table on where the action has been done
      * @param mixed $UUID The unique identifier of the object
      * @param string $Value Info on the object
-     * @param string $AdminName The name of the admin who did the action
+     * @param string $AdminName The name of the administrator who did the action
      */
     protected function logCreate($Table,$UUID,$Value,$AdminName){
         $this->LogText = "The ".$Value." is created by ".$AdminName." in table ".$Table;
@@ -68,10 +68,10 @@ abstract class Logger extends Database{
      * this function will log the update of a field in a table
      * @param string $Table The table on where the action has been done
      * @param mixed $UUID The unique identifier of the object
-     * @param string $field The indication of the coloumn where the change happend
+     * @param string $field The indication of the column where the change is done
      * @param string $oldValue The old value
      * @param string $NewValue The new value
-     * @param string $AdminName The name of the admin who did the action
+     * @param string $AdminName The name of the administrator who did the action
      */
     protected function logUpdate($Table,$UUID,$field,$oldValue,$NewValue,$AdminName){
         if (empty($oldValue)){
@@ -90,7 +90,7 @@ abstract class Logger extends Database{
      * @param mixed $UUID The unique identifier of the object
      * @param string $Value Information about the object
      * @param string $reason The reason why the deletion is done
-     * @param string $AdminName The name of the admin who did the action
+     * @param string $AdminName The name of the administrator who did the action
      */
     protected function logDelete($Table,$UUID,$Value,$reason,$AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is deleted du to ".$reason." by ".$AdminName;
@@ -101,7 +101,7 @@ abstract class Logger extends Database{
      * @param string $Table The table on where the action has been done
      * @param mixed $UUID The unique identifier of the object
      * @param string $Value Information about the object
-     * @param type $AdminName The name of the admin who did the action
+     * @param type $AdminName The name of the administrator who did the action
      */
     protected function logActivation($Table,$UUID,$Value,$AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is activated by ".$AdminName;
@@ -111,9 +111,9 @@ abstract class Logger extends Database{
      * This function will log the assignment of an Identity to an Account
      * @param string $Table The table on where the action has been done
      * @param int $UUID The unique identifier of the object
-     * @param string $Value info about the Idenity
+     * @param string $Value info about the Identity
      * @param string $AccountInfo info about the Account
-     * @param string $AdminName The name of the admin who did the action
+     * @param string $AdminName The name of the administrator who did the action
      */
     protected function logAssignIden2Account($Table,$UUID,$Value,$AccountInfo,$AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is assigned to ".$AccountInfo." by ".$AdminName;
@@ -124,8 +124,8 @@ abstract class Logger extends Database{
      * @param string $Table The table on where the action has been done
      * @param int $UUID The unique identifier of the object
      * @param string $Value The info of the Account
-     * @param string $IdenInfo The info about the Idententity
-     * @param string $AdminName The name of the admin who did the action
+     * @param string $IdenInfo The info about the Identity
+     * @param string $AdminName The name of the administrator who did the action
      */
     protected function logAssignAccount2Iden($Table,$UUID,$Value, $IdenInfo, $AdminName){
         $this->LogText = "The ".$Value." in table ".$Table." is assigned to ".$IdenInfo." by ".$AdminName;

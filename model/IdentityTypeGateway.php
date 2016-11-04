@@ -50,7 +50,7 @@ class IdentityTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This sfunction will Activate the given IdentityType
+     * This function will Activate the given IdentityType
      * @param Integer $UUID
      * @param String $AdminName
      */
@@ -122,7 +122,7 @@ class IdentityTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function willretun the given IdentityType
+     * This function will return the given IdentityType
      * @param type $id
      * @return Array
      */
@@ -139,10 +139,10 @@ class IdentityTypeGateway extends Logger {
     }
     /**
      * 
-     * @param Integer $UUID
-     * @param String $type
-     * @param String $description
-     * @param String $AdminName
+     * @param int $UUID
+     * @param string $type
+     * @param string $description
+     * @param string $AdminName
      */
     public function update($UUID,$type,$description,$AdminName){
         $OldType = $this->getType($UUID);
@@ -174,8 +174,8 @@ class IdentityTypeGateway extends Logger {
     }
     /**
      * This function will check if the same Identity Type exist.
-     * @param String $Type
-     * @param String $Description
+     * @param string $Type
+     * @param string $Description
      * @return boolean
      * @throws PDOException
      */
@@ -200,7 +200,7 @@ class IdentityTypeGateway extends Logger {
     }
     /**
      * This function will return the Type
-     * @param Int $UUID
+     * @param int $UUID
      * @return string
      */
     private function getType($UUID){
@@ -218,8 +218,8 @@ class IdentityTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will return the Desription
-     * @param Int $UUID
+     * This function will return the Description
+     * @param int $UUID
      * @return string
      */
     private function getDescription($UUID){

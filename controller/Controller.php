@@ -7,7 +7,7 @@ abstract class Controller {
     protected $loggerController = NULL;
     /**
      * This function is the main function of this call
-     * It will be usesd to call the other functions.
+     * It will be used to call the other functions.
      */
     abstract function handleRequest();
     /**

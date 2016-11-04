@@ -44,13 +44,13 @@ class DeviceGateway extends Logger {
 	/**
 	 * This function will create a new Asset
 	 * @param string $AssetTag The AssetTag of the Asset        	
-	 * @param string $SerialNumber The serialnumber of the Asset        	
+	 * @param string $SerialNumber The serial number of the Asset        	
 	 * @param int $Type The AssetType of the Device 
 	 * @param string $RAM The amount of RAM
-	 * @param string $IP The IP-Adress of the Asset
+	 * @param string $IP The IP-Address of the Asset
 	 * @param string $Name The name of the device
 	 * @param string $MAC The MAC-Address of the Asset
-	 * @param string $AdminName The name of the admin that dit the creation
+	 * @param string $AdminName The name of the administrator that did the creation
 	 */
 	public function create($AssetTag, $SerialNumber, $Type, $RAM, $IP, $Name, $MAC, $AdminName) {
 		$pdo = Logger::connect ();
@@ -75,13 +75,13 @@ class DeviceGateway extends Logger {
 	/**
 	 * This function will update an asset
 	 * @param string $AssetTag The AssetTag of the Asset
-	 * @param string $SerialNumber The serialnumber of the Asset 
+	 * @param string $SerialNumber The serial number of the Asset 
 	 * @param int $Type The AssetType of the Device
 	 * @param string $RAM The amount of RAM
-	 * @param string $IP The IP-Adress of the Asset
+	 * @param string $IP The IP-Address of the Asset
 	 * @param string $Name The name of the device
 	 * @param string $MAC The MAC-Address of the Asset
-	 * @param string $AdminName The name of the admin that dit the creation
+	 * @param string $AdminName The name of the administrator that did the creation
 	 */
 	public function update($AssetTag, $SerialNumber, $Type, $RAM, $IP, $Name, $MAC, $AdminName) {
 		$OldSerialNumber = $this->getSerialNumber ( $AssetTag );
@@ -295,7 +295,7 @@ class DeviceGateway extends Logger {
 		Logger::disconnect ();
 	}
 	/**
-	 * This function will return the IP Adress
+	 * This function will return the IP Address
 	 * @param string $AssetTag The unique AssetTag
 	 * @return string
 	 */

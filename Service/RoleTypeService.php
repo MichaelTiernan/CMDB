@@ -39,7 +39,9 @@ class RoleTypeService extends Service{
             $this->roleTypeGateway->create($type, $description, $AdminName);
         } catch (ValidationException $ex) {
             throw $ex;
-        } 
+        } catch (PDOException $e){
+        	throw $e;
+        }
     }
     
     public function update($UUID,$type,$description,$AdminName){
@@ -48,6 +50,8 @@ class RoleTypeService extends Service{
             $this->roleTypeGateway->update($UUID, $type, $description, $AdminName);
         } catch (ValidationException $ex) {
             throw $ex;
+        } catch (PDOException $e){
+        	throw $e;
         }
     }
     /**

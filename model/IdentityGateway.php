@@ -3,10 +3,19 @@ require_once 'Logger.php';
 
 class IdentityGateway extends Logger{
     private static $table = 'identity';
-    
+    /**
+     * This function will create a new Identity
+     * @param string $FirstName
+     * @param string $LastName
+     * @param string $company
+     * @param string $language
+     * @param string $UserID
+     * @param int $type
+     * @param string $email
+     * @param string $AdminName
+     */
     public function create($FirstName,$LastName,$company, $language,$UserID,$type,$email,$AdminName) {
-        try{ 
-            $UserID = ($UserID!= NULL)?$UserID:NULL;
+        $UserID = ($UserID!= NULL)?$UserID:NULL;
             $company = ($company != NULL)?$company:NULL;
             $Name = $FirstName.", ".$LastName;
             $pdo = Logger::connect();
@@ -27,20 +36,14 @@ class IdentityGateway extends Logger{
                 $row = $stmnt->fetch(PDO::FETCH_ASSOC);
                 Logger::logCreate(self::$table, $row["Iden_ID"], $Value, $AdminName);
             }
-        }  catch (PDOException $e){
-            print $e;
-        }
         Logger::disconnect();
     }
     /**
-     * Thsi function will activate the given Identity
-     * @param Int $UUID
-     * @param String $reason
-     * @param String $AdminName
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID,$reason, $AdminName) {
-        try{
-            $pdo = Logger::connect();
+        $pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "Update Identity set Active = 0, Deactivate_reason = :reason where Iden_id = :uuid";
             $q = $pdo->prepare($sql);
@@ -50,19 +53,14 @@ class IdentityGateway extends Logger{
                 $Value = "Identity with ".  $this->getFirstName($UUID)." ".  $this->getLastName($UUID);
                 $this->logDelete(self::$table, $UUID, $Value, $reason, $AdminName);
             }
-        }catch (PDOException $e){
-            print $e;
-        }
         Logger::disconnect();
     }
     /**
-     * 
-     * @param type $UUID
-     * @param type $AdminName
+     * {@inheritDoc}
+     * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
-        try{
-            $pdo = Logger::connect();
+        $pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "Update Identity set Active = 1, Deactivate_reason = NULL where Iden_id = :uuid";
             $q = $pdo->prepare($sql);
@@ -71,15 +69,11 @@ class IdentityGateway extends Logger{
                 $Value = "Identity with ".  $this->getFirstName($UUID)." ".  $this->getLastName($UUID);
                 $this->logActivation(self::$table, $UUID, $Value, $AdminName);
             }
-        }catch (PDOException $e){
-            print $e;
-        }
         Logger::disconnect();
     }
     /**
-     * 
-     * @param type $id
-     * @return type
+     * {@inheritDoc}
+     * @see Logger::selectById()
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -95,13 +89,13 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will update a given Identity
-     * @param Integer $UUID
-     * @param String $FirstName
-     * @param String $LastName
-     * @param String $UserID
-     * @param String $type
-     * @param String $email
-     * @param String $AdminName
+     * @param integer $UUID
+     * @param string $FirstName
+     * @param string $LastName
+     * @param string $UserID
+     * @param int $type
+     * @param string $email
+     * @param string $AdminName
      */
     public function update($UUID,$FirstName,$LastName,$UserID,$company, $language,$type,$email,$AdminName) {
         $OldFirstName = $this->getFirstName($UUID);
@@ -199,9 +193,8 @@ class IdentityGateway extends Logger{
         } 
     }
     /**
-     * 
-     * @param string $order
-     * @return type
+     * {@inheritDoc}
+     * @see Logger::selectAll()
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -264,7 +257,7 @@ class IdentityGateway extends Logger{
     }
     /**
      * This will list all available accounts
-     * @return Array
+     * @return array
      */
     public function listAllAccounts() {
         $pdo = Logger::connect();
@@ -281,8 +274,8 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will list all Accound assinged to the given account
-     * @param Integer $UUID The Unique ID of the Identity
+     * This function will list all Accounts assinged to the given account
+     * @param integer $UUID The Unique ID of the Identity
      * @return Array
      */
     public function listAssignedAccount($UUID){

@@ -7,9 +7,8 @@ class ApplicationGateway extends Logger{
 	 */
     private static $table = 'application';
     /**
-     * This function will Activate the Application
-     * @param integer $UUID The ID of the Application
-     * @param string $AdminName The name of the person perfoming the action
+     * {@inheritDoc}
+     * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
         $pdo = Logger::connect();
@@ -23,10 +22,8 @@ class ApplicationGateway extends Logger{
         }
     }
     /**
-     * This application will Deactivate the application
-     * @param integer $UUID The ID of the Application
-     * @param string $reason The Reason of Deletion
-     * @param string $AdminName The name of the person perfoming the action
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID, $reason, $AdminName) {
         $pdo = Logger::connect();
@@ -41,9 +38,8 @@ class ApplicationGateway extends Logger{
         }
     }
     /**
-     * This function will select all posibel Application
-     * @param string $order The colmumn name were to order on
-     * @return array
+     * {@inheritDoc}
+     * @see Logger::selectAll()
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -76,7 +72,7 @@ class ApplicationGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will retun all the info of an given application
+     * This function will return all the info of an given application
      * @param integer $id The ID of the Application
      */
     public function selectById($id) {
@@ -110,7 +106,7 @@ class ApplicationGateway extends Logger{
     /**
      * This function will create a new application
      * @param string $Name The name of the application
-     * @param string $AdminName The name of the admin that creates the Application
+     * @param string $AdminName The name of the administrator that creates the Application
      */
     public function create($Name,$AdminName){
         $pdo = Logger::connect();
@@ -131,7 +127,7 @@ class ApplicationGateway extends Logger{
      * This function will update the application.
      * @param integer $UUID The ID of the Application
      * @param string $Name The name of the application
-     * @param string $AdminName The name of the admin that creates the Application
+     * @param string $AdminName The name of the administrator that creates the Application
      */
     public function update($UUID, $Name,$AdminName) {
         $OldName = $this->getName($UUID);
@@ -170,16 +166,16 @@ class ApplicationGateway extends Logger{
     }
     /**
      * This function will check if there is an application already existing
-     * @param string $Naam
+     * @param string $Name The name of the Application
      * @return boolean
      */
-    public function alreadyExist($Naam,$UUID = 0){
+    public function alreadyExist($Name,$UUID = 0){
     	$pdo = Logger::connect();
     	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     	if ($UUD = 0){
 	    	$sql =  "Select Name from Application where Name = :name" ;
 	    	$q = $pdo->prepare($sql);
-	    	$q->bindParam(':name',$Naam);
+	    	$q->bindParam(':name',$Name);
 	    	$q->execute();
 	    	if ($q->rowCount()>0){
 	    		return TRUE;
@@ -188,10 +184,10 @@ class ApplicationGateway extends Logger{
 	    	}
     	}else {
     		$OldName = $this->getName($UUID);
-    		if (strcmp($OldName, $Naam) != 0){
+    		if (strcmp($OldName, $Name) != 0){
     			$sql =  "Select Name from Application where Name = :name" ;
     			$q = $pdo->prepare($sql);
-    			$q->bindParam(':name',$Naam);
+    			$q->bindParam(':name',$Name);
     			$q->execute();
     			if ($q->rowCount()>0){
     				return TRUE;

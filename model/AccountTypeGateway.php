@@ -12,18 +12,14 @@ class AccountTypeGateway extends Logger{
      * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
-        try{
-            $pdo = Logger::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "Update AccountType set Active = 1, Deactivate_reason = NULL where Type_id = :uuid";
-            $q = $pdo->prepare($sql);
-            $q->bindParam(':uuid',$UUID);
-            if ($q->execute()){
-                $Value = "AccountType with ".  $this->getType($UUID)." ".  $this->getDescription($UUID);
-                $this->logActivation(self::$table, $UUID, $Value, $AdminName);
-            }
-        }catch (PDOException $e){
-            throw $e;
+        $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "Update AccountType set Active = 1, Deactivate_reason = NULL where Type_id = :uuid";
+        $q = $pdo->prepare($sql);
+        $q->bindParam(':uuid',$UUID);
+        if ($q->execute()){
+            $Value = "AccountType with ".  $this->getType($UUID)." ".  $this->getDescription($UUID);
+            $this->logActivation(self::$table, $UUID, $Value, $AdminName);
         }
         Logger::disconnect();
     }
@@ -32,9 +28,8 @@ class AccountTypeGateway extends Logger{
 	 * @see Logger::delete()
 	 */
     public function delete($UUID, $reason, $AdminName) {
-        try{
-            $pdo = Logger::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "Update AccountType set Active = 0, Deactivate_reason = :reason where Type_id = :uuid";
             $q = $pdo->prepare($sql);
             $q->bindParam(':uuid',$UUID);
@@ -44,9 +39,6 @@ class AccountTypeGateway extends Logger{
                 $this->logDelete(self::$table, $UUID, $Value, $reason, $AdminName);
             }
             print "UUID: ".$UUID." reason: ".$reason."<br>";
-        }catch (PDOException $e){
-            throw $e;
-        }
         Logger::disconnect();
     }
     /**
@@ -56,8 +48,7 @@ class AccountTypeGateway extends Logger{
      * @param string $AdminName The name of the admin that will do the action
      */
     public function create($type,$description, $AdminName) {
-        try{
-            $pdo = Logger::connect();
+        $pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "Insert into AccountType (Type,Description) values (:type,:description)";
             $q = $pdo->prepare($sql);
@@ -71,9 +62,6 @@ class AccountTypeGateway extends Logger{
                 $row = $stmnt->fetch(PDO::FETCH_ASSOC);
                 Logger::logCreate(self::$table, $row["Type_ID"], $Value, $AdminName);
             }
-        }catch (PDOException $e){
-            throw $e;
-        }
         Logger::disconnect();
     }
     /**
@@ -151,8 +139,7 @@ class AccountTypeGateway extends Logger{
         $OldType = $this->getType($UUID);
         $OldDescription = $this->getDescription($UUID);
         //Detect Changes
-        try{
-            $pdo = Logger::connect();
+        	$pdo = Logger::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             if (strcasecmp($OldDescription, $description) != 0){
                 $this->logUpdate(self::$table, $UUID, "Description", $OldDescription, $description, $AdminName);
@@ -170,9 +157,6 @@ class AccountTypeGateway extends Logger{
                 $q->bindParam(':Type',$type);
                 $q->execute();
             }
-        }catch (PDOException $e){
-            throw $e;
-        }
         Logger::disconnect();
     }
     /**

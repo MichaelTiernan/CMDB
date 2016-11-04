@@ -27,10 +27,8 @@ class AccountGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will deactivate the given Account
-     * @param integer $UUID The ID of the Account
-     * @param string $reason The reason the deactivation was done
-     * @param string $AdminName The name of the Admin that did the activation
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID, $reason, $AdminName) {
         $pdo = Logger::connect();
@@ -49,9 +47,8 @@ class AccountGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will list all Accounts
-     * @param string $order The order of sorting
-     * @return array
+     * {@inheritDoc}
+     * @see Logger::selectAll()
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -224,7 +221,7 @@ class AccountGateway extends Logger{
     }
 
     /**
-     * Thid function will return the info for one Account
+     * This function will return the info for one Account
      * @param integer $id The ID of the account
      * @return array
      */
@@ -242,7 +239,7 @@ class AccountGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will retrun all assigned account
+     * This function will return all assigned account
      * @param int $UUID
      * @return array
      */

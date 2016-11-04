@@ -202,7 +202,7 @@ class AccountController extends Controller{
         }
         $types = $this->accountTypeController->listAllTypes();
         $applications = $this->applicationController->listAllApplications();
-        include ($_SERVER["DOCUMENT_ROOT"] .'/CMDB/view/newAccount_form.php');
+        include 'view/newAccount_form.php';
     }
 	/**
 	 * {@inheritDoc}
