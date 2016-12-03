@@ -11,12 +11,12 @@ class Calculator{
 	public function calculate($requested, $received){
 		$calc = 0;
 		if ($requested == $received){
-			$calc = self::bonus + ($received * self::correction);
+			$calc = self::$bonus + ($received * self::$correction);
 		}else{
 			if ($received > $requested){
-				$calc = -(($received-$requested) * self::correction);
+				$calc = -(($received-$requested) * self::$correction);
 			}else{
-				$calc = ($received-$requested) * self::correction;
+				$calc = ($received-$requested) * self::$correction;
 			}
 		}
 		return $calc;

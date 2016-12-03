@@ -11,7 +11,7 @@ class Scoreboard {
 	}
 	
 	public function getPlayersName() {
-		return PlayersName;
+		return $this->PlayersName;
 	}
 	
 	public function setPlayersName($playersName) {
@@ -23,7 +23,14 @@ class Scoreboard {
 	}
 	
 	public function result($amout){
-		$this->score = $this->score + $this->calc.calculate($this->predation, $amout);
+		$this->score = $this->score + $this->calc->calculate($this->predation, $amout);
+		return $this->score;
+	}
+	
+	public function setScore($score){
+		$this->score = $score;
+	}
+	public function getScore(){
 		return $this->score;
 	}
 }

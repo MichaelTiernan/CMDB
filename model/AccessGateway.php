@@ -219,7 +219,7 @@ class AccessGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will return the permission from the givven permission
+     * This function will return the permission from the given permission
      * @param type $permission
      * @return string
      */

@@ -1,5 +1,8 @@
 <?php
 session_start();
+//include_once '../header.php';
 require_once 'GameController.php';
-$Game = new gameController();
+if (empty($Game)){
+	$Game = new gameController();
+}
 $Game->handleRequest();

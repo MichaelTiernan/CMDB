@@ -3,7 +3,10 @@ require_once 'GameService.php';
 require_once 'ValidationException.php';
 Class gameController{
 	private $gameService;
+	private $reslult;
+	private $count = 0;
 	public function __construct(){
+		$this->count++;
 		$this->gameService = new GameService();
 	}
 	/**
@@ -11,7 +14,7 @@ Class gameController{
 	 * It will be used to call the other functions.
 	 */
 	public function handleRequest() {
-		
+		print "GameController: This is the ".$this->count." occourence<br>";
 		$op = isset($_GET['op'])?$_GET['op']:NULL;
 		try {
 			if ( !$op || $op == 'reset' ) {
@@ -20,6 +23,8 @@ Class gameController{
 				$this->players();
 			}elseif ($op == 'round1'){
 				$this->round1();
+			}elseif ($op == 'round2'){
+				$this->round2();
 			}
 		}catch ( Exception $e ) {
             // some unknown Exception got through here, use application error page to display it
@@ -40,7 +45,7 @@ Class gameController{
 	 * @param string $location
 	 */
 	public function redirect($location) {
-		header('Location: '.$location);
+		header('Location: '.$location, TRUE, 301);
 	}
 	
 	private function start(){
@@ -50,11 +55,12 @@ Class gameController{
 		if ( isset($_POST['form-submitted'])) {
 			$Players  = isset($_POST['players']) ? $_POST['players'] :NULL;
 			try {
-				echo "<br>The amount of players is: ".$this->amount."<br>";
+				print "GameController: The amount of players will be set to: ".$Players."<br>";
+				//$_SESSION["Game_ID"] = $this->gameService->setAmountOfPlayers($Players);
 				$this->gameService->setAmountOfPlayers($Players);
-				$_SESSION["Players"] = $Players;
-				$this->redirect('PlayWizard.php?op=players');
-				return;
+// 				print "The Game_ID = ".$_SESSION["Game_ID"]."<br>";
+ 				$this->redirect('PlayWizard.php?op=players');
+ 				return;
 			} catch (ValidationException $e) {
                 $errors = $e->getErrors();
             }
@@ -62,30 +68,32 @@ Class gameController{
 		include 'amountPlayers_form.php';
 	}
 	
-	private function players(){	
+	private function players(){
+		print_r($_POST);
 		$title = 'Players name';
 		$errors = array();
-		$amount = $_SESSION["Players"];
+		$Game_ID = $_SESSION["Game_ID"];
+		$amount = $this->gameService->getAmountOfPlayers();
+		print "The Amount of  players= ".$amount."<br>";
 		$Name ="";
 		if ( isset($_POST['form-submitted'])) {
-			print_r($_POST);
 			try {
 				switch ($amount) {
 					case 3:
-						$this->gameService->Play3Players($_POST["player1"], $_POST["player2"], $_POST["player3"]);
+						$this->gameService->Play3Players($Game_ID,$_POST["player1"], $_POST["player2"], $_POST["player3"]);
 						break;
 					case 4:
-						$this->gameService->Play4Players($_POST["player1"], $_POST["player2"], $_POST["player3"],$_POST["player4"]);
+						$this->gameService->Play4Players($Game_ID,$_POST["player1"], $_POST["player2"], $_POST["player3"],$_POST["player4"]);
 						break;
 					case 5:
-						$this->gameService->Play5Players($_POST["player1"], $_POST["player2"], $_POST["player3"],$_POST["player4"],$_POST["player5"]);
+						$this->gameService->Play5Players($Game_ID,$_POST["player1"], $_POST["player2"], $_POST["player3"],$_POST["player4"],$_POST["player5"]);
 						break;
 					case 6:
-						$this->gameService->Play6Players($_POST["player1"], $_POST["player2"], $_POST["player3"],$_POST["player4"],$_POST["player5"],$_POST["player6"]);
+						$this->gameService->Play6Players($Game_ID,$_POST["player1"], $_POST["player2"], $_POST["player3"],$_POST["player4"],$_POST["player5"],$_POST["player6"]);
 						break;
 				}
-				//$this->redirect('PlayWizard.php?op=round1');
-				//return;
+				$this->redirect('PlayWizard.php?op=round1');
+				return;
 			} catch (ValidationException $e) {
 				$errors = $e->getErrors();
 			}
@@ -95,10 +103,36 @@ Class gameController{
 	
 	private function round1(){
 		$title = 'Round 1';
-		$errors = array();
-		$amount = $_SESSION["Players"];
-		
-		include 'Round_form.php';
+		$Game_ID = $_SESSION["Game_ID"];
+		$amount = $this->gameService->getAmountOfPlayers($Game_ID);
+		$players = $this->gameService->getPlayers($Game_ID);
+		if ( isset($_POST['form-submitted'])) {
+			print_r($_POST);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$Result[]= array("PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => 0);
+				$i++;
+			}
+			$this->reslult = $this->gameService->setRound1($Result);
+			if (!$this->gameService->isThisTheLastRound(1, $amount)){
+				$this->redirect('PlayWizard.php?op=round2');
+				return;
+			}
+		}	
+		include 'Round1_form.php';
 	}
 	
+	private function round2(){
+		$title = 'Round 2';
+		$Game_ID = $_SESSION["Game_ID"];
+		$amount = $this->gameService->getAmountOfPlayers($Game_ID);
+		$players = $this->gameService->getPlayers($Game_ID);
+		if ( isset($_POST['form-submitted'])) {
+			
+		}
+		include 'Round2_form.php';
+	}
 }

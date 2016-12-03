@@ -7,7 +7,7 @@
     <link href="css/font-awesome.css" rel="stylesheet">
     <link href="css/datepacker.css" rel="stylesheet">
     <link href="css/bootstrap2-toggle.min.css" rel="stylesheet">  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js" charset="UTF-8"></script>
     <script type="text/javascript" src="js/bootstrap-select.js" charset="UTF-8"></script>
     <script type="text/javascript" src="js/bootstrap-datepicker.js" charset="UTF-8"></script>
