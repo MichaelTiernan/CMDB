@@ -45,7 +45,8 @@ Class gameController{
 	 * @param string $location
 	 */
 	public function redirect($location) {
-		header('Location: '.$location, TRUE, 301);
+		header('Location: '.$location);
+		die();
 	}
 	
 	private function start(){
@@ -57,9 +58,10 @@ Class gameController{
 			try {
 				print "GameController: The amount of players will be set to: ".$Players."<br>";
 				//$_SESSION["Game_ID"] = $this->gameService->setAmountOfPlayers($Players);
+				$_SESSION["AmountOfPlayers"] = $Players;
 				$this->gameService->setAmountOfPlayers($Players);
 // 				print "The Game_ID = ".$_SESSION["Game_ID"]."<br>";
- 				$this->redirect('PlayWizard.php?op=players');
+				$this->redirect('PlayWizard.php?op=players');
  				return;
 			} catch (ValidationException $e) {
                 $errors = $e->getErrors();
@@ -72,8 +74,8 @@ Class gameController{
 		print_r($_POST);
 		$title = 'Players name';
 		$errors = array();
-		$Game_ID = $_SESSION["Game_ID"];
-		$amount = $this->gameService->getAmountOfPlayers();
+		//$Game_ID = $_SESSION["Game_ID"];
+		$amount = $_SESSION["AmountOfPlayers"];
 		print "The Amount of  players= ".$amount."<br>";
 		$Name ="";
 		if ( isset($_POST['form-submitted'])) {

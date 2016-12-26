@@ -52,9 +52,9 @@ class AccountTypeService extends Service{
     }
     /**
      * This function will create a new Account Type
-     * @param string $type The type of the accounttype
+     * @param string $type The type of the account type
      * @param string $description the description for this type
-     * @param string $AdminName The name of the person hwo did the creation
+     * @param string $AdminName The name of the person who did the creation
      * @throws ValidationException
      * @throws PDOException
      */
@@ -71,9 +71,9 @@ class AccountTypeService extends Service{
     /**
      * This function will update a given account type
      * @param int $UUID The Unique ID of the AccountType
-     * @param string $type The type of the accounttype
+     * @param string $type The type of the account type
      * @param string $description The description for this type
-     * @param string $AdminName The name of the person hwo did the creation
+     * @param string $AdminName The name of the person who did the update
      * @throws ValidationException
      * @throws PDOException
      */
@@ -95,8 +95,8 @@ class AccountTypeService extends Service{
         return $this->accountTypeGateway->selectBySearch($search);
     }
     /**
-     * This function will validate the paramaters
-     * @param string $type The type of the accounttype
+     * This function will validate the parameters
+     * @param string $type The type of the account type
      * @param string $description The description for this type
      * @throws ValidationException
      */

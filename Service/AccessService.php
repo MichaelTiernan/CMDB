@@ -18,9 +18,9 @@ class AccessService extends Service {
         return $this->accessGateway->hasAccess($level, $sitePart, $action);
     }
     /**
-     * This function will retrun the third level of the menu
-     * @param int $level
-     * @param int $menuid
+     * This function will return the third level of the menu
+     * @param int $level The level of the Admin
+     * @param int $menuid The Unique ID of the Menu
      */
     public function getThirdLevel($level,$menuid){
         return $this->accessGateway->getMenu($level,$menuid);

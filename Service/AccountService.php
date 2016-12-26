@@ -54,7 +54,7 @@ class AccountService extends Service {
      * @param string $UserID The UserID of the Account
      * @param int $Type The ID of the AccountType
      * @param int $Application The ID of the Application
-     * @param string $AdminName The name of the Admin
+     * @param string $AdminName The name of the Administrator
      * @throws ValidationException
      * @throws PDOException
      */
@@ -69,12 +69,12 @@ class AccountService extends Service {
         }
     }
     /**
-     * This functon will update a given Account
+     * This function will update a given Account
      * @param int $UUID The unique ID of the Account
      * @param string $UserID The UserID of the Account
      * @param int $Type The ID of the AccountType
      * @param int $Application The ID of the Application
-     * @param string $AdminName The name of the Admin
+     * @param string $AdminName The name of the Administrator
      * @throws ValidationException
      * @throws PDOException
      */
@@ -101,7 +101,7 @@ class AccountService extends Service {
      * @param int $Identity The unique ID of the Identity
      * @param DateTime $start The startDate
      * @param DateTime $end The EndDate
-     * @param string $AdminName The name of the Admin
+     * @param string $AdminName The name of the Administrator
      * @throws ValidationException
      * @throws PDOException
      */
@@ -130,10 +130,10 @@ class AccountService extends Service {
         return $this->accountGateway->selectBySearch($search);
     }
     /**
-     * This function will validate teh parameters during assign
-     * @param int $Identity
-     * @param DateTime $From
-     * @param DateTime $Until
+     * This function will validate the parameters during assign
+     * @param int $Identity The unique ID of the Identity
+     * @param DateTime $From The From Date
+     * @param DateTime $Until The Until date
      * @throws ValidationException
      */
     private function validateAssignParams($Identity,$From,$Until){
@@ -158,7 +158,7 @@ class AccountService extends Service {
         throw new ValidationException($errors);
     }
     /**
-     * This function will validate the paramaters and throw an exception
+     * This function will validate the parameters and throw an exception
      * @param string $userid The UserID of the Account
      * @param int $type The ID of the AccountType
      * @param int $application The ID of the Application
@@ -178,12 +178,12 @@ class AccountService extends Service {
     	if ($UUID > 0){
     		if (strcmp($userid, $this->accountGateway->getUserID($UUID)) != 0){
     			if ($this->accountGateway->CheckDoubleEntry($userid, $application)){
-    				$errors[] = 'This UserID aleray exist in the application';
+    				$errors[] = 'This UserID already exist in the application';
     			}
     		}
     	}else{
     		if ($this->accountGateway->CheckDoubleEntry($userid, $application)){
-    			$errors[] = 'This UserID aleray exist in the application';
+    			$errors[] = 'This UserID already exist in the application';
     		}
     	}
     	if ( empty($errors) ) {

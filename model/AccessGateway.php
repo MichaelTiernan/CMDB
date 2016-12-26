@@ -8,7 +8,7 @@ class AccessGateway extends Logger{
 	private static $table = 'role_perm';
     /**
      * Check if the level has access to the requested source
-     * @param int $level The level of the Administator 
+     * @param int $level The level of the Administrator 
      * @param string $sitePart the Source 
      * @param string $action the action that will be performed
      * @return boolean
@@ -53,7 +53,7 @@ class AccessGateway extends Logger{
     }
     /**
      * Return the Second Level of the menu
-     * @param type $menuid
+     * @param int $menuid The unique ID of the Menu.
      * @return array
      */
     public function getSecond($menuid){
@@ -107,8 +107,8 @@ class AccessGateway extends Logger{
     }
     /**
      * Return the Last level if the Level has access
-     * @param integer $level
-     * @param integer $menuid
+     * @param int $level The level of the Administrator
+     * @param int $menuid The unique ID of the Menu
      * @return array
      */
     public function getMenu($level,$menuid) {
@@ -133,7 +133,7 @@ class AccessGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will list all Accounts
+     * This function will list all Roles and Permissions
      * @param string $order The order of sorting
      * @return array
      */
@@ -154,11 +154,11 @@ class AccessGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will create a new Permmission;
+     * This function will create a new Permission;
      * @param int $Level The Level of the administrator
      * @param int $menu the ID Level of the menu
-     * @param int $permission the ID of the Permession
-     * @param string $AdminName The name of the Admin
+     * @param int $permission the ID of the Permission
+     * @param string $AdminName The name of the Administrator
      */
     public function create($Level,$menu,$permission,$AdminName){
         $pdo = Logger::connect();
@@ -220,7 +220,7 @@ class AccessGateway extends Logger{
     }
     /**
      * This function will return the permission from the given permission
-     * @param type $permission
+     * @param int $permission The unique ID of the Permission
      * @return string
      */
     private function getPermission($permission){
@@ -239,8 +239,8 @@ class AccessGateway extends Logger{
     }
     /**
      * This function will check if a given level, menu and permission exist
-     * @param int $Level The level of the Administratr
-     * @param int $menu The ID of the menu 
+     * @param int $Level The level of the Administrator
+     * @param int $menu The unique ID of the Menu. 
      * @param int $permission The id of the Permission
      * @return boolean
      */
@@ -282,7 +282,7 @@ class AccessGateway extends Logger{
     }
     /**
      * This function will return the Menu
-     * @param int $menu The ID of the Menu.
+     * @param int $menu The unique ID of the Menu.
      * @return string
      */
     private function getMenuById($menu){

@@ -63,12 +63,12 @@ class ApplicationService extends Service{
     }
     /**
      * This function will create a new Application
-     * @param string $Name
-     * @param string $AdminName
+     * @param string $Name The name of the application
+     * @param string $AdminName The name of the person who did the creation
      * @throws ValidationException
      * @throws PDOException
      */
-    public function createNewApplication($Name,$AdminName){
+    public function create($Name,$AdminName){
         try{
             $this->validateParameters($Name);
             $this->applicationGateway->create($Name,$AdminName);
@@ -80,13 +80,20 @@ class ApplicationService extends Service{
     }
     /**
      * This function will return all accounts
-     * @param int $UUID The 
+     * @param int $UUID The unique ID of the Application
      */
     public function listAllAccounts($UUID) {
         return $this->applicationGateway->listAllAccounts($UUID);
     }
-    
-    public function edit($UUID,$Name,$AdminName){
+    /**
+     * This function will update an existing Application
+     * @param int $UUID The unique of the application
+     * @param string $Name The name of the application
+     * @param string $AdminName The name of the person who did the update
+     * @throws ValidationException
+     * @throws PDOException
+     */
+    public function update($UUID,$Name,$AdminName){
     	try {
     		$this->validateParameters($Name,$UUID);
     		$this->applicationGateway->update($UUID,$Name,$AdminName);
@@ -97,9 +104,8 @@ class ApplicationService extends Service{
         }
     }
     /**
-     * This will validate the givven parameters
+     * This will validate the given parameters
      * @param String $Name The Name of the Application
-     * @return 
      * @throws ValidationException
      */
     private function validateParameters($Name, $UUID = 0){

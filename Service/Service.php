@@ -23,9 +23,9 @@ abstract class Service {
      */
     abstract function delete($id,$reason,$AdminName);
     /**
-     * This function will activate the given oject 
+     * This function will activate the given object 
      * @param mixed $id The unique ID of the Object
-     * @param string $AdminName The name of the person who is doing the deletion
+     * @param string $AdminName The name of the person who is doing the activation
      * @throws PDOException
      */
     abstract function activate($id, $AdminName);

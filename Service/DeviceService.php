@@ -54,14 +54,14 @@ class DeviceService extends Service{
     }
     /**
      * This function will create a new Asset
-     * @param string $AssetTag
-     * @param string $SerialNumber
-     * @param int $Type
-     * @param string $RAM
-     * @param string $IP
-     * @param string $Name
-     * @param string $MAC
-     * @param string $AdminName
+     * @param string $AssetTag The Asset tag of the Asset
+     * @param string $SerialNumber The serial number of the Asset
+     * @param int $Type The ID of the Asset Type
+     * @param string $RAM The amount of RAM
+     * @param string $IP The IP address
+     * @param string $Name The name of the Asset
+     * @param string $MAC The MAC address of the Asset
+     * @param string $AdminName The name of the person who did the creation
      * @throws ValidationException
      * @throws PDOException
      */
@@ -77,14 +77,14 @@ class DeviceService extends Service{
     }
     /**
      * This function will update a given Asset
-     * @param string $AssetTag
-     * @param string $SerialNumber
-     * @param int $Type
-     * @param string $RAM
-     * @param string $IP
-     * @param string $Name
-     * @param string $MAC
-     * @param string $AdminName
+     * @param string $AssetTag The Asset tag of the Asset
+     * @param string $SerialNumber The serial number of the Asset
+     * @param int $Type The ID of the Asset Type
+     * @param string $RAM The amount of RAM
+     * @param string $IP The IP address
+     * @param string $Name The name of the Asset
+     * @param string $MAC The MAC address of the Asset
+     * @param string $AdminName The name of the person who did the update
      * @throws ValidationException
      * @throws PDOException
      */
@@ -122,13 +122,13 @@ class DeviceService extends Service{
     }
     /**
      * This function will validate the parameters
-     * @param string $AssetTag
-     * @param string $SerialNumber
-     * @param int $Type
-     * @param string $RAM
-     * @param string $IP
-     * @param string $Name
-     * @param string $MAC
+     * @param string $AssetTag The Asset tag of the Asset
+     * @param string $SerialNumber The serial number of the Asset
+     * @param int $Type The ID of the Asset Type
+     * @param string $RAM The amount of RAM
+     * @param string $IP The IP address
+     * @param string $Name The name of the Asset
+     * @param string $MAC The MAC address of the Asset
      * @throws ValidationException
      */
     private function validateParameters($AssetTag,$SerialNumber,$Type,$RAM,$IP,$Name,$MAC){

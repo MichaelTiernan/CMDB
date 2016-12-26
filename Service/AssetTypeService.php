@@ -7,7 +7,10 @@ class AssetTypeService extends Service{
     public function __construct() {
         $this->assetTypeGateway = new AssetTypeGateway();
     }
-
+	/**
+	 * {@inheritDoc}
+	 * @see Service::activate()
+	 */
     public function activate($id, $AdminName) {
         try{
             $this->assetTypeGateway->activate($id, $AdminName);
@@ -15,7 +18,10 @@ class AssetTypeService extends Service{
             throw $ex;
         }
     }
-
+    /**
+     * {@inheritDoc}
+     * @see Service::activate()
+     */
     public function delete($id, $reason, $AdminName) {
         try{
             $this->validateDeleteParams($reason);
@@ -26,20 +32,26 @@ class AssetTypeService extends Service{
             throw $e;
         }
     }
-
+    /**
+     * {@inheritDoc}
+     * @see Service::activate()
+     */
     public function getAll($order) {
         return $this->assetTypeGateway->selectAll($order);
     }
-
+    /**
+     * {@inheritDoc}
+     * @see Service::activate()
+     */
     public function getByID($id) {
         return $this->assetTypeGateway->selectById($id);
     }
     /**
-     * 
-     * @param type $Category
-     * @param type $Vendor
-     * @param type $Type
-     * @param type $AdminName
+     * This function will create a new AssetType
+     * @param int $Category The category of the Asset Type
+     * @param string $Vendor The name of the vendor of the Asset Type
+     * @param string $Type The name of the asset type
+     * @param string $AdminName The name of the person who did the creation
      * @throws ValidationException
      * @throws PDOException
      */
@@ -53,7 +65,16 @@ class AssetTypeService extends Service{
             print $e;
         }
     }
-    
+    /**
+     * This function will update a given Asset Type
+     * @param int $UUID The unique ID of the Asset Type
+     * @param int $Category The category of the Asset Type
+     * @param string $Vendor The name of the vendor of the Asset Type
+     * @param string $Type The name of the asset type
+     * @param string $AdminName The name of the person who did the update
+     * @throws ValidationException
+     * @throws PDOException
+     */
     public function update($UUID, $Category,$Vendor,$Type,$AdminName) {
         try{
             $this->validateParameters($Category, $Vendor, $Type);
@@ -76,11 +97,10 @@ class AssetTypeService extends Service{
         return $this->assetTypeGateway->selectBySearch($search);
     }
     /**
-     * 
-     * @param type $Category
-     * @param type $Vendor
-     * @param type $Type
-     * @return type
+     * This function will validate the parameters
+     * @param int $Category The category of the Asset Type
+     * @param string $Vendor The name of the vendor of the Asset Type
+     * @param string $Type The name of the asset type
      * @throws ValidationException
      */
     private function validateParameters($Category,$Vendor,$Type){
