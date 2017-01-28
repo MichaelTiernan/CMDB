@@ -336,7 +336,7 @@ class AccountGateway extends Logger{
     }
     /**
      * This will return the UserID of the given account
-     * @param integer $UUID The ID of the Account
+     * @param int $UUID The ID of the Account
      * @return string
      */
     public function getUserID($UUID){

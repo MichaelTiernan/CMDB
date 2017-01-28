@@ -4,7 +4,7 @@ require_once 'Logger.php';
 class RoleTypeGateway extends Logger {
     private static $table = 'roletype';
     /**
-     * This function will return all Active IdentiyTypes
+     * This function will return all Active RoleTypes
      * @return array
      */
     public function getAllTypes(){
@@ -18,9 +18,8 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will return all roletypes
-     * @param string $order
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectAll()
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -35,6 +34,10 @@ class RoleTypeGateway extends Logger {
         }
         Logger::disconnect();
     }
+    /**
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
+     */
     public function selectBySearch($search){
         $searhterm = "%$search%";
         $pdo = Logger::connect();
@@ -49,9 +52,9 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This sfunction will Activate the given roletype
-     * @param Integer $UUID
-     * @param String $AdminName
+     * This function will Activate the given RoleType
+     * @param int $UUID
+     * @param string $AdminName
      */
     public function activate($UUID, $AdminName) {
         try{
@@ -70,10 +73,8 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will DeActivate the given roletype
-     * @param Integer $UUID
-     * @param String $reason
-     * @param String $AdminName
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID, $reason, $AdminName) {
         try{
@@ -97,7 +98,7 @@ class RoleTypeGateway extends Logger {
      * This function will add a new roletype
      * @param string $type
      * @param string $description
-     * @param string $AdminName
+     * @param string $AdminName The name of the administrator that did the creation
      */
     public function create($type,$description, $AdminName) {
         try{
@@ -121,9 +122,8 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function willretun the given roletype
-     * @param type $id
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectById()
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -137,11 +137,11 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * 
+     * This function will update a given RoleType
      * @param Integer $UUID
      * @param String $type
      * @param String $description
-     * @param String $AdminName
+     * @param String $AdminName The name of the administrator that did the creation
      */
     public function update($UUID,$type,$description,$AdminName){
         $OldType = $this->getType($UUID);
@@ -172,7 +172,7 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will check if the same Identity Type exist.
+     * This function will check if the same Role Type exist.
      * @param String $Type
      * @param String $Description
      * @return boolean
@@ -198,7 +198,7 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will return the Type
+     * This function will return the Type of a given Role
      * @param Int $UUID
      * @return string
      */
@@ -217,8 +217,8 @@ class RoleTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will return the Desription
-     * @param Int $UUID
+     * This function will return the Description
+     * @param int $UUID
      * @return string
      */
     private function getDescription($UUID){

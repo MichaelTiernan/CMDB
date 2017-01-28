@@ -54,12 +54,39 @@ class AdminGateway extends Logger {
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	/**
-	 * This function will create a new Admin
-	 * @param unknown $account
-	 * @param unknown $level
-	 * @param unknown $AdminName
+	 * This function will create a new Administrator
+	 * @param int $account
+	 * @param int $level
+	 * @param string $AdminName The name of the administrator that did the creation
 	 */
 	public function create($account, $level, $AdminName){
-		
+		$pwd = md5("cmdb");
+		$LogDate = date("y-m-d h:i:s");
+		$pdo = Logger::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "insert into Admin (Account,Level,PassWord,DateSet) values (:Account,:Level,:PWD,:Date)";
+		$q = $pdo->prepare($sql);
+		$q->bindParam(':Account',$account);
+		$q->bindParam(':Level',$level);
+		$q->bindParam(':PWD',$pwd);
+		$q->bindParam(':Date',$LogDate);
+		if ($q->execute()){
+			$Value = "Admin width UserID: ".getAccount($account)." and level: ".$level;
+            $UUIDQ = "Select Admin_id from Admin order by Admin_ID desc limit 1";
+            $stmnt = $pdo->prepare($UUIDQ);
+            $stmnt->execute();
+            $row = $stmnt->fetch(PDO::FETCH_ASSOC);
+            Logger::logCreate(self::$table, $row["Admin_id"], $Value, $AdminName);
+		}
+		Logger::disconnect();
+	}
+	/**
+	 * This function will return the UserID of a given Account
+	 * @param int $AccountID The unique of an account
+	 */
+	private function getAccount($AccountID){
+		require_once 'AccountGateway.php';
+		$Acc = new AccountGateway();
+		return $Acc->getUserID($AccountID);
 	}
 }

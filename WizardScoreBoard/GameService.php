@@ -25,22 +25,30 @@ Class GameService{
 		print "GameService: This is the ".$this->count." occourence<br>";
 		return $this->game->getAmountOfPlayers();	
 	}
+	/**
+	 * this function will be used when playing with 3 players
+	 * @param string $player1
+	 * @param string $player2
+	 * @param string $player3
+	 * @throws ValidationException
+	 * @throws PDOException
+	 */
+	public function Play3Players($player1,$player2,$player3){
+		print "Let's play with 3<br>";
+// 		try{
+// 			$this->validate3Players($player1, $player2, $player3);
+// // 			Print "WHY <br>";
+// // 			$this->game->Play3Players($player1, $player2, $player3);
+// 		}catch (ValidationException $ex){
+// 			throw $ex;
+// 		}
+		$this->game->Play3Players($player1, $player2, $player3);
+	}	
 	
-	public function Play3Players($Game_ID,$player1,$player2,$player3){
-		try{
-			$this->validate3Players($player1, $player2, $player3);
-			$this->game->Play3Players($Game_ID,$player1, $player2, $player3);
-		}catch (ValidationException $ex){
-			throw $ex;
-		}catch (PDOException $e){
-			throw $e;
-		}
-	}
-	
-	public function Play4Players($Game_ID,$player1,$player2,$player3,$player4){
+	public function Play4Players($player1,$player2,$player3,$player4){
 		try{
 			$this->validate4Players($player1, $player2, $player3,$player4);
-			$this->game->Play4Players($Game_ID,$Game_ID,$player1, $player2, $player3,$player4);
+			$this->game->Play4Players($player1, $player2, $player3,$player4);
 		}catch (ValidationException $ex){
 			throw $ex;
 		}catch (PDOException $e){
@@ -48,10 +56,10 @@ Class GameService{
 		}
 	}
 	
-	public function Play5Players($Game_ID,$player1,$player2,$player3,$player4,$player5){
+	public function Play5Players($player1,$player2,$player3,$player4,$player5){
 		try{
 			$this->validate5Players($player1, $player2, $player3,$player4,$player5);
-			$this->game->Play5Players($Game_ID,$player1, $player2, $player3,$player4,$player5);
+			$this->game->Play5Players($player1, $player2, $player3,$player4,$player5);
 		}catch (ValidationException $ex){
 			throw $ex;
 		}catch (PDOException $e){
@@ -59,10 +67,10 @@ Class GameService{
 		}
 	}
 	
-	public function Play6Players($Game_ID,$player1,$player2,$player3,$player4,$player5,$player6){
+	public function Play6Players($player1,$player2,$player3,$player4,$player5,$player6){
 		try{
 			$this->validate6Players($player1, $player2, $player3,$player4,$player5,$player6);
-			$this->game->Play6Players($Game_ID,$player1, $player2, $player3,$player4,$player5,$player6);
+			$this->game->Play6Players($player1, $player2, $player3,$player4,$player5,$player6);
 		}catch (ValidationException $ex){
 			throw $ex;
 		}catch (PDOException $e){
@@ -74,15 +82,15 @@ Class GameService{
 		return $this->game->isThisTheLastRound($curentRound, $amountOfPlayers);
 	}
 	
-	public function getPlayers($Game_ID){
-		return $this->game->getPlayers($Game_ID);
+	public function getPlayers($AountOfPlayers){
+		return $this->game->getPlayers($AountOfPlayers);
 	}
 	
 	public function setRound1($results){
 		return $this->game->setRound1($results);
 	}
 	
-	private function validate3Players($player1,$player2,$player3){
+	public function validate3Players($player1,$player2,$player3){
 		$errors = array();
 		if (empty($player1)) {
 			$errors[] = 'Please enter a name for player 1';

@@ -23,7 +23,7 @@ for ($i =1 ; $i <= $amount;$i++){
 echo "</tr>";
 echo "</tbody>";
 echo "</table>";
-echo "<input type=\"hidden\" name=\"form-submitted\" value=\"1\" /><br>";
+echo "<input type=\"hidden\" name=\"formRound2-submitted\" value=\"1\" /><br>";
 echo "<div class=\"form-actions\">";
 echo "<button type=\"submit\" class=\"btn btn-success\">Next Round</button>";
 echo "</div>";

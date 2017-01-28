@@ -12,7 +12,7 @@ class IdentityGateway extends Logger{
      * @param string $UserID
      * @param int $type
      * @param string $email
-     * @param string $AdminName
+     * @param string $AdminName The name of the administrator that did the creation
      */
     public function create($FirstName,$LastName,$company, $language,$UserID,$type,$email,$AdminName) {
         $UserID = ($UserID!= NULL)?$UserID:NULL;
@@ -89,13 +89,13 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will update a given Identity
-     * @param integer $UUID
-     * @param string $FirstName
+     * @param int $UUID The Unique ID of the Identity
+     * @param string $FirstName 
      * @param string $LastName
      * @param string $UserID
      * @param int $type
      * @param string $email
-     * @param string $AdminName
+     * @param string $AdminName The name of the administrator that did the update
      */
     public function update($UUID,$FirstName,$LastName,$UserID,$company, $language,$type,$email,$AdminName) {
         $OldFirstName = $this->getFirstName($UUID);
@@ -211,8 +211,8 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param String $UserID
+     * This function will check if there is an other Identity existing with the same user ID. 
+     * @param string $UserID The user ID of the Identity
      * @return Boolean
      * @throws PDOException
      */
@@ -237,7 +237,7 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This will list all available Identities
+     * This will list all available Identities that are not assigned to an account
      * @return type
      */
     public function listAllIdentities() {
@@ -256,7 +256,7 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This will list all available accounts
+     * This will list all available accounts that are not assigned to an identity
      * @return array
      */
     public function listAllAccounts() {
@@ -274,8 +274,8 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will list all Accounts assinged to the given account
-     * @param integer $UUID The Unique ID of the Identity
+     * This function will list all Accounts assigned to the given account
+     * @param int $UUID The Unique ID of the Identity
      * @return Array
      */
     public function listAssignedAccount($UUID){
@@ -294,12 +294,12 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param type $UUID
-     * @param type $account
-     * @param type $From
-     * @param type $Until
-     * @param type $AdminName
+     * This function will assign a Identity to an Account
+     * @param int $UUID the unique ID of the Identity
+     * @param int $account the unique ID of the Account
+     * @param DateTime $From The from date
+     * @param DateTime $Until The Until Date
+     * @param String $AdminName The name of the person that did the Assignment
      */
     public function AssignAccount($UUID,$account,$From,$Until,$AdminName) {
         if (empty($Until)){
@@ -330,9 +330,8 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will rerutn anny matchin row by the given search term
-     * @param type $search
-     * @return type
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
      */
     public function selectBySearch($search){
         $searhterm = "%$search%";
@@ -353,7 +352,7 @@ class IdentityGateway extends Logger{
 
     /**
      * This function will return the Type
-     * @param type $UUID
+     * @param int $UUID the unique ID of the Identity
      * @return string
      */
     public function getUserID($UUID){
@@ -372,7 +371,7 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will return the FirstName
-     * @param Int $UUID
+     * @param Int $UUID the unique ID of the Identity
      * @return string
      */
     public function getFirstName($UUID){
@@ -393,7 +392,7 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will return the LastName
-     * @param type $UUID
+     * @param int $UUID the unique ID of the Identity
      * @return string
      */
     public  function getLastName($UUID){
@@ -414,7 +413,7 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will return the Company
-     * @param type $UUID
+     * @param int $UUID the unique ID of the Identity
      * @return string
      */
     private function getCompany($UUID){
@@ -433,7 +432,7 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will return the Language
-     * @param type $UUID
+     * @param int $UUID the unique ID of the Identity
      * @return string
      */
     private function getLanguage($UUID){
@@ -452,7 +451,7 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will return the Type
-     * @param type $UUID
+     * @param int $UUID The unique ID of the Identity
      * @return string
      */
     private function getType($UUID){
@@ -473,6 +472,11 @@ class IdentityGateway extends Logger{
             throw $ex;
         }
     }
+    /**
+     * This function will return the Identity Type
+     * @param int $UUID The Unique iD of the Identity Type
+     * @return string
+     */
     private function getIdentityType($UUID){
         $pdo = Logger::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -489,7 +493,7 @@ class IdentityGateway extends Logger{
     }
     /**
      * This function will return the Type
-     * @param type $UUID
+     * @param int $UUID
      * @return string
      */
     private function getEmail($UUID){

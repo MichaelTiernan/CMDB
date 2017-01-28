@@ -18,9 +18,8 @@ class IdentityTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will return all IdentityTypes
-     * @param string $order
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectAll()
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -35,7 +34,10 @@ class IdentityTypeGateway extends Logger {
         }
         Logger::disconnect();
     }
-    
+    /**
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
+     */
     public function selectBySearch($search){
         $searhterm = "%$search%";
         $pdo = Logger::connect();
@@ -50,9 +52,8 @@ class IdentityTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will Activate the given IdentityType
-     * @param Integer $UUID
-     * @param String $AdminName
+     * {@inheritDoc}
+     * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
         try{
@@ -71,10 +72,8 @@ class IdentityTypeGateway extends Logger {
         Logger::disconnect();
     }
     /**
-     * This function will DeActivate the given IdentityType
-     * @param Integer $UUID
-     * @param String $reason
-     * @param String $AdminName
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID, $reason, $AdminName) {
         try{
@@ -98,7 +97,7 @@ class IdentityTypeGateway extends Logger {
      * This function will add a new IdentityType
      * @param string $type
      * @param string $description
-     * @param string $AdminName
+     * @param string $AdminName The name of the administrator that did the creation
      */
     public function create($type,$description, $AdminName) {
         try{
@@ -142,7 +141,7 @@ class IdentityTypeGateway extends Logger {
      * @param int $UUID
      * @param string $type
      * @param string $description
-     * @param string $AdminName
+     * @param string $AdminName The name of the administrator that did the update
      */
     public function update($UUID,$type,$description,$AdminName){
         $OldType = $this->getType($UUID);

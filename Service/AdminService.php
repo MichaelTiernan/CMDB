@@ -52,7 +52,7 @@ class AdminService extends Service {
 	 * @param string $UserID The UserID of the Account
 	 * @param int $Type The ID of the AccountType
 	 * @param int $Application The ID of the Application
-	 * @param string $AdminName The name of the Admin
+	 * @param string $AdminName The name of the administrator that did the creation
 	 * @throws ValidationException
 	 * @throws PDOException
 	 */

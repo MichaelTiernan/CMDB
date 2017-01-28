@@ -6,8 +6,10 @@ Class Game extends Database{
 	private $Rounds;
 	private $amountOfPlayers = 0;
 	private $count = 0;
+	private $ScoreboardCollaction;
 	public function __construct(){
 		$this->count++;
+		$this->ScoreboardCollaction = new Collection();
 	}
 	
 	public function setAmountOfPlayers($amountPlayers){
@@ -46,89 +48,63 @@ Class Game extends Database{
 		return $this->amountOfPlayers;
 	}
 	
-	public function Play3Players($Game_ID,$player1, $player2, $player3){
-		$pdo = $this::connect();
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		//Player1
-		$SQL = "Insert into players (Name,Game) values (:player,:game)";
-		$q = $pdo->prepare($SQL);
-		$q->bindParam(':player',$player1);
-		$q->bindParam(':game',$Game_ID);
-		$q->execute();
-		//Player2
-		$SQL = "Insert into players (Name,Game) values (:player,:game)";
-		$q = $pdo->prepare($SQL);
-		$q->bindParam(':player',$player2);
-		$q->bindParam(':game',$Game_ID);
-		$q->execute();
-		//Player3
-		$SQL = "Insert into players (Name,Game) values (:player,:game)";
-		$q = $pdo->prepare($SQL);
-		$q->bindParam(':player',$player3);
-		$q->bindParam(':game',$Game_ID);
-		$q->execute();
-		$this::disconnect();
+	public function Play3Players($player1, $player2, $player3){
+		$scoreboard1 = new Scoreboard();
+		$scoreboard1->setPlayersName($player1);
+		$this->ScoreboardCollaction->addItem($scoreboard1, 1);
+		$scoreboard2 = new Scoreboard();
+		$scoreboard2->setPlayersName($player2);
+		$this->ScoreboardCollaction->addItem($scoreboard2, 2);
+		$scoreboard3 = new Scoreboard();
+		$scoreboard3->setPlayersName($player3);
+		$this->ScoreboardCollaction->addItem($scoreboard3, 3);
+		print "Amount of keys after Play3Players <br>";
+		print_r($this->ScoreboardCollaction->keys());
+		return;
 	}
 	
-	public function Play4Players($Game_ID,$player1, $player2, $player3,$player4){
-		$this->Play3Players($Game_ID,$player1, $player2, $player3);
-		$pdo = $this::connect();
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		//Player4
-		$SQL = "Insert into players (Name,Game) values (:player,:game)";
-		$q = $pdo->prepare($SQL);
-		$q->bindParam(':player',$player4);
-		$q->bindParam(':game',$Game_ID);
-		$q->execute();
-		$this::disconnect();
+	public function Play4Players($player1, $player2, $player3,$player4){
+		$this->Play3Players($player1, $player2, $player3);
+		$scoreboard4 = new Scoreboard();
+		$scoreboard4->setPlayersName($player4);
+		$this->ScoreboardCollaction->addItem($scoreboard4, 4);
 	}
 	
-	public function Play5Players($Game_ID,$player1,$player2,$player3,$player4,$player5){
-		$this->Play4Players($Game_ID,$player1, $player2, $player3,$player4);
-		$pdo = $this::connect();
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		//Player5
-		$SQL = "Insert into players (Name,Game) values (:player,:game)";
-		$q = $pdo->prepare($SQL);
-		$q->bindParam(':player',$player5);
-		$q->bindParam(':game',$Game_ID);
-		$q->execute();
-		$this::disconnect();
+	public function Play5Players($player1,$player2,$player3,$player4,$player5){
+		$this->Play4Players($player1, $player2, $player3,$player4);
+		$scoreboard5 = new Scoreboard();
+		$scoreboard5->setPlayersName($player5);
+		$this->ScoreboardCollaction->addItem($scoreboard4, 5);
 	}
 	
-	public function Play6Players($Game_ID,$player1,$player2,$player3,$player4,$player5,$player6){
-		$this->Play5Players($Game_ID,$player1, $player2, $player3,$player4,$player5);
-		$pdo = $this::connect();
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		//Player6
-		$SQL = "Insert into players (Name,Game) values (:player,:game)";
-		$q = $pdo->prepare($SQL);
-		$q->bindParam(':player',$player6);
-		$q->bindParam(':game',$Game_ID);
-		$q->execute();
-		$this::disconnect();
+	public function Play6Players($player1,$player2,$player3,$player4,$player5,$player6){
+		$this->Play5Players($player1, $player2, $player3,$player4,$player5);
+		$scoreboard6 = new Scoreboard();
+		$scoreboard6->setPlayersName($player6);
+		$this->ScoreboardCollaction->addItem($scoreboard6, 6);
 	}
 	
-	public function getPlayers($Game_ID){
-		$pdo = $this::connect();
-		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$SQL = "Select Name from players where Game = :id";
-		$q = $pdo->prepare($SQL);
-		$q->bindParam(':id',$Game_ID);
-		if ($q->execute()){
-			return $q->fetchAll(PDO::FETCH_ASSOC);
-		}
+	public function getPlayers($AmountOfPlayers){
+		$this->ScoreboardCollaction->length();
+		print_r($this->ScoreboardCollaction->keys());
+// 		$result = array();
+// 		for ($i=1; $i<=$AmountOfPlayers; $i++){
+// 			$scoreboard = $this->ScoreboardCollaction->getItem($i);
+// 			$result[] = array("Name" => $scoreboard->getPlayersName());
+// 		}
+// 		return $result;
 	}
 	
 	public function setRound1($results){
 		foreach ($results as $result){
-			$scoreboard = new Scoreboard();
-			$scoreboard->setPlayersName($result['PlayersName']);
-			$scoreboard->predaction($result['Required']);
-			$score= $scoreboard->result($result['Received']);
-			$result['Score'] = $score;
+			print_r($results);
+// 			$scoreboard = new Scoreboard();
+// 			$scoreboard->setPlayersName($result['PlayersName']);
+// 			$scoreboard->predaction($result['Required']);
+// 			$score= $scoreboard->result($result['Received']);
+// 			$result['Score'] = $score;
 		}
-		return $results;
+		//return $results;
 	}
 	
 	public function isThisTheLastRound($curentRound,$amountOfPlayers){

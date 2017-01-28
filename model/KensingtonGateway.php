@@ -39,7 +39,7 @@ class KensingtonGateway extends Logger{
      * @param string $Serial The Serial number of the kensington
      * @param int $NrKeys The amount of Keys
      * @param int $hasLock Indicates of the Keys has a Lock
-     * @param string $AdminName The name that do the creation
+     * @param string $AdminName The name of the administrator that did the creation
      */
     public function create($Type,$Serial,$NrKeys,$hasLock,$AdminName) {
         $pdo = Logger::connect();
@@ -66,7 +66,7 @@ class KensingtonGateway extends Logger{
      * @param string $Serial The Serial number of the Kensington
      * @param int $NrKeys the amount of keys
      * @param int $hasLock the indication if the key has a lock
-     * @param string $AdminName The Person who did the activation
+     * @param string $AdminName The name of the administrator that did the update
      */
     public function update($UUID,$Type,$Serial,$NrKeys,$hasLock,$AdminName) {
         $oldType = $this->getType($UUID);
@@ -133,9 +133,8 @@ class KensingtonGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will select all the fields fot a given Kensington Key
-     * @param Integer $id The unique ID of the Kensington
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectById()
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -153,9 +152,8 @@ class KensingtonGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will return the list of all kensingtons that have the search term
-     * @param string $search The search term
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
      */
     public function selectBySearch($search) {
         $searhterm = "%$search%";
@@ -240,7 +238,7 @@ class KensingtonGateway extends Logger{
         }
     }
     /**
-     * This function will return the Asset Info from a givven Kensington
+     * This function will return the Asset Info from a given Kensington
      * @param int $UUID
      * @return array
      */

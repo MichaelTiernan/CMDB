@@ -17,7 +17,7 @@ for ($i = 1; $i <= $amount; $i++){
 	echo "</div>";
 	echo "</div>";
 }	
-echo "<input type=\"hidden\" name=\"form-submitted\" value=\"1\" /><br>";
+echo "<input type=\"hidden\" name=\"form-PlayersSubmitted\" value=\"1\" /><br>";
 echo "<div class=\"form-actions\">";
 echo "<button type=\"submit\" class=\"btn btn-success\">Next</button>";
 echo "</div>";

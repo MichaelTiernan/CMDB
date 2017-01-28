@@ -3,9 +3,8 @@ require_once 'Logger.php';
 class RoleGateway extends Logger{
     private static $table = 'role';
     /**
-     * 
-     * @param Integer $UUID The Unique ID of the Role
-     * @param String $AdminName
+     * {@inheritDoc}
+     * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
         $pdo = Logger::connect();
@@ -21,10 +20,8 @@ class RoleGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param Integer $UUID The Unique ID of the Role
-     * @param String $reason
-     * @param String $AdminName
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID, $reason, $AdminName) {
         $pdo = Logger::connect();
@@ -41,9 +38,8 @@ class RoleGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param string $order
-     * @return type
+     * {@inheritDoc}
+     * @see Logger::selectAll()
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -60,6 +56,10 @@ class RoleGateway extends Logger{
         }
         Logger::disconnect();
     }
+    /**
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
+     */
     public function selectBySearch($search){
         $searhterm = "%$search%";
         $pdo = Logger::connect();
@@ -76,9 +76,8 @@ class RoleGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
-     * @param Integer $id The Unique ID of the Role
-     * @return type
+     * {@inheritDoc}
+     * @see Logger::selectById()
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -95,10 +94,10 @@ class RoleGateway extends Logger{
     }
     /**
      * This function will create a new Role
-     * @param String $Name
-     * @param String $Description
-     * @param String $Type
-     * @param String $AdminName
+     * @param string $Name
+     * @param string $Description
+     * @param int $Type
+     * @param string $AdminName The name of the administrator that did the creation
      */
     public function create($Name,$Description,$Type,$AdminName){
         $pdo = Logger::connect();
@@ -121,11 +120,11 @@ class RoleGateway extends Logger{
     }
     /**
      * This function will update the given Role
-     * @param Integer $UUID The Unique ID of the Role
-     * @param String $Name
-     * @param String $Description
-     * @param Integer $Type
-     * @param String $AdminName
+     * @param int $UUID The Unique ID of the Role
+     * @param string $Name
+     * @param string $Description
+     * @param int $Type
+     * @param string $AdminName The name of the administrator that did the update
      */
     public function update($UUID,$Name,$Description,$Type,$AdminName){
         $OldType = $this->getType($UUID);
@@ -157,8 +156,8 @@ class RoleGateway extends Logger{
     }
     /**
      * This function will check if the same Identity Type exist.
-     * @param String $Type
-     * @param String $Description
+     * @param string $Type
+     * @param string $Description
      * @return boolean
      * @throws PDOException
      */
@@ -183,9 +182,9 @@ class RoleGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * 
+     * This function will return the Role Type of a given Role
      * @param Integer $UUID The Unique ID of the Role
-     * @return string
+     * @return int
      */
     private function getType($UUID){
         $pdo = Logger::connect();
@@ -197,7 +196,7 @@ class RoleGateway extends Logger{
             $row = $q->fetch(PDO::FETCH_ASSOC);
             return $row["Type"];
         }  else {
-            return "";
+            return 0;
         }
         Logger::disconnect();
     }
@@ -221,7 +220,7 @@ class RoleGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will return the Desription
+     * This function will return the description of a given role
      * @param Int $UUID The Unique ID of the Role
      * @return string
      */
@@ -240,7 +239,7 @@ class RoleGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will reurn the RoleType Type and description
+     * This function will return the RoleType Type and description
      * @param Integer $TypeID The Unique ID of the RoleType
      * @return string
      */

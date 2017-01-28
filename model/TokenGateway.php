@@ -3,9 +3,8 @@ require_once 'Logger.php';
 class TokenGateway extends Logger{
     private static $table = 'token';
     /**
-     * This function will activate the given token
-     * @param String $UUID The AssetTag of the Token
-     * @param String $AdminName The name of the person who did the activation
+     * {@inheritDoc}
+     * @see Logger::activate()
      */
     public function activate($UUID, $AdminName) {
         $pdo = Logger::connect();
@@ -19,10 +18,8 @@ class TokenGateway extends Logger{
         }
     }
     /**
-     * This function will deactivate the given Token
-     * @param String $UUID The AssetTag of the token
-     * @param String $reason The Reason why the deactivation was done
-     * @param String $AdminName The name of the person who did the activation
+     * {@inheritDoc}
+     * @see Logger::delete()
      */
     public function delete($UUID, $reason, $AdminName) {
         $pdo = Logger::connect();
@@ -37,9 +34,8 @@ class TokenGateway extends Logger{
         }
     }
     /**
-     * This function will sellect all Tokens
-     * @param string $order The name of the column to sort on
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectAll()
      */
     public function selectAll($order) {
         if (empty($order)) {
@@ -60,9 +56,8 @@ class TokenGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will return all the info for one given Token
-     * @param string $id The AssetTag of the Token
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectById()
      */
     public function selectById($id) {
         $pdo = Logger::connect();
@@ -81,9 +76,8 @@ class TokenGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will return all the Tokens that contains a given value
-     * @param string $search The search criteria
-     * @return Array
+     * {@inheritDoc}
+     * @see Logger::selectBySearch()
      */
     public function selectBySearch($search) {
         $searhterm = "%$search%";
@@ -144,10 +138,10 @@ class TokenGateway extends Logger{
     }
     /**
      * This function will create a new Token
-     * @param type $AssetTag
-     * @param type $serialNumber
-     * @param type $type
-     * @param type $AdminName
+     * @param string $AssetTag
+     * @param string $serialNumber
+     * @param int $type
+     * @param string $AdminName The name of the administrator that did the creation
      */    
     public function create($AssetTag,$serialNumber,$type,$AdminName) {
         $TokenId = $this->getCategoryID("Token");
@@ -183,7 +177,13 @@ class TokenGateway extends Logger{
         }
         Logger::disconnect();
     }
-    
+    /**
+     * This function will update a given Token
+     * @param string $assetTag
+     * @param string $serialNumber
+     * @param int $type
+     * @param string $AdminName The name of the administrator that did the update
+     */
     public function update($assetTag, $serialNumber, $type, $AdminName){
         $OldSerialNumber = $this->getSerialNumber($assetTag);
         $OldType = $this->getType($assetTag);
@@ -213,8 +213,8 @@ class TokenGateway extends Logger{
     }
     /**
      * This function will set the Category ID.
-     * @param String $category
-     * @return Int The ID of the given category
+     * @param string $category
+     * @return int The ID of the given category
      */
     private function getCategoryID($category){
         $pdo = Logger::connect();
