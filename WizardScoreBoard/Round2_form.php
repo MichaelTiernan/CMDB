@@ -1,4 +1,4 @@
-<?php 
+<?php
 print "<h2>" . htmlentities ($title) . "</h2>";
 echo "<form class=\"form-horizontal\" action=\"\" method=\"post\">";
 echo "<table class=\"table table-striped table-bordered\">";
@@ -13,7 +13,26 @@ echo "</thead>";
 echo "<tbody>";
 echo "<tr>";
 echo "<td>Round 1</td>";
-print_r($this->reslult);
+foreach ($results as $result){
+	echo "<td>";
+	echo "<table class=\"table table-striped\">";
+	echo "<thead>";
+	echo "<tr>";
+	echo "<th>Required</th>";
+	echo "<th>Received</th>";
+	echo "<th>Score</th>";
+	echo "</tr>";
+	echo "</thead>";
+	echo "<tbody>";
+	echo "<tr>";
+	echo "<td>".$result["Required"]."</td>";
+	echo "<td>".$result["Received"]."</td>";
+	echo "<td>".$result["Score"]."</td>";
+	echo "</tr>";
+	echo "</tbody>";
+	echo "</table>";
+	echo "</td>";
+}
 echo "</tr>";
 echo "<tr>";
 echo "<td>Round 2</td>";

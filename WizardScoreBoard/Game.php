@@ -11,100 +11,109 @@ Class Game extends Database{
 		$this->count++;
 		$this->ScoreboardCollaction = new Collection();
 	}
-	
+	/**
+	 * This function will set the amount of players
+	 * @param int $amountPlayers
+	 */
 	public function setAmountOfPlayers($amountPlayers){
-		print "Game: This is the ".$this->count." occourence<br>";
-// 		$pdo = $this::connect();
-// 		$SQL = "insert into game (AmountPlayers) values (:amount)";
-// 		$q = $pdo->prepare($SQL);
-// 		$q->bindParam(':amount',$amountPlayers);
-// 		if ($q->execute()){
-// 			$UUIDQ = "Select game_id from game order by game_id desc limit 1";
-// 			$stmnt = $pdo->prepare($UUIDQ);
-// 			$stmnt->execute();
-// 			$row = $stmnt->fetch(PDO::FETCH_ASSOC);
-// 			return $row["game_id"];
-// 		}
-// 		$this::disconnect();
-		print "Game: The amount of players will be set to: ".$amountPlayers."<br>";
+		$myfile = fopen("AmountPlayers.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $amountPlayers);
+		fclose($myfile);
 		$this->amountOfPlayers = $amountPlayers;
 	}
-	
+	/**
+	 * This function will return the amount of players
+	 * @return int
+	 */
 	public function getAmountOfPlayers(){
-		print "Game: This is the ".$this->count." occourence<br>";
-// 		$pdo = $this::connect();
-// 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-// 		$SQL = "Select AmountPlayers from game where game_id = :id";
-// 		$q = $pdo->prepare($SQL);
-// 		$q->bindParam(':id',$Game_ID);
-// 		if ($q->execute()){
-// 			$row = $q->fetch(PDO::FETCH_ASSOC);
-// 			return $row["AmountPlayers"];
-// 		}else{
-// 			return 0;
-// 		}
-// 		$this::disconnect();
-		print "Game: The amount of players: ".$this->amountOfPlayers."<br>";
+		$myfile = fopen("AmountPlayers.txt", "r") or die("Unable to open file!");
+		$Line= fread($myfile,filesize("AmountPlayers.txt"));
+		fclose($myfile);
+		$this->amountOfPlayers = $Line;
 		return $this->amountOfPlayers;
 	}
 	
 	public function Play3Players($player1, $player2, $player3){
-		$scoreboard1 = new Scoreboard();
-		$scoreboard1->setPlayersName($player1);
-		$this->ScoreboardCollaction->addItem($scoreboard1, 1);
-		$scoreboard2 = new Scoreboard();
-		$scoreboard2->setPlayersName($player2);
-		$this->ScoreboardCollaction->addItem($scoreboard2, 2);
-		$scoreboard3 = new Scoreboard();
-		$scoreboard3->setPlayersName($player3);
-		$this->ScoreboardCollaction->addItem($scoreboard3, 3);
-		print "Amount of keys after Play3Players <br>";
-		print_r($this->ScoreboardCollaction->keys());
-		return;
+		$myfile = fopen("Player1.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $player1);
+		fclose($myfile);
+		$myfile = fopen("Player2.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $player2);
+		fclose($myfile);
+		$myfile = fopen("Player3.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $player3);
+		fclose($myfile);
 	}
 	
 	public function Play4Players($player1, $player2, $player3,$player4){
 		$this->Play3Players($player1, $player2, $player3);
-		$scoreboard4 = new Scoreboard();
-		$scoreboard4->setPlayersName($player4);
-		$this->ScoreboardCollaction->addItem($scoreboard4, 4);
+		$myfile = fopen("Player4.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $player4);
+		fclose($myfile);
 	}
 	
 	public function Play5Players($player1,$player2,$player3,$player4,$player5){
 		$this->Play4Players($player1, $player2, $player3,$player4);
-		$scoreboard5 = new Scoreboard();
-		$scoreboard5->setPlayersName($player5);
-		$this->ScoreboardCollaction->addItem($scoreboard4, 5);
+		$myfile = fopen("Player5.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $player5);
+		fclose($myfile);
 	}
 	
 	public function Play6Players($player1,$player2,$player3,$player4,$player5,$player6){
 		$this->Play5Players($player1, $player2, $player3,$player4,$player5);
-		$scoreboard6 = new Scoreboard();
-		$scoreboard6->setPlayersName($player6);
-		$this->ScoreboardCollaction->addItem($scoreboard6, 6);
+		$myfile = fopen("Player6.txt", "w") or die("Unable to open file!");
+		fwrite($myfile, $player6);
+		fclose($myfile);
 	}
 	
 	public function getPlayers($AmountOfPlayers){
-		$this->ScoreboardCollaction->length();
-		print_r($this->ScoreboardCollaction->keys());
-// 		$result = array();
-// 		for ($i=1; $i<=$AmountOfPlayers; $i++){
-// 			$scoreboard = $this->ScoreboardCollaction->getItem($i);
-// 			$result[] = array("Name" => $scoreboard->getPlayersName());
-// 		}
-// 		return $result;
+		$result = array();
+		for ($i = 1; $i <= $AmountOfPlayers; $i++){
+			$myfile = fopen("Player".$i.".txt", "r") or die("Unable to open file!");
+			$Line= fgets($myfile);
+			fclose($myfile);
+			$result[] = array("Name" => $Line);
+		}
+		return $result;
 	}
 	
 	public function setRound1($results){
 		foreach ($results as $result){
-			print_r($results);
-// 			$scoreboard = new Scoreboard();
-// 			$scoreboard->setPlayersName($result['PlayersName']);
-// 			$scoreboard->predaction($result['Required']);
-// 			$score= $scoreboard->result($result['Received']);
-// 			$result['Score'] = $score;
+			$scoreboard = new Scoreboard();
+			$scoreboard->setPlayersName($result['PlayersName']);
+			$scoreboard->predaction($result['Required']);
+			$score= $scoreboard->result($result['Received']);
+			$result['Score'] = $score;
+			$myfile = fopen("Player".$result[ID].".txt", "w") or die("Unable to open file!");
+			fwrite($myfile, $result['PlayersName']."\n");
+			fwrite($myfile, "Required =>".$result['Required']."\n");
+			fwrite($myfile, "Received =>".$result['Received']."\n");
+			fwrite($myfile, "Score =>".$score);
+			fclose($myfile);
 		}
-		//return $results;
+	}
+	
+	public function getRound1($AmountOfPlayers){
+		$Result = array();
+		for ($i = 1; $i <= $AmountOfPlayers; $i++){
+			$myfile = fopen("Player".$i.".txt", "r") or die("Unable to open file!");	
+			$Required = 0;
+			$Received = 0;
+			$Score = 0;
+			while(!feof($myfile)) {
+				$line = fgets($myfile);
+				if (strstr($line, "Required")){
+					$Required = substr($line,11);
+				}elseif (strstr($line, "Received")){
+					$Received = substr($line, 11);
+				}elseif (strstr($line, "Score")){
+					$Score = substr($line, 8);
+				}
+			}
+			fclose($myfile);
+			$Result[]= array("ID" => $i, "Required" => $Required,"Received" => $Received, "Score" => $Score);
+		}
+		return $Result;
 	}
 	
 	public function isThisTheLastRound($curentRound,$amountOfPlayers){

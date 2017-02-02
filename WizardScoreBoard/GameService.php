@@ -8,21 +8,21 @@ Class GameService{
 		$this->count++;
 		$this->game = new Game();
 	}
-	
+	/**
+	 * This function will set the amount of players
+	 * @param int $Players
+	 * @throws ValidationException
+	 */
 	public function setAmountOfPlayers($Players){
-		print "GameService: This is the ".$this->count." occourence<br>";
 		try{
 			$this->validateTypeParams($Players);
 			$this->game->setAmountOfPlayers($Players);
 		}catch (ValidationException $ex){
 			throw $ex;
-		}catch (PDOException $e){
-			throw $e;
 		}
 	}
 	
 	public function getAmountOfPlayers(){
-		print "GameService: This is the ".$this->count." occourence<br>";
 		return $this->game->getAmountOfPlayers();	
 	}
 	/**
@@ -35,13 +35,13 @@ Class GameService{
 	 */
 	public function Play3Players($player1,$player2,$player3){
 		print "Let's play with 3<br>";
-// 		try{
-// 			$this->validate3Players($player1, $player2, $player3);
-// // 			Print "WHY <br>";
-// // 			$this->game->Play3Players($player1, $player2, $player3);
-// 		}catch (ValidationException $ex){
-// 			throw $ex;
-// 		}
+		try{
+			$this->validate3Players($player1, $player2, $player3);
+// 			Print "WHY <br>";
+			$this->game->Play3Players($player1, $player2, $player3);
+		}catch (ValidationException $ex){
+			throw $ex;
+		}
 		$this->game->Play3Players($player1, $player2, $player3);
 	}	
 	
@@ -87,10 +87,14 @@ Class GameService{
 	}
 	
 	public function setRound1($results){
-		return $this->game->setRound1($results);
+		$this->game->setRound1($results);
 	}
 	
-	public function validate3Players($player1,$player2,$player3){
+	public function getRound1($AountOfPlayers){
+		return $this->game->getRound1($AountOfPlayers);
+	}
+	
+	private function validate3Players($player1,$player2,$player3){
 		$errors = array();
 		if (empty($player1)) {
 			$errors[] = 'Please enter a name for player 1';
@@ -102,7 +106,7 @@ Class GameService{
 			$errors[] = 'Please enter a name for player 3';
 		}
 		if ( empty($errors) ) {
-			return;
+			return true;
 		}
 		throw new ValidationException($errors);
 	}
@@ -122,7 +126,7 @@ Class GameService{
 			$errors[] = 'Please enter a name for player 4';
 		}
 		if ( empty($errors) ) {
-			return;
+			return true;
 		}
 		throw new ValidationException($errors);
 	}
@@ -145,7 +149,7 @@ Class GameService{
 			$errors[] = 'Please enter a name for player 5';
 		}
 		if ( empty($errors) ) {
-			return;
+			return true;
 		}
 		throw new ValidationException($errors);
 	}
@@ -171,7 +175,7 @@ Class GameService{
 			$errors[] = 'Please enter a name for player 6';
 		}
 		if ( empty($errors) ) {
-			return;
+			return true;
 		}
 		throw new ValidationException($errors);
 	}
@@ -185,7 +189,7 @@ Class GameService{
 			$errors[] = 'The amount of players can only be between 3 and 6';
 		}
 		if ( empty($errors) ) {
-			return;
+			return true;
 		}
 	
 		throw new ValidationException($errors);
