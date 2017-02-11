@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>Test CMDB</title>
+    <title>Wizard scoreboard</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/dropdown.css" rel="stylesheet">
     <link href="css/bootstrap-select.min.css" rel="stylesheet">  
@@ -17,7 +17,7 @@
 <?php
 session_start();
 //include_once '../header.php';
-require_once 'GameController.php';
+require_once 'Classes/GameController.php';
 // if (empty($Game)){
 // 	$Game = new gameController();
 // }

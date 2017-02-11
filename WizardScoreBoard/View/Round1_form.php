@@ -12,9 +12,20 @@ echo "</tr>";
 echo "</thead>";
 echo "<tbody>";
 echo "<tr>";
-echo "<td>Round 1</td>";
+echo "<td width=\"3%\">1:</td>";
 for ($i =1 ; $i <= $amount;$i++){
-	echo "<td><input type=\"text\" name=\"ReceivedPlayer".$i."\" placeholder=\"Set Received\"> <input type=\"text\" name=\"RequiredPlayer".$i."\" placeholder=\"Set Requested\"></td>";
+	echo "<td class=\"col-md-3\">";
+	echo "<table>";
+	echo "<tr>";
+	echo "<td>Requested</td>";
+	echo "<td>Received</td>";
+	echo "</tr>";
+	echo "<tr>";
+	echo "<td><input type=\"text\" name=\"RequiredPlayer".$i."\" class=\"col-md-3\"></td>";
+	echo "<td><input type=\"text\" name=\"ReceivedPlayer".$i."\" class=\"col-md-3\"></td>";
+	echo "</tr>";
+	echo "</table>";
+	echo "</td>";
 }
 echo "</tr>";
 echo "</tbody>";
