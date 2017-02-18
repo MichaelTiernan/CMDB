@@ -5,7 +5,6 @@ Class GameService{
 	private $game;
 	private $count = 0;
 	public function __construct(){
-		$this->count++;
 		$this->game = new Game();
 	}
 	/**
@@ -41,6 +40,8 @@ Class GameService{
 			$this->game->Play3Players($Game_ID,$player1, $player2, $player3);
 		}catch (ValidationException $ex){
 			throw $ex;
+		}catch (PDOException $e){
+			throw $e;
 		}
 	}	
 	/**
@@ -57,6 +58,8 @@ Class GameService{
 			$this->game->Play4Players($Game_ID,$player1, $player2, $player3,$player4);
 		}catch (ValidationException $ex){
 			throw $ex;
+		}catch (ValidationException $ex){
+			throw $ex;
 		}
 	}
 	
@@ -66,6 +69,8 @@ Class GameService{
 			$this->game->Play5Players($Game_ID,$player1, $player2, $player3,$player4,$player5);
 		}catch (ValidationException $ex){
 			throw $ex;
+		}catch (ValidationException $ex){
+			throw $ex;
 		}
 	}
 	
@@ -73,6 +78,8 @@ Class GameService{
 		try{
 			$this->validate6Players($player1, $player2, $player3,$player4,$player5,$player6);
 			$this->game->Play6Players($Game_ID,$player1, $player2, $player3,$player4,$player5,$player6);
+		}catch (ValidationException $ex){
+			throw $ex;
 		}catch (ValidationException $ex){
 			throw $ex;
 		}
@@ -92,6 +99,10 @@ Class GameService{
 		
 	public function getResultRound($Game_ID,$Round){
 		return $this->game->getResultRound($Game_ID,$Round);
+	}
+	
+	public function getAmountofRounds($amountOfPlayers){
+		return $this->game->getAmountofRounds($amountOfPlayers);
 	}
 	
 	private function validate3Players($player1,$player2,$player3){

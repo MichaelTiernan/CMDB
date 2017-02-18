@@ -8,7 +8,6 @@ Class Game extends Database{
 	private $count = 0;
 	private $ScoreboardCollaction;
 	public function __construct(){
-		$this->count++;
 		$this->ScoreboardCollaction = new Collection();
 	}
 	/**
@@ -236,6 +235,27 @@ Class Game extends Database{
 		} else {
 			print "This is not the last round, happy playing<br>";
 			return FALSE;
+		}
+	}
+	/**
+	 * This will return the amount of rounds
+	 * @param number $amountOfPlayers
+	 * @return number
+	 */
+	public function getAmountofRounds($amountOfPlayers){
+		switch ($amountOfPlayers){
+			case 3:
+				return 20;
+				break;
+			case 4:
+				return 15;
+				break;
+			case 5:
+				return 12;
+				break;
+			case 6:
+				return 10;
+				break;
 		}
 	}
 }

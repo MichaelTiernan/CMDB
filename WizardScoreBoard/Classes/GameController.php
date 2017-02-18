@@ -6,7 +6,6 @@ Class gameController{
 	private $result;
 	private $count = 0;
 	public function __construct(){
-		$this->count++;
 		$this->gameService = new GameService();
 	}
 	/**
@@ -30,6 +29,40 @@ Class gameController{
 				$this->round4();
 			}elseif ($op == 'round5'){
 				$this->round5();
+			}elseif ($op == 'round6'){
+				$this->round6();
+			}elseif ($op == 'round7'){
+				$this->round7();
+			}elseif ($op == 'round8'){
+				$this->round8();
+			}elseif ($op == 'round9'){
+				$this->round9();
+			}elseif ($op == 'round10'){
+				$this->round10();
+			}elseif ($op == 'round11'){
+				$this->round11();
+			}elseif ($op == 'round12'){
+				$this->round12();
+			}elseif ($op == 'round13'){
+				$this->round13();
+			}elseif ($op == 'round14'){
+				$this->round14();
+			}elseif ($op == 'round15'){
+				$this->round15();
+			}elseif ($op == 'round16'){
+				$this->round16();
+			}elseif ($op == 'round17'){
+				$this->round17();
+			}elseif ($op == 'round18'){
+				$this->round18();
+			}elseif ($op == 'round18'){
+				$this->round18();
+			}elseif ($op == 'round19'){
+				$this->round19();
+			}elseif ($op == 'round20'){
+				$this->round20();
+			}elseif ($op == 'last'){
+				$this->Last_round();
 			}
 		}catch ( Exception $e ) {
             // some unknown Exception got through here, use application error page to display it
@@ -107,7 +140,9 @@ Class gameController{
  // 				die();
 			} catch (ValidationException $e) {
 				$errors = $e->getErrors();
-			}
+			} catch (PDOException $ex){
+            	$this->showError("Database exception",$ex);
+            }
 		}
 		include 'View/PlayersName_form.php';
 	}
@@ -146,28 +181,31 @@ Class gameController{
 		}
 		$title = 'Round 2';
 		$amount = $this->gameService->getAmountOfPlayers($id);
-		$results = $this->gameService->getResultRound($id,1);
-		
-		if ( isset($_POST['formRound2-submitted'])) {
-			$results = $this->gameService->getResultRound($id,1);
+		$resulsRound1 = $this->gameService->getResultRound($id,1);
+		$round = 2;
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$resulsRound1 = $this->gameService->getResultRound($id,1);
 			$players = $this->gameService->getPlayers($id);
+			$round = 2;
 			$Result = array();
 			$i = 1;
 			foreach ($players as $player){
+				$resultRound = $round -1;
 				$ReceivedPlayer = "ReceivedPlayer".$i;
 				$RequiredPlayer = "RequiredPlayer".$i;
-				$score = $results[$i-1]["Score"];
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
 				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
 				$i++;
 			}
-			$this->gameService->setResultRound($id,2,$Result);
-			if (!$this->gameService->isThisTheLastRound(2, $amount)){
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
 				$this->redirect('PlayWizard.php?op=round3&gameid='.$id);
 				//return;
 			}
 		}
+		$lastround = 0;
 		$players = $this->gameService->getPlayers($id);
-		include 'View/Round2_form.php';
+		include 'View/Rounds_form.php';
 	}
 	/**
 	 * Round 3
@@ -179,31 +217,38 @@ Class gameController{
 			throw new Exception('Internal error.');
 		}
 		$amount = $this->gameService->getAmountOfPlayers($id);
-		$resulsRound1 = $this->gameService->getResultRound($id,1);
-		$resulsRound2 = $this->gameService->getResultRound($id,2);
+		$round = 3;
 		$title = 'Round 3';
-		if ( isset($_POST['formRound3-submitted'])) {
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$resultRound = $round -1;
+			$round = 3;
 			$amount = $this->gameService->getAmountOfPlayers($id);
-			$resulsRound1 = $this->gameService->getResultRound($id,1);
-			$resulsRound2 = $this->gameService->getResultRound($id,2);
 			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
 			$Result = array();
 			$i = 1;
 			foreach ($players as $player){
 				$ReceivedPlayer = "ReceivedPlayer".$i;
 				$RequiredPlayer = "RequiredPlayer".$i;
-				$score = $results[$i-1]["Score"];
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
 				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
 				$i++;
 			}
-			$this->gameService->setResultRound($id,3,$Result);
-			if (!$this->gameService->isThisTheLastRound(3, $amount)){
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
 				$this->redirect('PlayWizard.php?op=round4&gameid='.$id);
 				//return;
 			}
 		}
+		$lastround = 0;
 		$players = $this->gameService->getPlayers($id);
-		include 'View/Round3_form.php';
+		include 'View/Rounds_form.php';
 	}
 	/**
 	 * Round 4
@@ -215,33 +260,38 @@ Class gameController{
 			throw new Exception('Internal error.');
 		}
 		$amount = $this->gameService->getAmountOfPlayers($id);
-		$resulsRound1 = $this->gameService->getResultRound($id,1);
-		$resulsRound2 = $this->gameService->getResultRound($id,2);
-		$resulsRound3 = $this->gameService->getResultRound($id,3);
+		$round = 4;
 		$title = 'Round 4';
-		if ( isset($_POST['formRound4-submitted'])) {
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 4;
+			$resultRound = $round -1;
 			$amount = $this->gameService->getAmountOfPlayers($id);
-			$resulsRound1 = $this->gameService->getResultRound($id,1);
-			$resulsRound2 = $this->gameService->getResultRound($id,2);
-			$resulsRound3 = $this->gameService->getResultRound($id,3);
 			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
 			$Result = array();
 			$i = 1;
 			foreach ($players as $player){
 				$ReceivedPlayer = "ReceivedPlayer".$i;
 				$RequiredPlayer = "RequiredPlayer".$i;
-				$score = $results[$i-1]["Score"];
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
 				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
 				$i++;
 			}
-			$this->gameService->setResultRound($id,4,$Result);
-			if (!$this->gameService->isThisTheLastRound(4, $amount)){
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
 				$this->redirect('PlayWizard.php?op=round5&gameid='.$id);
 				//return;
 			}
 		}
+		$lastround = 0;
 		$players = $this->gameService->getPlayers($id);
-		include 'View/Round4_form.php';
+		include 'View/Rounds_form.php';
 	}
 	
 	private function round5(){
@@ -250,34 +300,732 @@ Class gameController{
 			throw new Exception('Internal error.');
 		}
 		$amount = $this->gameService->getAmountOfPlayers($id);
-		$resulsRound1 = $this->gameService->getResultRound($id,1);
-		$resulsRound2 = $this->gameService->getResultRound($id,2);
-		$resulsRound3 = $this->gameService->getResultRound($id,3);
-		$resulsRound4 = $this->gameService->getResultRound($id,4);
 		$title = 'Round 5';
-		if ( isset($_POST['formRound4-submitted'])) {
+		$round = 5;
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 5;
+			$resultRound = $round -1;
 			$amount = $this->gameService->getAmountOfPlayers($id);
-			$resulsRound1 = $this->gameService->getResultRound($id,1);
-			$resulsRound2 = $this->gameService->getResultRound($id,2);
-			$resulsRound3 = $this->gameService->getResultRound($id,3);
-			$resulsRound4 = $this->gameService->getResultRound($id,4);
+			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round6&gameid='.$id);
+				//return;
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 6
+	 * @throws Exception
+	 */
+	private function round6(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 6';
+		$round = 6;
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 6;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round7&gameid='.$id);
+				//return;
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 7
+	 * @throws Exception
+	 */
+	private function round7(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 7';
+		$round = 7;
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 7;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resulsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round8&gameid='.$id);
+				//return;
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 8
+	 * @throws Exception
+	 */
+	private function round8(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 8';
+		$round = 8;
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 8;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round9&gameid='.$id);
+				//return;
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 9
+	 * @throws Exception
+	 */
+	private function round9(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 9';
+		$round = 9;
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 9;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round10&gameid='.$id);
+				//return;
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round10(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 10';
+		$round = 10;
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 10;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round10&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round11(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 11';
+		$round = 11;
+		$resultRound = $round -1;
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 11;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			$players = $this->gameService->getPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resulsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round11&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round12(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 12';
+		$round = 12;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 12;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
 			$players = $this->gameService->getPlayers($id);
 			$Result = array();
 			$i = 1;
 			foreach ($players as $player){
 				$ReceivedPlayer = "ReceivedPlayer".$i;
 				$RequiredPlayer = "RequiredPlayer".$i;
-				$score = $results[$i-1]["Score"];
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
 				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
 				$i++;
 			}
-			$this->gameService->setResultRound($id,5,$Result);
-			if (!$this->gameService->isThisTheLastRound(5, $amount)){
-				$this->redirect('PlayWizard.php?op=round6&gameid='.$id);
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round13&gameid='.$id);
 				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
 			}
 		}
+		$lastround = 0;
 		$players = $this->gameService->getPlayers($id);
-		include 'View/Round5_form.php';
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round13(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 13';
+		$round = 13;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 13;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round14&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round14(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 14';
+		$round = 14;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 14;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round15&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round15(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 15';
+		$round = 15;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 15;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round16&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round16(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 16';
+		$round = 16;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 16;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round17&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round17(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 17';
+		$round = 17;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 17;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round18&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round18(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 18';
+		$round = 18;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 18;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round19&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round19(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 19';
+		$round = 19;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 19;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round20&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used in round 10
+	 * @throws Exception
+	 */
+	private function round20(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$title = 'Round 20';
+		$round = 20;
+		$resultRound = $round -1;
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		for ($i = 1; $i <= $resultRound; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		if ( isset($_POST["formRound".$round."-submitted"])) {
+			$round = 20;
+			$resultRound = $round -1;
+			$amount = $this->gameService->getAmountOfPlayers($id);
+			for ($i = 1; $i <= $resultRound; $i++){
+				${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+			}
+			$players = $this->gameService->getPlayers($id);
+			$Result = array();
+			$i = 1;
+			foreach ($players as $player){
+				$ReceivedPlayer = "ReceivedPlayer".$i;
+				$RequiredPlayer = "RequiredPlayer".$i;
+				$score = ${"resultsRound".$resultRound}[$i-1]["Score"];
+				$Result[]= array("ID" => $i, "PlayersName" => $player['Name'],"Required" => $_POST[$RequiredPlayer],"Received" => $_POST[$ReceivedPlayer], "Score" => $score);
+				$i++;
+			}
+			$this->gameService->setResultRound($id,$round,$Result);
+			if (!$this->gameService->isThisTheLastRound($round, $amount)){
+				$this->redirect('PlayWizard.php?op=round21&gameid='.$id);
+				//return;
+			}else{
+				$this->redirect('PlayWizard.php?op=last&gameid='.$id);
+			}
+		}
+		$lastround = 0;
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
+	}
+	/**
+	 * This will be used for the last round
+	 * @throws Exception
+	 */
+	private function Last_round(){
+		$id = isset($_GET['gameid'])?$_GET['gameid']:NULL;
+		if ( !$id ) {
+			throw new Exception('Internal error.');
+		}
+		$amount = $this->gameService->getAmountOfPlayers($id);
+		$rounds = $this->gameService->getAmountofRounds($amount);
+		for ($i = 1; $i <= $rounds; $i++){
+			${"resultsRound".$i} = $this->gameService->getResultRound($id,$i);
+		}
+		$lastround = 1;
+		$title = 'End result';
+		$players = $this->gameService->getPlayers($id);
+		include 'View/Rounds_form.php';
 	}
 }
