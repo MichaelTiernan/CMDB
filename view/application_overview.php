@@ -64,7 +64,7 @@ if ($ViewAccess){
         echo "</tbody>";
         echo "</table>";
     }  else {
-        echo "No Log entries found for this IdentityType";
+        echo "No Log entries found for this Application";
     }
 }else {
     $this->showError("Application error", "You do not access to this page");

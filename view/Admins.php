@@ -1,15 +1,15 @@
-<h2>Roles</h2>
+<h2>Admin</h2>
 <?php
 echo "<div class=\"container\">";
 echo "<div class=\"row\">";
 if ($AddAccess){
-    echo "<div class=\"col-md-6 text-left\"><a class=\"btn icon-btn btn-success\" href=\"Role.php?op=new\">";
+    echo "<div class=\"col-md-6 text-left\"><a class=\"btn icon-btn btn-success\" href=\"Admin.php?op=new\">";
     echo "<span class=\"glyphicon btn-glyphicon glyphicon-plus img-circle text-success\"></span>Add</a>";
     echo "</div>";
 }
 echo "<div class=\"col-md-6 text-right\">";
 ?>
-<form class="form-inline" role="search" action="Role.php?op=search" method="post">
+<form class="form-inline" role="search" action="Admin.php?op=search" method="post">
     <div class="form-group">
        <input name="search" type="text" class="form-control" placeholder="Search">
     </div>
@@ -22,9 +22,9 @@ if (count($rows)>0){
     echo "<table class=\"table table-striped table-bordered\">";
     echo "<thead>";
     echo "<tr>";
-    echo "<th><a href=\"Role.php?orderby=Account\">Account</a></th>";
-    echo "<th><a href=\"Role.php?orderby=Level\">Level</a></th>";
-    echo "<th><a href=\"Role.php?orderby=Active\">Active</a></th>";
+    echo "<th><a href=\"Admin.php?orderby=Account\">Account</a></th>";
+    echo "<th><a href=\"Admin.php?orderby=Level\">Level</a></th>";
+    echo "<th><a href=\"Admin.php?orderby=Active\">Active</a></th>";
     echo "<th>Actions</th>";
     echo "</tr>";
     echo "</thead>";
@@ -36,18 +36,18 @@ if (count($rows)>0){
         echo "<td>".htmlentities($row['Active'])."</td>";
         echo "<td>"; 
         IF ($UpdateAccess){
-            echo "<a class=\"btn btn-primary\" href=\"Role.php?op=edit&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit\">";
+            echo "<a class=\"btn btn-primary\" href=\"Admin.php?op=edit&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Edit\">";
             echo "<span class=\"fa fa-pencil\"></span></a>";
         }
         if ($row["Active"] == "Active" and $DeleteAccess){
-            echo "<a class=\"btn btn-danger\" href=\"Role.php?op=delete&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\">";
+            echo "<a class=\"btn btn-danger\" href=\"Admin.php?op=delete&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\">";
             echo "<span class=\"fa fa-toggle-off\"></span></a>";
         }elseif ($ActiveAccess){
-            echo "<a class=\"btn btn-glyphicon\" href=\"Role.php?op=activate&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Activate\">";
+            echo "<a class=\"btn btn-glyphicon\" href=\"Admin.php?op=activate&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Activate\">";
             echo "<span class=\"fa fa-toggle-on\"></span></a>";
         }
         if ($InfoAccess) {
-            echo "<a class=\"btn btn-info\" href=\"Role.php?op=show&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Info\">";
+            echo "<a class=\"btn btn-info\" href=\"Admin.php?op=show&id=".$row['Admin_id']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Info\">";
             echo "<span class=\"fa fa-info\"></span></a>";
         }    
         echo "</td>"; 

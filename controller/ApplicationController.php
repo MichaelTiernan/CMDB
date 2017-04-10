@@ -166,7 +166,7 @@ class ApplicationController extends Controller{
         if ( isset($_POST['form-submitted'])) {
             $Name = isset($_POST['Name']) ? $_POST['Name'] :NULL;
             try{
-                $this->applicationService->createNewApplication($Name,$AdminName);
+                $this->applicationService->create($Name,$AdminName);
                 $this->redirect('Application.php');
                 return;
             } catch (ValidationException $e) {

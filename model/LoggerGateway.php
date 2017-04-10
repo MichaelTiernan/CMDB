@@ -67,8 +67,11 @@ class LoggerGateway extends Logger {
             case "kensington":
                 $sql = "Select Log_Text, Log_Date from Log where Kensington=:uuid order by Log_ID Desc";
                 break;
+            case "admin":
+                	$sql = "Select Log_Text, Log_Date from Log where Admin=:uuid order by Log_ID Desc";
+                	break;
             default :
-                throw new Exception("Table not defenied in Logger");
+                throw new Exception("Table ".$table." not available in Logger");
         }
         $q = $pdo->prepare($sql);
         $q->bindParam(':uuid',$UUID);

@@ -303,7 +303,7 @@ class IdentityGateway extends Logger{
      */
     public function AssignAccount($UUID,$account,$From,$Until,$AdminName) {
         if (empty($Until)){
-            $newUntilDate = NULL;
+            $newUntilDate = "31/12/2037";
         }else{
             $newUntilDate = preg_replace("/(\d+)\D+(\d+)\D+(\d+)/","$3-$2-$1",$Until);
         }

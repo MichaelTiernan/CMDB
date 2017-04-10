@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS `application` (
   PRIMARY KEY (`App_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin AUTO_INCREMENT=1 ;
 insert into `application` (App_ID,Name) values
-(1,'Active Directory');
+(1,'Active Directory'),
+(2,'CMDB');
 -- --------------------------------------------------------
 --
 -- Tabelstructuur voor tabel `accounttype`
@@ -745,56 +746,57 @@ insert into `log` (Log_ID, `AccountType`, Log_text, Log_Date) values
 (19,2,'Accounttype Administrator Created by SQL Import','2012-01-01 00:00:00'),
 (20,3,'Accounttype Servive User Created by SQL Import','2012-01-01 00:00:00');
 insert into `log` (Log_ID, `Application`, Log_text, Log_Date) values
-(21,1,'Application Active Directory Created by SQL Import','2012-01-01 00:00:00');
+(21,1,'Application Active Directory Created by SQL Import','2012-01-01 00:00:00'),
+(22,2,'Application CMDB Created by SQL Import','2012-01-01 00:00:00');
 insert into `log` (Log_ID, `RoleType`, Log_text, Log_Date) values
-(22,1,'Roletype Application Created by SQL Import','2012-01-01 00:00:00'),
-(23,2,'Roletype System Created by SQL Import','2012-01-01 00:00:00');
+(23,1,'Roletype Application Created by SQL Import','2012-01-01 00:00:00'),
+(24,2,'Roletype System Created by SQL Import','2012-01-01 00:00:00');
 insert into `log` (Log_ID, `role_perm_id`, Log_text, Log_Date) values
-(24,1,'The Menu Identity recieved Permission Read for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(25,2,'The Menu Identity recieved Permission Update for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(26,3,'The Menu Identity recieved Permission Delete for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(27,4,'The Menu Identity recieved Permission Activate for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(28,5,'The Menu Identity recieved Permission Add for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(29,6,'The Menu Identity recieved Permission AssignAccount for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(30,7,'The Menu Identity recieved Permission AccountOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(31,8, 'The Menu Identity recieved Permission AssignDevice for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(32,9, 'The Menu Identity recieved Permission DeviceOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(33,10, 'The Menu Identity recieved Permission AssignMobile for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(34,11, 'The Menu Identity recieved Permission MobileOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(35,12, 'The Menu Identity recieved Permission AssignSubscription for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
-(36,13, 'The Menu Identity recieved Permission SubscriptionOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00');
+(25,1,'The Menu Identity recieved Permission Read for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(26,2,'The Menu Identity recieved Permission Update for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(27,3,'The Menu Identity recieved Permission Delete for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(28,4,'The Menu Identity recieved Permission Activate for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(29,5,'The Menu Identity recieved Permission Add for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(30,6,'The Menu Identity recieved Permission AssignAccount for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(31,7,'The Menu Identity recieved Permission AccountOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(32,8, 'The Menu Identity recieved Permission AssignDevice for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(33,9, 'The Menu Identity recieved Permission DeviceOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(34,10, 'The Menu Identity recieved Permission AssignMobile for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(35,11, 'The Menu Identity recieved Permission MobileOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(36,12, 'The Menu Identity recieved Permission AssignSubscription for Level: 9 this is created by SQL Import','2012-01-01 00:00:00'),
+(37,13, 'The Menu Identity recieved Permission SubscriptionOverview for Level: 9 this is created by SQL Import','2012-01-01 00:00:00');
 insert into `log` (Log_ID, `role_perm_id`, Log_text, Log_Date) values
-(37, 14, 'The Permission: Read added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
-(38, 15, 'The Permission: Update added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
-(39, 16, 'The Permission: Delete added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
-(40, 17, 'The Permission: Activate added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
-(41, 18, 'The Permission: Add added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-06-16 01:01:58');
+(38, 14, 'The Permission: Read added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
+(39, 15, 'The Permission: Update added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
+(40, 16, 'The Permission: Delete added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
+(41, 17, 'The Permission: Activate added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-01-01 00:00:00'),
+(42, 18, 'The Permission: Add added for Level: 9 for Menu: IdentityType is created by SQL Import', '2012-06-16 01:01:58');
 insert into `log` (Log_ID, `role_perm_id`, Log_text, Log_Date) values
-(42, 19, 'The Permission: Read added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
-(43, 20, 'The Permission: Update added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
-(44, 21, 'The Permission: Delete added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
-(45, 22, 'The Permission: Activate added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
-(46, 23, 'The Permission: Add added for Level: 9 for Menu: Account is created by SQL Import', '2012-06-16 01:01:58'),
-(47, 24, 'The Permission: Assign Identity added for Level: 9 for Menu: Account is created by SQL Import', '2012-06-16 01:01:58'),
-(48, 25, 'The Permission: Identity Overview added for Level: 9 for Menu: Account is created by SQL Import', '2012-06-16 01:01:58');
+(43, 19, 'The Permission: Read added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
+(44, 20, 'The Permission: Update added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
+(45, 21, 'The Permission: Delete added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
+(46, 22, 'The Permission: Activate added for Level: 9 for Menu: Account is created by SQL Import', '2012-01-01 00:00:00'),
+(47, 23, 'The Permission: Add added for Level: 9 for Menu: Account is created by SQL Import', '2012-06-16 01:01:58'),
+(48, 24, 'The Permission: Assign Identity added for Level: 9 for Menu: Account is created by SQL Import', '2012-06-16 01:01:58'),
+(49, 25, 'The Permission: Identity Overview added for Level: 9 for Menu: Account is created by SQL Import', '2012-06-16 01:01:58');
 insert into `log` (Log_ID, `role_perm_id`, Log_text, Log_Date) values
-(49, 26, 'The Permission: Read added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
-(50, 27, 'The Permission: Update added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
-(51, 28, 'The Permission: Delete added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
-(52, 29, 'The Permission: Activate added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
-(53, 30, 'The Permission: Add added for Level: 9 for Menu: Role is created by SQL Import', '2012-06-16 01:01:58'),
-(54, 31, 'The Permission: Assign Application added for Level: 9 for Menu: Role is created by SQL Import', '2012-06-16 01:01:58'),
-(55, 32, 'The Permission: Application overview added for Level: 9 for Menu: Role is created by SQL Import', '2012-06-16 01:01:58');
+(50, 26, 'The Permission: Read added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
+(51, 27, 'The Permission: Update added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
+(52, 28, 'The Permission: Delete added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
+(53, 29, 'The Permission: Activate added for Level: 9 for Menu: Role is created by SQL Import', '2012-01-01 00:00:00'),
+(54, 30, 'The Permission: Add added for Level: 9 for Menu: Role is created by SQL Import', '2012-06-16 01:01:58'),
+(55, 31, 'The Permission: Assign Application added for Level: 9 for Menu: Role is created by SQL Import', '2012-06-16 01:01:58'),
+(56, 32, 'The Permission: Application overview added for Level: 9 for Menu: Role is created by SQL Import', '2012-06-16 01:01:58');
 insert into `log` (Log_ID, `role_perm_id`, Log_text, Log_Date) values
-(56, 33, 'The Permission: Read added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
-(57, 34, 'The Permission: Update added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
-(58, 35, 'The Permission: Delete added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
-(59, 36, 'The Permission: Activate added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
-(60, 37, 'The Permission: Add added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
-(61, 38, 'The Permission: Assign Identity added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
-(62, 39, 'The Permission: Identity overview added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
-(63, 40, 'The Permission: Assign Kensington added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
-(64, 41, 'The Permission: Kensington overview added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58');
+(57, 33, 'The Permission: Read added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
+(58, 34, 'The Permission: Update added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
+(59, 35, 'The Permission: Delete added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
+(60, 36, 'The Permission: Activate added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-01-01 00:00:00'),
+(61, 37, 'The Permission: Add added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
+(62, 38, 'The Permission: Assign Identity added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
+(63, 39, 'The Permission: Identity overview added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
+(64, 40, 'The Permission: Assign Kensington added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58'),
+(65, 41, 'The Permission: Kensington overview added for Level: 9 for Menu: Laptop is created by SQL Import', '2012-06-16 01:01:58');
 
 -- Alter Table
 ALTER TABLE `identity` ADD UNIQUE(`UserID`);

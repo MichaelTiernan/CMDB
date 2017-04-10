@@ -75,9 +75,30 @@ class AdminController extends Controller{
 			throw new Exception('Internal error.');
 		}
 		$AdminName = $_SESSION["WhoName"];
-		$title = 'Update Account Type';
+		$title = 'Update Administrator';
 		$errors = array();
 		$UpdateAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Update");
+		if ( isset($_POST['form-submitted'])) {
+			$Level  = isset($_POST['Level']) ? $_POST['Level'] :NULL;
+			$Admin  = isset($_POST['Admin']) ? $_POST['Admin'] :NULL;
+			print_r($_POST);
+			try {
+				$this->adminSerice->update($id, $Level, $Admin, $AdminName);
+			} catch (Exception $e) {
+				$errors = $e->getErrors();
+            } catch (PDOException $ex){
+                $this->showError("Database exception",$ex);
+            }
+		}else{
+			$rows = $this->adminSerice->getByID($id);
+			foreach ($rows as $row){
+				$Level = $row["Level"];
+				$Admin = $row["Acc_ID"];
+			}
+		}
+		$Accounts = $this->adminSerice->getAllAccounts();
+		$Levels = $this->adminSerice->getAllLevels();
+		include 'view/updateAdmin_form.php';
 	}
 	/**
 	 * {@inheritDoc}
@@ -107,10 +128,27 @@ class AdminController extends Controller{
 		$AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
 	
 		$AdminName = $_SESSION["WhoName"];
-		$Type = '';
-		$Description = '';
+		$level = '';
+		$Admin = '';
 	
 		$errors = array();
+		if ( isset($_POST['form-submitted'])) {
+			print_r($_POST);
+			$level  = isset($_POST['Level']) ? $_POST['Level'] :NULL;
+			$Admin  = isset($_POST['Admin']) ? $_POST['Admin'] :NULL;
+			try {
+				$this->adminSerice->create($Level, $Admin, $AdminName);
+				$this->redirect('Admin.php');
+				return;
+			} catch (ValidationException $e) {
+                $errors = $e->getErrors();
+            } catch (PDOException $ex){
+                $this->showError("Database exception",$ex);
+            }
+		}
+		$Accounts = $this->adminSerice->getAllAccounts();
+		$Levels = $this->adminSerice->getAllLevels();
+		include 'view/newAdmin_form.php';
 	}
 	/**
 	 * {@inheritDoc}
@@ -126,6 +164,9 @@ class AdminController extends Controller{
 		if ( !$id ) {
 			throw new Exception('Internal error.');
 		}
+		$rows = $this->adminSerice->getByID($id);
+		$logrows = $this->loggerController->listAllLogs('admin', $id);
+		include 'view/admin_overview.php';
 	}
 	/**
 	 * {@inheritDoc}

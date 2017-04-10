@@ -160,7 +160,7 @@ class IdentityController extends Controller{
             $EMail    = isset($_POST['EMail'])? $_POST['EMail']:NULL;
             
             try {
-                $this->identityService->createNewIdentity($FristName,$LastName,$company,$Language, $userid,$type,$EMail,$AdminName);
+                $this->identityService->create($FristName,$LastName,$company,$Language, $userid,$type,$EMail,$AdminName);
                 $this->redirect('Identity.php');
                 return;
             } catch (ValidationException $e) {

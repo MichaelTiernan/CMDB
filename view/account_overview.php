@@ -55,7 +55,7 @@ if ($ViewAccess){
             echo "</tbody>";
             echo "</table>";
         }else {
-            echo "No Accounts assigned to this Identity";
+            echo "No Identities assigned to this Account";
         }
     }
     echo "<H3>Log overview</H3>";

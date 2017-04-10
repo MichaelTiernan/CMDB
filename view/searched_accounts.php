@@ -49,7 +49,7 @@ if (count($rows)>0){
             echo "<span class=\"fa fa-toggle-on\"></span></a>";
         }
         if ($row["Active"] == "Active" and $AssignAccess){
-            echo "<a class=\"btn btn-success\" href=\"Account.php?op=assign&id=".$row['Acc_ID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Assign Account\">";
+            echo "<a class=\"btn btn-success\" href=\"Account.php?op=assign&id=".$row['Acc_ID']."\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Assign Identity\">";
             echo "<span class=\"fa fa-user-plus\"></span></a>";
         }
         if ($InfoAccess) {

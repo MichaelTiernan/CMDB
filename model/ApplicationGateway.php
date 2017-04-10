@@ -116,7 +116,7 @@ class ApplicationGateway extends Logger{
         $q->bindParam(':name',$Name);
         if ($q->execute()){
             $Value = "Application with ". $Name;
-            $UUIDQ = "Select App_ID from Application order by Acc_ID desc limit 1";
+            $UUIDQ = "Select App_ID from Application order by App_ID desc limit 1";
             $stmnt = $pdo->prepare($UUIDQ);
             $stmnt->execute();
             $row = $stmnt->fetch(PDO::FETCH_ASSOC);

@@ -185,8 +185,11 @@ abstract class Logger extends Database{
                 case "kensington":
                     $sql = "INSERT INTO log (Kensington,Log_Text,Log_Date) values(:uuid, :log_text, :log_date)";
                     break;
+                case "admin":
+                    	$sql = "INSERT INTO log (Admin,Log_Text,Log_Date) values(:uuid, :log_text, :log_date)";
+                    	break;
                 default :
-                    throw new Exception('Class logger reports: Table not Know');
+                    throw new Exception("Class logger reports: Table ".$Table." not Know");
             }
             $q = $pdo->prepare($sql);
             $q->bindParam(':uuid',$UUID);

@@ -49,17 +49,16 @@ class AdminService extends Service {
 	}
 	/**
 	 * This function will create a new Account
-	 * @param string $UserID The UserID of the Account
-	 * @param int $Type The ID of the AccountType
-	 * @param int $Application The ID of the Application
+	 * @param int $Account The ID of the Account
+	 * @param int $Level The level
 	 * @param string $AdminName The name of the administrator that did the creation
 	 * @throws ValidationException
 	 * @throws PDOException
 	 */
-	public function create($UserID,$Type,$Application,$AdminName){
+	public function create($Level,$Account,$AdminName){
 		try {
-			$this->validateAccountParams($UserID, $Type, $Application);
-			$this->adminGateway->create($UserID, $Type, $Application, $AdminName);
+			$this->validateParams($Level, $Account);
+			$this->adminGateway->create($Account,$Level, $AdminName);
 		} catch (ValidationException $exc) {
 			throw $exc;
 		} catch (PDOException $e){
@@ -68,18 +67,16 @@ class AdminService extends Service {
 	}
 	/**
 	 * This function will update a given Account
-	 * @param int $UUID The unique ID of the Account
-	 * @param string $UserID The UserID of the Account
-	 * @param int $Type The ID of the AccountType
-	 * @param int $Application The ID of the Application
-	 * @param string $AdminName The name of the Admin
+	 * @param int $UUID The ID of Administrator
+	 * @param int $Level The level of the Administrator
+	 * @param string $Account The Unique ID of the account
 	 * @throws ValidationException
 	 * @throws PDOException
 	 */
-	public function update($UUID,$UserID,$Type,$Application,$AdminName) {
+	public function update($UUID,$Level,$Account,$AdminName) {
 		try {
-			$this->validateAccountParams($UserID, $Type, $Application, $UUID);
-			$this->adminGateway->update($UUID,$UserID, $Type, $Application, $AdminName);
+			$this->validateParams($Level,$Account, $UUID);
+			$this->adminGateway->update($UUID,$Account, $AdminName);
 		} catch (ValidationException $exc) {
 			throw $exc;
 		} catch (PDOException $e){
@@ -92,5 +89,40 @@ class AdminService extends Service {
 	 */
 	public function search($search) {
 		return $this->accountGateway->selectBySearch($search);
+	}
+	/**
+	 * This function will return all Accounts for the Application CMDB.
+	 */
+	public function getAllAccounts(){
+		return $this->adminGateway->getAllAccount();
+	}
+	/**
+	 * This function will return all Levels
+	 */
+	public function getAllLevels(){
+		return $this->adminGateway->getAllLevels();		
+	}
+	/**
+	 * 
+	 * @param unknown $Level
+	 * @param unknown $Account
+	 * @param number $UUID
+	 * @throws ValidationException
+	 */
+	private function validateParams($Level,$Account, $UUID =0){
+		$errors = array();
+		if (empty($Level)) {
+			$errors[] = 'Please select a Level';
+		}
+		if (empty($Account)) {
+			$errors[] = 'Please select an Account';
+		}
+		if ($this->adminGateway->alreadyExist($Level, $Admin,$UUID)){
+			$errors[]= "The account is already an administrator";
+		}
+		if ( empty($errors) ) {
+			return;
+		}
+		throw new ValidationException($errors);
 	}
 }
