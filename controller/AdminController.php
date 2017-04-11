@@ -51,6 +51,16 @@ class AdminController extends Controller{
 		}
 		$ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
 		$AdminName = $_SESSION["WhoName"];
+		if ($ActiveAccess){
+			try{
+				$this->adminSerice->activate($id,$AdminName);
+				$this->redirect('Admin.php');
+			} catch (PDOException $e){
+				$this->showError("Database exception",$e);
+			}
+		} else {
+			$this->showError("Application error", "You do not access to activate a account");
+		}
 	}
 	/**
 	 * {@inheritDoc}
@@ -64,6 +74,22 @@ class AdminController extends Controller{
 		$title = 'Delete Account Type';
 		$AdminName = $_SESSION["WhoName"];
 		$DeleteAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Delete");
+		$Reason = '';
+		$errors = array();
+		if ( isset($_POST['form-submitted'])) {
+			$Reason = isset($_POST['reason']) ? $_POST['reason'] :NULL;
+			try {
+				$this->adminSerice->delete($id,$Reason,$AdminName);
+				$this->redirect('Admin.php');
+				return;
+			} catch (ValidationException $ex) {
+				$errors = $ex->getErrors();
+			} catch (PDOException $e){
+				$this->showError("Database exception",$e);
+			}
+		}
+		$rows  = $this->adminSerice->getByID($id);
+		include 'view/deleteAdmin_form.php';
 	}
 	/**
 	 * {@inheritDoc}
@@ -84,8 +110,10 @@ class AdminController extends Controller{
 			print_r($_POST);
 			try {
 				$this->adminSerice->update($id, $Level, $Admin, $AdminName);
-			} catch (Exception $e) {
-				$errors = $e->getErrors();
+				$this->redirect('Admin.php');
+				return;
+			} catch (ValidationException $e) {
+				$errors = $e->getErrors();	
             } catch (PDOException $ex){
                 $this->showError("Database exception",$ex);
             }
@@ -182,7 +210,7 @@ class AdminController extends Controller{
 			$DeleteAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Delete");
 			$ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
 			$UpdateAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Update");
-			$rows = $this->accountTypeService->search($search);
+			$rows = $this->adminSerice->search($search);
 			include 'view/searched_admins.php';
 		}
 	}

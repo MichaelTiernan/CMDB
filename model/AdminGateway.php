@@ -8,21 +8,37 @@ class AdminGateway extends Logger {
 	private static $table = 'admin';
 	/**
 	 * {@inheritDoc}
-	 * @see Logger::activate()
 	 */
 	public function activate($UUID, $AdminName) {
-		
+		$pdo = Logger::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "Update Admin set Deactivate_reason = NULL, Active = 1 where Admin_ID = :uuid";
+		$q = $pdo->prepare($sql);
+		$q->bindParam(':uuid',$UUID);
+		if ($q->execute()){
+			$AccountID =$this->getAccountID($UUID);
+			$Value = "The Administrator with account ".$this->getAccount($AccountID)." and level ".$this->getLevel($UUID);
+			$this->logActivation(self::$table, $UUID, $Value, $AdminName);
+		}
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Logger::delete()
 	 */
 	public function delete($UUID, $reason, $AdminName) {
-		
+		$pdo = Logger::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "Update Admin set Deactivate_reason = :reason, Active = 0 where Admin_ID = :uuid";
+		$q = $pdo->prepare($sql);
+		$q->bindParam(':uuid',$UUID);
+		$q->bindParam(':reason',$reason);
+		if ($q->execute()){
+			$AccountID =$this->getAccountID($UUID);
+			$Value = "The Administrator with account ".$this->getAccount($AccountID)." and level ".$this->getLevel($UUID);
+			$this->logDelete(self::$table, $UUID, $Value, $reason, $AdminName);
+		}
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Logger::selectAll()
 	 */
 	public function selectAll($order) {
 		if (empty($order)) {
@@ -39,11 +55,20 @@ class AdminGateway extends Logger {
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Logger::selectBySearch()
 	 */
 	public function selectBySearch($search){
 		$searhterm = "%$search%";
 		$pdo = Logger::connect();
+		$pdo = Logger::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$sql = "Select Admin_id, a.UserID Account,a.Acc_ID, Level, if(admin.active=1,\"Active\",\"Inactive\") as Active ".
+				"from admin join Account a on Account = a.Acc_ID where UserID like :search or Level like :search";
+		$q = $pdo->prepare($sql);
+		$q->bindParam(':search',$searhterm);
+		if ($q->execute()){
+			return $q->fetchAll(PDO::FETCH_ASSOC);
+		}
+		Logger::disconnect();
 	}
 	/**
 	 * {@inheritDoc}
@@ -89,14 +114,34 @@ class AdminGateway extends Logger {
 		Logger::disconnect();
 	}
 	/**
-	 * 
+	 * This function will update a given administrator
 	 * @param int $UUID
 	 * @param int $account
 	 * @param int $level
 	 * @param string $AdminName
 	 */
 	public function update($UUID,$account, $level, $AdminName){
-		
+		$pdo = Logger::connect();
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$OldAccount = $this->getAccountID($UUID);
+		$OldLevel = $this->getLevel($UUID);
+		$changed = FALSE;
+		if ($OldAccount != $account){
+			$changed = TRUE;
+			$this->logUpdate(self::$table, $UUID, "Account", $this->getAccount($OldAccount), $this->getAccount($account), $AdminName);
+		}
+		if ($OldLevel != $level){
+			$changed = TRUE;
+			$this->logUpdate(self::$table, $UUID, "Level", $OldLevel, $level, $AdminName);
+		}
+		if ($changed){
+			$sql = "Update Admin set Account = :account, Level = :level where Admin_ID = :uuid";
+			$q = $pdo->prepare($sql);
+			$q->bindParam(':uuid',$UUID);
+			$q->bindParam(':account',$account);
+			$q->bindParam(':level', $level);
+			$q->execute();
+		}
 	}
 	/**
 	 * This function will list all Accounts for the application CMDB
@@ -131,7 +176,7 @@ class AdminGateway extends Logger {
 	public function getLevel($UUID){
 		$pdo = Logger::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$SQL = "Select Level from Admin where Admin_id = :uuid";
+		$sql = "Select Level from Admin where Admin_id = :uuid";
 		$q = $pdo->prepare($sql);
 		$q->bindParam(':uuid',$UUID);
 		if ($q->execute()){
@@ -149,7 +194,7 @@ class AdminGateway extends Logger {
 	public function getAccountID($UUID){
 		$pdo = Logger::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		$SQL = "Select Account from Admin where Admin_id = :uuid";
+		$sql = "Select Account from Admin where Admin_id = :uuid";
 		$q = $pdo->prepare($sql);
 		$q->bindParam(':uuid',$UUID);
 		if ($q->execute()){

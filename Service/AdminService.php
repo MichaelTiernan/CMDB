@@ -9,14 +9,12 @@ class AdminService extends Service {
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Service::activate()
 	 */
 	public function activate($id, $AdminName) {
 		$this->adminGateway->activate($id, $AdminName);
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Service::delete()
 	 */
 	public function delete($id, $reason, $AdminName) {
 		try{
@@ -30,7 +28,6 @@ class AdminService extends Service {
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Service::getAll()
 	 */
 	public function getAll($order) {
 		try{
@@ -42,7 +39,6 @@ class AdminService extends Service {
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Service::getByID()
 	 */
 	public function getByID($id) {
 		return $this->adminGateway->selectById($id);
@@ -76,7 +72,7 @@ class AdminService extends Service {
 	public function update($UUID,$Level,$Account,$AdminName) {
 		try {
 			$this->validateParams($Level,$Account, $UUID);
-			$this->adminGateway->update($UUID,$Account, $AdminName);
+			$this->adminGateway->update($UUID,$Account, $Level,$AdminName);
 		} catch (ValidationException $exc) {
 			throw $exc;
 		} catch (PDOException $e){
@@ -85,10 +81,9 @@ class AdminService extends Service {
 	}
 	/**
 	 * {@inheritDoc}
-	 * @see Service::search()
 	 */
 	public function search($search) {
-		return $this->accountGateway->selectBySearch($search);
+		return $this->adminGateway->selectBySearch($search);
 	}
 	/**
 	 * This function will return all Accounts for the Application CMDB.
@@ -103,10 +98,10 @@ class AdminService extends Service {
 		return $this->adminGateway->getAllLevels();		
 	}
 	/**
-	 * 
-	 * @param unknown $Level
-	 * @param unknown $Account
-	 * @param number $UUID
+	 * This function will validate the Parameters
+	 * @param int $Level
+	 * @param int $Account
+	 * @param int $UUID
 	 * @throws ValidationException
 	 */
 	private function validateParams($Level,$Account, $UUID =0){
@@ -117,7 +112,7 @@ class AdminService extends Service {
 		if (empty($Account)) {
 			$errors[] = 'Please select an Account';
 		}
-		if ($this->adminGateway->alreadyExist($Level, $Admin,$UUID)){
+		if ($this->adminGateway->alreadyExist($Level, $Account,$UUID)){
 			$errors[]= "The account is already an administrator";
 		}
 		if ( empty($errors) ) {
