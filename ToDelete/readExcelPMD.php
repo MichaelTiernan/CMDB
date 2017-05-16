@@ -17,6 +17,9 @@ $selectsql ="SELECT ";
 $FORSql = "FOR r_upd IN ( SELECT y.*, y.ora_rowscn scn "
         . "FROM ";
 $upateSql = "";
+$createsql ="CREATE TABLE ";
+$lowerbound = 7;
+$upperbound = 13;
 function printInser($insersql){
     print "<hr>Inser statment: <br>";
     PRINT  $insersql.")<br>";  
@@ -31,6 +34,156 @@ function printUpdate($upateSql){
 function printFor($forSQL){
     print "Update statment: <br>";
     print $forSQL."<br>";
+}
+function printCreate($createsql){
+	print "Create statement: <br>";
+	print $createsql."<BR>";
+}
+function getLowerBounds($tableName){
+	switch ($tableName){
+		case "ADRESSEN":
+			return 9;
+			break;
+		case "AUDIT_EIGENSCHAPPEN":
+			return 33;
+			break;
+		case "AUDIT_ENTITEITEN":
+			return 45;
+			break;
+		case "AUDIT_EVENTS":
+			return 59;
+			break;
+		case "B2B_PARTNERS":
+			return 71;
+			break;
+		case "BRONNEN":
+			return 87;
+			break;
+		case "CODES":
+			return 99;
+			break;
+		case "CONTACT_INFOS":
+			return 110;
+			break;
+		case "EXPLOITANTEN":
+			return 128;
+			break;
+		case "GEMEENTES":
+			return 145;
+			break;
+		case "GEZINNEN":
+			return 166;
+			break;
+		case "GEZINSLEDEN":
+			return 180;
+			break;
+		case "KAARTHOUDERNUMMERS":
+			return 198;
+			break;
+		case "KLANTEN":
+			return 216;
+			break;
+		case "LANDEN":
+			return 235;
+			break;
+		case "MEDEWERKERS":
+			return 252;
+			break;
+		case "ORGANISATIE_ENTITEITEN":
+			return 273;
+			break;
+		case "ORGANISATORISCHE_EENHEDEN":
+			return 281;
+			break;
+		case "PARTIJEN":
+			return 297;
+			break;
+		case "PERSOONPROFIELEN":
+			return 343;
+			break;
+		case "PERSOON_FOTOS":
+			return 362;
+			break;
+		case "TOEGEKENDE_PERSOONPROFIELEN":
+			return 378;
+			break;
+		case "WERKLOCATIES":
+			return 397;
+			break;
+	}
+}
+function getUpperbound($tablename){
+	switch ($tablename){
+		case "ADRESSEN":
+			return 25;
+			break;
+		case "AUDIT_EIGENSCHAPPEN":
+			return 37;
+			break;
+		case "AUDIT_ENTITEITEN":
+			return 51;
+			break;
+		case "AUDIT_EVENTS":
+			return 64;
+			break;
+		case "B2B_PARTNERS":
+			return 78;
+			break;
+		case "BRONNEN":
+			return 91;
+			break;
+		case "CODES":
+			return 103;
+			break;
+		case "CONTACT_INFOS":
+			return 120;
+			break;
+		case "EXPLOITANTEN":
+			return 137;
+			break;
+		case "GEMEENTES":
+			return 158;
+			break;
+		case "GEZINNEN":
+			return 171;
+			break;
+		case "GEZINSLEDEN":
+			return 191;
+			break;
+		case "KAARTHOUDERNUMMERS":
+			return 208;
+			break;
+		case "KLANTEN":
+			return 226;
+			break;
+		case "LANDEN":
+			return 245;
+			break;
+		case "MEDEWERKERS":
+			return 266;
+			break;
+		case "ORGANISATIE_ENTITEITEN":
+			return 274;
+			break;
+		case "ORGANISATORISCHE_EENHEDEN":
+			return 290;
+			break;
+		case "PARTIJEN":
+			return 336;
+			break;
+		case "PERSOONPROFIELEN":
+			return 355;
+			break;
+		case "PERSOON_FOTOS":
+			return 371;
+			break;
+		case "TOEGEKENDE_PERSOONPROFIELEN":
+			return 390;
+			break;
+		case "WERKLOCATIES":
+			return 405;
+			break;
+	}
 }
 foreach($rowIterator as $row){
     $cellIterator = $row->getCellIterator();
@@ -76,6 +229,13 @@ foreach($rowIterator as $row){
                         $upateSql = "UPDATE \"".$tabelOds."\" SET ";
                         $FORSql ="FOR r_upd IN ( SELECT y.*, y.ora_rowscn scn "
                                 . "FROM ";
+                        $createsql .= "ODS_AANGEMAAKT TIMESTAMP, "
+                        	. "ODS_GEWIJZIGD TIMESTAMP, "
+                            ."ODS_SCN NUMBER";
+						$createsql .= ");";
+                        //echo 'Create statement now: '.$createsql."<br>";
+                        printCreate($createsql);
+                        $createsql ="CREATE TABLE ".$tabelOds."( ";
                     }
                 }
             }
@@ -86,6 +246,8 @@ foreach($rowIterator as $row){
                 $insersql .= $cell->getCalculatedValue().", ";
                 //echo 'insert statment now: '.$insersql."<br>";
                 $upateSql .= $cell->getCalculatedValue()."=r_upd.";
+                $createsql .= $cell->getCalculatedValue()." ";
+                //echo 'Create statement now: '.$createsql."<br>";
             }
         }
         if('D' == $cell->getColumn()){
@@ -95,6 +257,20 @@ foreach($rowIterator as $row){
                // echo 'select statment now: '.$selectsql."<br>";
                  $upateSql .= $cell->getCalculatedValue().", ";
             }
+        }
+        if('E' == $cell->getColumn()){
+        	//echo 'Data in Cell E:'.$row->getRowIndex()." ".$cell->getCalculatedValue()."<BR>";
+        	if (!empty($cell->getCalculatedValue())){
+        		$createsql .= $cell->getCalculatedValue()." ";
+        		//echo 'Create statement now: '.$createsql."<br>";
+        	}
+        }
+        if('F' == $cell->getColumn()){
+        	if ($row->getRowIndex() >= getLowerBounds($tabelOds) and $row->getRowIndex() <= getUpperbound($tabelOds)){
+        		//echo 'Data in Cell F:'.$row->getRowIndex()." ".$cell->getCalculatedValue()."<BR>";
+        		$createsql .= $cell->getCalculatedValue().", ";
+        		//echo 'Create statement now: '.$createsql."<br>";
+        	}
         }
     }
 }

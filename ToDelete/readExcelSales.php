@@ -17,6 +17,9 @@ $selectsql ="SELECT ";
 $FORSql = "FOR r_upd IN ( SELECT y.*, y.ora_rowscn scn "
         . "FROM ";
 $upateSql = "";
+$createsql ="CREATE TABLE ";
+$lowerbound = 7;
+$upperbound = 13;
 function printInser($insersql){
     print "<hr>Inser statment: <br>";
     PRINT  $insersql.")<br>";  
@@ -31,6 +34,90 @@ function printUpdate($upateSql){
 function printFor($forSQL){
     print "Update statment: <br>";
     print $forSQL."<br>";
+}
+function printCreate($createsql){
+	print "Create statement: <br>";
+	print $createsql."<BR>";
+}
+function getLowerBounds($tableName){
+	switch ($tableName){
+		case "AANVRAGEN":
+			return 8;
+			break;
+		case "BETALINGSVOORSTELLEN":
+			return 28;
+			break;
+		case "BETALINGSVOORSTEL_BATCHES":
+			return 41;
+			break;
+		case "CODE_NAMEN":
+			return 57;
+			break;
+		case "OFFERTELIJNEN":
+			return 67;
+			break;
+		case "OFFERTELIJN_ADRESSEN":
+			return 96;
+			break;
+		case "OFFERTELIJN_ARTIKELEN":
+			return 110;
+			break;
+		case "OFFERTELIJN_PERSONEN":
+			return 124;
+			break;
+		case "OFFERTELIJN_PERSOONPROFIELEN":
+			return 145;
+			break;
+		case "OFFERTES":
+			return 154;
+			break;
+		case "VERKOOPORDERLIJNEN":
+			return 191;
+			break;
+		case "VERKOOPORDERS":
+			return 208;
+			break;
+	}
+}
+function getUpperbound($tablename){
+switch ($tablename){
+		case "AANVRAGEN":
+			return 21;
+			break;
+		case "BETALINGSVOORSTELLEN":
+			return 34;
+			break;
+		case "BETALINGSVOORSTEL_BATCHES":
+			return 51;
+			break;
+		case "CODE_NAMEN":
+			return 60;
+			break;
+		case "OFFERTELIJNEN":
+			return 88;
+			break;
+		case "OFFERTELIJN_ADRESSEN":
+			return 103;
+			break;
+		case "OFFERTELIJN_ARTIKELEN":
+			return 115;
+			break;
+		case "OFFERTELIJN_PERSONEN":
+			return 137;
+			break;
+		case "OFFERTELIJN_PERSOONPROFIELEN":
+			return 147;
+			break;
+		case "OFFERTES":
+			return 182;
+			break;
+		case "VERKOOPORDERLIJNEN":
+			return 199;
+			break;
+		case "VERKOOPORDERS":
+			return 222;
+			break;
+	}
 }
 foreach($rowIterator as $row){
     $cellIterator = $row->getCellIterator();
@@ -76,6 +163,17 @@ foreach($rowIterator as $row){
                         $upateSql = "UPDATE \"".$tabelOds."\" SET ";
                         $FORSql ="FOR r_upd IN ( SELECT y.*, y.ora_rowscn scn "
                                 . "FROM ";
+                        printUpdate($upateSql);
+                        $upateSql = "UPDATE \"".$tabelOds."\" SET ";
+                        $FORSql ="FOR r_upd IN ( SELECT y.*, y.ora_rowscn scn "
+                                . "FROM ";
+                        $createsql .= "ODS_AANGEMAAKT TIMESTAMP, "
+                        	. "ODS_GEWIJZIGD TIMESTAMP, "
+                            ."ODS_SCN NUMBER";
+                        $createsql .= ");";
+                        //echo 'Create statement now: '.$createsql."<br>";
+                        printCreate($createsql);
+                        $createsql ="CREATE TABLE ".$tabelOds."( ";
                     }
                 }
             }
@@ -86,6 +184,8 @@ foreach($rowIterator as $row){
                 $insersql .= $cell->getCalculatedValue().", ";
                 //echo 'insert statment now: '.$insersql."<br>";
                 $upateSql .= $cell->getCalculatedValue()."=r_upd.";
+                $createsql .= $cell->getCalculatedValue()." ";
+                //echo 'Create statement now: '.$createsql."<br>";
             }
         }
         if('D' == $cell->getColumn()){
@@ -95,6 +195,20 @@ foreach($rowIterator as $row){
                // echo 'select statment now: '.$selectsql."<br>";
                  $upateSql .= $cell->getCalculatedValue().", ";
             }
+        }
+        if('E' == $cell->getColumn()){
+        	//echo 'Data in Cell E:'.$row->getRowIndex()." ".$cell->getCalculatedValue()."<BR>";
+        	if (!empty($cell->getCalculatedValue())){
+        		$createsql .= $cell->getCalculatedValue()." ";
+        		//echo 'Create statement now: '.$createsql."<br>";
+        	}
+        }
+        if('F' == $cell->getColumn()){
+        	if ($row->getRowIndex() >= getLowerBounds($tabelOds) and $row->getRowIndex() <= getUpperbound($tabelOds)){
+        		//echo 'Data in Cell F:'.$row->getRowIndex()." ".$cell->getCalculatedValue()."<BR>";
+        		$createsql .= $cell->getCalculatedValue().", ";
+        		//echo 'Create statement now: '.$createsql."<br>";
+        	}
         }
     }
 }

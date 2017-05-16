@@ -121,6 +121,13 @@ class DeviceService extends Service{
         return $this->deviceGateway->selectBySearch($search);
     }
     /**
+     * This function will return a list of All identities
+     * @return array
+     */
+    public function listAllIdentities(){
+    	return $this->deviceGateway->listAllIdentities();
+    }
+    /**
      * This function will validate the parameters
      * @param string $AssetTag The Asset tag of the Asset
      * @param string $SerialNumber The serial number of the Asset
@@ -142,7 +149,7 @@ class DeviceService extends Service{
         if (empty($Type)) {
             $errors[] = 'Please select a type';
         }
-        if (!$this->tokenModel->isAssetTagUnique($AssetTag)){
+        if (!$this->deviceGateway->isAssetTagUnique($AssetTag)){
             $errors[] = 'Asset is not unique';
         }
         //TODO: implement more checks depending on the Category.

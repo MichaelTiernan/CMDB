@@ -238,6 +238,22 @@ class DeviceGateway extends Logger {
 		Logger::disconnect ();
 	}
 	/**
+	 * This function will return the list of all Identities
+	 * @return array
+	 */
+	public function listAllIdentities(){
+		$pdo = Logger::connect ();
+		$pdo->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		$sql = "Select Iden_ID, Name, UserID from Identity where Iden_ID != 1";
+		$q = $pdo->prepare ( $sql );
+		if ($q->execute ()) {
+			return $q->fetchAll ( PDO::FETCH_ASSOC );
+		}else{
+			return array();
+		}
+		Logger::disconnect ();
+	}
+	/**
 	 * This function will return the Category for a given Category ID
 	 * @param Int $CatID The unique category ID
 	 * @return string

@@ -5,7 +5,7 @@ if ($ViewAccess){
         echo "<a class=\"btn icon-btn btn-success\" href=\"AssetType.php?op=new\">";
         echo "<span class=\"glyphicon btn-glyphicon glyphicon-plus img-circle text-success\"></span>Add</a>";
     }
-    echo " <a href=\"AssetType.php\" class=\"btn btn-default\"><i class=\"fa fa-arrow-left\"></i> Back</a>";
+    echo " <a href=\"Devices.php?Category=".$this->Category."\" class=\"btn btn-default\"><i class=\"fa fa-arrow-left\"></i> Back</a>";
     echo "<p></p>";
     echo "<table class=\"table table-striped table-bordered\">";
     echo "<thead>";

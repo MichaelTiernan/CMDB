@@ -234,13 +234,23 @@ class DeviceController extends Controller{
         include 'view/devices_overview.php';
     }
     /**
-     * This function will Assign a Device to an Identiy
+     * This function will Assign a Device to an Identity
      */
     public function assign(){
     	$id = isset($_GET['id'])?$_GET['id']:NULL;
     	if ( !$id ) {
     		throw new Exception('Internal error.');
     	}
+    	$AssignAccess= $this->accessService->hasAccess($this->Level, $this->Category, "AssignIdentity");
+    	
+    	$title = 'Assign ' .$this->Category;
+    	$errors = array();
+    	if ( isset($_POST['form-submitted'])) {
+    		print_r($_POST);
+    	}
+    	$rows = $this->deviceService->getByID($id);
+    	$identities = $this->deviceService->listAllIdentities();
+    	include 'view/devicesAssign_form.php';
     }
 	/**
 	 * {@inheritDoc}
