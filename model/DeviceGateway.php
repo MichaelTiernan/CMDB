@@ -254,6 +254,14 @@ class DeviceGateway extends Logger {
 		Logger::disconnect ();
 	}
 	/**
+	 * 
+	 * @param unknown $AssetTag
+	 * @param unknown $Identity
+	 */
+	public function assign2Identity($AssetTag,$Identity){
+		
+	}
+	/**
 	 * This function will return the Category for a given Category ID
 	 * @param Int $CatID The unique category ID
 	 * @return string

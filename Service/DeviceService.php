@@ -128,7 +128,24 @@ class DeviceService extends Service{
     	return $this->deviceGateway->listAllIdentities();
     }
     /**
-     * This function will validate the parameters
+     * This function will assign the AssetTag to an Identity
+     * @param string $AssetTag
+     * @param int $Identity
+     * @throws ValidationException
+     * @throws PDOException
+     */
+    public function assign2Identity($AssetTag,$Identity){
+    	try{
+    		$this->validateAssignParameters($identity, $AssetTag);
+    		$this->deviceGateway->assign2Identity($AssetTag,$Identity);
+    	} catch (ValidationException $ex){
+            throw $ex;
+        } catch (PDOException $e){
+            throw $e;
+        }
+    }
+    /**
+     * This function will validate the parameters on update and Insert
      * @param string $AssetTag The Asset tag of the Asset
      * @param string $SerialNumber The serial number of the Asset
      * @param int $Type The ID of the Asset Type
@@ -172,5 +189,25 @@ class DeviceService extends Service{
         }
         
         throw new ValidationException($errors);
+    }
+    /**
+     * This function will validate the parameters needed for assign
+     * @param unknown $identity
+     * @param unknown $AssetTag
+     * @throws ValidationException
+     */
+    private function validateAssignParameters($identity, $AssetTag){
+    	$errors = array();
+    	if (empty($identity)) {
+    		$errors[] = 'Please select an Identity';
+    	}
+    	if (empty($AssetTag)) {
+    		$errors[] = 'Please select an AssetTag';
+    	}
+    	if ( empty($errors) ) {
+    		return;
+    	}
+    	
+    	throw new ValidationException($errors);
     }
 }
