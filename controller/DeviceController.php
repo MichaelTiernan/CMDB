@@ -38,6 +38,8 @@ class DeviceController extends Controller{
                 $this->assign();
             } elseif ($op == "search") {
                 $this->search();
+            }  elseif ($op == "assignform") {
+                $this->assignform();
             } else {
                 $this->showError("Page not found", "Page for operation ".$op." was not found!");
             }
@@ -242,15 +244,31 @@ class DeviceController extends Controller{
     		throw new Exception('Internal error.');
     	}
     	$AssignAccess= $this->accessService->hasAccess($this->Level, $this->Category, "AssignIdentity");
-    	
+    	$AdminName = $_SESSION["WhoName"];
+    	$Identity ="";
     	$title = 'Assign ' .$this->Category;
     	$errors = array();
     	if ( isset($_POST['form-submitted'])) {
-    		print_r($_POST);
+    	    $Identity = isset($_POST['Identity']) ? $_POST['Identity'] :NULL;
+    	    $this->deviceService->assign2Identity($id, $Identity,$AdminName);
+    	    $this->redirect('Devices.php?Category='.$this->Category.'&op=assignform&id='.$id);
+    	    return ;
     	}
     	$rows = $this->deviceService->getByID($id);
     	$identities = $this->deviceService->listAllIdentities();
     	include 'view/devicesAssign_form.php';
+    }
+    /**
+     * This function will generate the assign Form
+     * @throws Exception
+     */
+    public function assignform(){
+        $id = isset($_GET['id'])?$_GET['id']:NULL;
+        if ( !$id ) {
+            throw new Exception('Internal error.');
+        }
+        print "<h2>Assign Form</h2>";
+        print "Underconstruction";
     }
 	/**
 	 * {@inheritDoc}

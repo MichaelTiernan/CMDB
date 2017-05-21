@@ -172,7 +172,7 @@ class ApplicationGateway extends Logger{
     public function alreadyExist($Name,$UUID = 0){
     	$pdo = Logger::connect();
     	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    	if ($UUD = 0){
+    	if ($UUID == 0){
 	    	$sql =  "Select Name from Application where Name = :name" ;
 	    	$q = $pdo->prepare($sql);
 	    	$q->bindParam(':name',$Name);

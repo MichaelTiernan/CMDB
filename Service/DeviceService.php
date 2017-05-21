@@ -131,13 +131,14 @@ class DeviceService extends Service{
      * This function will assign the AssetTag to an Identity
      * @param string $AssetTag
      * @param int $Identity
+     * @param string $AdminName
      * @throws ValidationException
      * @throws PDOException
      */
-    public function assign2Identity($AssetTag,$Identity){
+    public function assign2Identity($AssetTag,$Identity,$AdminName){
     	try{
-    		$this->validateAssignParameters($identity, $AssetTag);
-    		$this->deviceGateway->assign2Identity($AssetTag,$Identity);
+    		$this->validateAssignParameters($Identity, $AssetTag);
+    		$this->deviceGateway->assign2Identity($AssetTag,$Identity,$AdminName);
     	} catch (ValidationException $ex){
             throw $ex;
         } catch (PDOException $e){

@@ -131,7 +131,30 @@ abstract class Logger extends Database{
         $this->LogText = "The ".$Value." in table ".$Table." is assigned to ".$IdenInfo." by ".$AdminName;
         $this->doLog($Table, $UUID);
     }
-
+    /**
+     * This function will log the assignment of an Device to an Identity
+     * @param string $Table The table on where the action has been done
+     * @param string $UUID The unique identifier of the object
+     * @param string $Value The info of the Device
+     * @param string $IdenInfo The info about the Identity
+     * @param string $AdminName The name of the administrator who did the action
+     */
+    protected function logAssignDevice2Identity($Table,$UUID,$Value,$IdenInfo,$AdminName){
+        $this->LogText = "The ".$Value." in table ".$Table." is assigned to ".$IdenInfo." by ".$AdminName;
+        $this->doLog($Table, $UUID);
+    }
+    /**
+     * This function will log the assignment of an Idenity to an Device
+     * @param string $Table The table on where the action has been done
+     * @param string $UUID The unique identifier of the object
+     * @param string $Value The info of the Identity
+     * @param string $DeviceInfo The info about the device
+     * @param string $AdminName The name of the administrator who did the action
+     */
+    protected function logAssignIdentity2Device($Table,$UUID,$Value,$DeviceInfo,$AdminName){
+        $this->LogText = "The ".$Value." in table ".$Table." is assigned to ".$DeviceInfo." by ".$AdminName;
+        $this->doLog($Table, $UUID);
+    }
     /**
      * This function will do the logging
      * @param string $Table The table on where the action has been done

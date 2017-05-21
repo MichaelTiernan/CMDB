@@ -244,7 +244,7 @@ class DeviceGateway extends Logger {
 	public function listAllIdentities(){
 		$pdo = Logger::connect ();
 		$pdo->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-		$sql = "Select Iden_ID, Name, UserID from Identity where Iden_ID != 1";
+		$sql = "Select Iden_ID, Name, UserID from Identity where Iden_ID != 1 and Iden_ID not in (Select Idenity from asset)";
 		$q = $pdo->prepare ( $sql );
 		if ($q->execute ()) {
 			return $q->fetchAll ( PDO::FETCH_ASSOC );
@@ -254,12 +254,23 @@ class DeviceGateway extends Logger {
 		Logger::disconnect ();
 	}
 	/**
-	 * 
-	 * @param unknown $AssetTag
-	 * @param unknown $Identity
+	 * This function will assign an Asset to an Identity
+	 * @param string $AssetTag
+	 * @param int $Identity
 	 */
-	public function assign2Identity($AssetTag,$Identity){
-		
+	public function assign2Identity($AssetTag,$Identity,$AdminName){
+	    $pdo = Logger::connect ();
+	    $pdo->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+	    $sql = "Update Asset set Identity = :identity where AssetTag = :assettag";
+	    $q = $pdo->prepare ( $sql );
+	    $q->bindParam ( ':identity', $Identity );
+	    $q->bindParam ( ':assettag', $AssetTag );
+	    if($q->execute()){
+	        $IdenInfo = "The Identity with name: ";
+	        $AssetInfo ="The ".$this->Category." with assettag: ".$AssetTag;
+	        $this->logAssignIdentity2Device("identity", $Identity, $IdenInfo, $AssetInfo, $AdminName);
+	        $this->logAssignDevice2Identity(self::$table, $AssetTag, $AssetInfo, $IdenInfo, $AdminName);
+	    }
 	}
 	/**
 	 * This function will return the Category for a given Category ID
@@ -412,5 +423,25 @@ class DeviceGateway extends Logger {
 			return "";
 		}
 		Logger::disconnect ();
+	}
+	/**
+	 * This function will return the name of a given Identity
+	 * @param int $IdenId
+	 * @return string
+	 */
+	private function getIdentityName($IdenId){
+	    require_once 'identityGateway.php';
+	    $identity = new IdentityGateway();
+	    return $identity->getFirstName($IdenId)." ".$identity->getLastName($IdenId);
+	}
+	/**
+	 * This function will return the UserID of a given Identity
+	 * @param int $IdenId
+	 * @return string
+	 */
+	private function getIdentityUserID($IdenId){
+	    require_once 'identityGateway.php';
+	    $identity = new IdentityGateway();
+	    return $identity->getUserID($IdenId);
 	}
 }

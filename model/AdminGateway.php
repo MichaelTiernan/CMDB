@@ -213,7 +213,7 @@ class AdminGateway extends Logger {
 	public function alreadyExist($Level,$Admin,$UUID = 0){
 		$pdo = Logger::connect();
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-		if ($UUD = 0){
+		if ($UUID == 0){
 			$sql =  "Select * from Admin where Account = :account" ;
 			$q = $pdo->prepare($sql);
 			$q->bindParam(':account',$Admin);
