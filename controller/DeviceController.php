@@ -229,8 +229,9 @@ class DeviceController extends Controller{
         }
         $AddAccess= $this->accessService->hasAccess($this->Level, $this->Category, "Add");
         $ViewAccess = $this->accessService->hasAccess($this->Level, $this->Category, "Read");
-        $IdenViewAccess = $this->accessService->hasAccess($this->Level, self::$sitePart, "IdentityOverview");
+        $IdenViewAccess = $this->accessService->hasAccess($this->Level, $this->Category, "IdentityOverview");
         $rows = $this->deviceService->getByID($id);
+        $idenrows = $this->deviceService->ListAssignedIdentities($id);
         $logrows = $this->loggerController->listAllLogs('devices', $id);
         $title = $this->Category. ' Overview';
         include 'view/devices_overview.php';

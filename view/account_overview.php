@@ -1,4 +1,4 @@
-<h2>Account Details</h2>
+ <h2>Account Details</h2>
 <?php 
 if ($ViewAccess){
     if ($AddAccess){
@@ -39,17 +39,15 @@ if ($ViewAccess){
             echo "</thead>";
             echo "<tbody>";
             foreach ($accrows as $account){
-                $ValidEnd = NUll;
-                If (isset($account["ValidEnd"])){
-                    $ValidEnd = $account["ValidEnd"];
-                }else {
-                    $ValidEnd = "9999-12-31";
-                }
                 echo "<tr>";
                 echo "<td class=\"small\">".htmlentities($account["Name"])."</td>";
                 echo "<td class=\"small\">".htmlentities($account["UserID"])."</td>";
-                echo "<td class=\"small\">".htmlentities(date("d-m-Y", strtotime($account["ValidFrom"])))."</td>";
-                echo "<td class=\"small\">".htmlentities(date("d-m-Y", strtotime($ValidEnd)))."</td>";
+                echo "<td class=\"small\">".htmlentities(date($this->getDateFormat(), strtotime($account["ValidFrom"])))."</td>";
+                if (!empty($account["ValidEnd"])){
+                    echo "<td class=\"small\">".htmlentities(date($this->getDateFormat(), strtotime($account["ValidEnd"])))."</td>";
+                }else{
+                    echo "<td class=\"small\">".date($this->getDateFormat(),strtotime("now +1 year"))."</td>";
+                }
                 echo "</tr>";
             }
             echo "</tbody>";
@@ -70,7 +68,7 @@ if ($ViewAccess){
         echo "<tbody>";
         foreach ($logrows as $log){
             echo "<tr>";
-            echo "<td class=\"small\">".htmlentities(date("d-m-Y h:i:s", strtotime($log["Log_Date"])))."</td>";
+            echo "<td class=\"small\">".htmlentities(date($this->getLogDateFormat(), strtotime($log["Log_Date"])))."</td>";
             echo "<td class=\"small\">".htmlentities($log["Log_Text"])."</td>";
             echo "</tr>";
         }

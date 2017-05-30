@@ -244,7 +244,7 @@ class DeviceGateway extends Logger {
 	public function listAllIdentities(){
 		$pdo = Logger::connect ();
 		$pdo->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-		$sql = "Select Iden_ID, Name, UserID from Identity where Iden_ID != 1 and Iden_ID not in (Select Idenity from asset)";
+		$sql = "Select Iden_ID, Name, UserID from Identity where Iden_ID != 1 and Iden_ID not in (Select Identity from asset)";
 		$q = $pdo->prepare ( $sql );
 		if ($q->execute ()) {
 			return $q->fetchAll ( PDO::FETCH_ASSOC );
@@ -255,7 +255,7 @@ class DeviceGateway extends Logger {
 	}
 	/**
 	 * This function will assign an Asset to an Identity
-	 * @param string $AssetTag
+	 * @param string $AssetTag The AssetTag of the Devive
 	 * @param int $Identity
 	 */
 	public function assign2Identity($AssetTag,$Identity,$AdminName){
@@ -271,6 +271,26 @@ class DeviceGateway extends Logger {
 	        $this->logAssignIdentity2Device("identity", $Identity, $IdenInfo, $AssetInfo, $AdminName);
 	        $this->logAssignDevice2Identity(self::$table, $AssetTag, $AssetInfo, $IdenInfo, $AdminName);
 	    }
+	}
+	/**
+	 * This function will return the identity that is assinged to a given device
+	 * @param string $AssetTag The AssetTag of the Devive
+	 */
+	public function ListAssignedIdentities($AssetTag){
+	    $pdo = Logger::connect ();
+	    $pdo->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+	    $sql = "select i.Name, i.UserID "
+	       ."from identity i "
+           ."join asset a on a.Identity = i.Iden_ID "
+           ."where a.AssetTag = :assettag";
+	    $q = $pdo->prepare ($sql);
+	    $q->bindParam(':assettag', $AssetTag);
+	    if ($q->execute ()) {
+	        return $q->fetchAll(PDO::FETCH_ASSOC);
+	    }else {
+	        throw new Exception("There is an error");
+	    }
+	    Logger::disconnect ();
 	}
 	/**
 	 * This function will return the Category for a given Category ID

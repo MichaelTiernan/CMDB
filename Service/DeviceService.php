@@ -121,6 +121,14 @@ class DeviceService extends Service{
         return $this->deviceGateway->selectBySearch($search);
     }
     /**
+     * This function will return a list of Assigned identities to a given device
+     * @param sting $id The AssetTag of the Devive
+     * @return array
+     */
+    public function ListAssignedIdentities($id){
+        return $this->deviceGateway->ListAssignedIdentities($id);
+    }
+    /**
      * This function will return a list of All identities
      * @return array
      */

@@ -219,7 +219,7 @@ class IdentityController extends Controller{
             throw new Exception('Internal error.');
         }
         $AdminName = $_SESSION["WhoName"];
-        $ActiveAccess= $this->accessService->hasAccess($this->Level, $this->Category, "Activate");
+        $ActiveAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Activate");
         if ($ActiveAccess){
         	try{
        			$this->identityService->activate($id,$AdminName);
@@ -240,12 +240,14 @@ class IdentityController extends Controller{
         $AddAccess= $this->accessService->hasAccess($this->Level, self::$sitePart, "Add");
         $ViewAccess = $this->accessService->hasAccess($this->Level, self::$sitePart, "Read");
         $AccAccess = $this->accessService->hasAccess($this->Level, self::$sitePart, "AccountOverview");
+        $DevAccess = $this->accessService->hasAccess($this->Level, self::$sitePart, "DeviceOverview");
         if ( !$id ) {
             throw new Exception('Internal error.');
         }
         $rows = $this->identityService->getByID($id);
         $logrows = $this->loggerController->listAllLogs('identity', $id);
         $accrows = $this->identityService->listAssignedAccount($id);
+        $devicerows = $this->identityService->listAssignedDevices($id);
         include 'view/identity_overview.php';
     }
     /**

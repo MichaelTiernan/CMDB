@@ -57,7 +57,7 @@ if ($ViewAccess){
         echo "<tbody>";
         foreach ($logrows as $log){
             echo "<tr>";
-            echo "<td class=\"small\">".htmlentities(date("d-m-Y h:i:s", strtotime($log["Log_Date"])))."</td>";
+            echo "<td class=\"small\">".htmlentities(date($this->getLogDateFormat(), strtotime($log["Log_Date"])))."</td>";
             echo "<td class=\"small\">".htmlentities($log["Log_Text"])."</td>";
             echo "</tr>";
         }

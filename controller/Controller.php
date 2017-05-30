@@ -1,10 +1,12 @@
 <?php
 require_once 'Service/AccessService.php';
 require_once 'LoggerController.php';
+require_once 'model/configuration.php';
 
 abstract class Controller {
     protected $accessService = NULL;
     protected $loggerController = NULL;
+    private $config =NULL;
     /**
      * This function is the main function of this call
      * It will be used to call the other functions.
@@ -47,6 +49,7 @@ abstract class Controller {
     public function __construct() {
         $this->accessService = new AccessService();
         $this->loggerController = new LoggerController();
+        $this->config = new configuration();
     }
     /**
      * This function will show an given error
@@ -62,5 +65,19 @@ abstract class Controller {
      */
     public function redirect($location) {
         header('Location: '.$location);
+    }
+    /**
+     * This function will return the date format.
+     * @return string
+     */
+    protected function getDateFormat(){
+        return $this->config->getDataFormat();
+    }
+    /**
+     * This function will return the date format.
+     * @return string
+     */
+    protected function getLogDateFormat(){
+        return $this->config->getLogDataFormat();
     }
 }

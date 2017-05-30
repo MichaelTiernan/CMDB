@@ -274,7 +274,7 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
-     * This function will list all Accounts assigned to the given account
+     * This function will list all Accounts assigned to the given Identity
      * @param int $UUID The Unique ID of the Identity
      * @return Array
      */
@@ -294,6 +294,25 @@ class IdentityGateway extends Logger{
         Logger::disconnect();
     }
     /**
+     * This function will list all Devices assigned to the given Identity
+     * @param int $UUID The Unique ID of the Identity
+     * @return Array
+     */
+    public function listAssignedDevices($UUID){
+        $pdo = Logger::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $SQL = "SELECT c.Category, at.Vendor, at.Type, a.AssetTag, a.SerialNumber "
+            ."from asset a join category c on a.Category = c.ID "
+            ."join assettype at on a.Type = at.Type_ID "
+            ."where a.Identity = :uuid";
+        $q = $pdo->prepare($SQL);
+        $q->bindParam(':uuid',$UUID);
+        if ($q->execute()){
+            return $q->fetchAll(PDO::FETCH_ASSOC);
+        }
+        Logger::disconnect();
+    }
+    /**
      * This function will assign a Identity to an Account
      * @param int $UUID the unique ID of the Identity
      * @param int $account the unique ID of the Account
@@ -303,7 +322,7 @@ class IdentityGateway extends Logger{
      */
     public function AssignAccount($UUID,$account,$From,$Until,$AdminName) {
         if (empty($Until)){
-            $newUntilDate = "31/12/2037";
+            $newUntilDate = NULL;
         }else{
             $newUntilDate = preg_replace("/(\d+)\D+(\d+)\D+(\d+)/","$3-$2-$1",$Until);
         }

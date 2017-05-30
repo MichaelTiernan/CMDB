@@ -28,6 +28,14 @@ class IdentityService extends Service{
     public function listAssignedAccount($id){
         return $this->identityGateway->listAssignedAccount($id);
     }
+    /**
+     * This function will list all Assigned Devices to an Identity
+     * @param int $id The Unique id of the Identity
+     * @return Array
+     */
+    public function listAssignedDevices($id){
+        return $this->identityGateway->listAssignedDevices($id);
+    }
 	/**
 	 * {@inheritDoc}
 	 * @see Service::delete()
